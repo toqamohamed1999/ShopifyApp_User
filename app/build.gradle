@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -15,6 +18,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "api_key", "\"9d218f5e95606bd93e59d4317577066b\""
+        buildConfigField "String", "api_password", "\"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\""
+        buildConfigField "String", "store_name", "\"mad43-sv-and2\""
+        buildConfigField "String", "api_version", "\"2023-04\""
     }
 
     buildTypes {
@@ -30,6 +38,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -41,4 +54,98 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+
+    // Navigation XML Components
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+
+    // Json Parser
+    implementation 'com.google.code.gson:gson:2.10.1'
+    
+
+    // GLIDE
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    kapt 'com.github.bumptech.glide:compiler:4.14.2'
+    //circle image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //lottie
+    def lottieVersion = "5.2.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    //Room
+    implementation "androidx.room:room-ktx:2.5.0"
+    implementation "androidx.room:room-runtime:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
+    //kotlin + Work manager
+    implementation "androidx.work:work-runtime-ktx:2.8.0"
+    //Coroutines Dependencies
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    //ViewModel & livedata
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+    //json converter
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    //location services & maps
+    implementation "com.google.android.gms:play-services-location:21.0.1"
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+
+    //Testing
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:$junitVersion"
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+
+    // hamcrest
+    testImplementation "org.hamcrest:hamcrest:2.2"
+    testImplementation "org.hamcrest:hamcrest-library:2.2"
+    androidTestImplementation "org.hamcrest:hamcrest:2.2"
+    androidTestImplementation "org.hamcrest:hamcrest-library:2.2"
+
+    // AndroidX and Robolectric
+    testImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:core:$androidXTestCoreVersion"
+    testImplementation "org.robolectric:robolectric:4.8"
+
+    // InstantTaskExecutorRule
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    //kotlinx-coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
+    //dimens
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+
+    //font dimens
+    implementation 'com.intuit.ssp:ssp-android:1.1.0'
+
+    //Material Design
+    implementation 'com.google.android.material:material:1.8.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+
+    //shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+
 }
