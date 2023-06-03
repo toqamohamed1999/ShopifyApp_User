@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ShopifyApp_User</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="noAccount">Don\'t have an account? </string>
+    <string name="signup">SignUp</string>
+    <string name="password">Password</string>
 </resources>
