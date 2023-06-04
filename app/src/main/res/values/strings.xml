@@ -7,4 +7,8 @@
     <string name="noAccount">Don\'t have an account? </string>
     <string name="signup">SignUp</string>
     <string name="password">Password</string>
+    <string name="or">OR</string>
+    <string name="haveAccount">Already have account?</string>
+    <string name="username">UserName</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
