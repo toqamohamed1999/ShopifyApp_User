@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="10dp"
-    tools:context=".CartFragment">
+    tools:context=".cart.presentation.ui.CartFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_items_recyclerView"
