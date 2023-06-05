@@ -3,4 +3,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="checkout">Checkout</string>
+
+    /** nada **/
+    <string name="home_header">Home</string>
+    <string name="category_header">Category</string>
+    <string name="favorite_header">Favorite</string>
+    <string name="profile_header">Profile</string>
+    /** nada **/
 </resources>
