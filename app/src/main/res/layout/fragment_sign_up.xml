@@ -21,19 +21,36 @@
             android:layout_gravity="top"
             android:src="@drawable/arrow_back" />
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-           />
-
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputUserName_signup"
+            android:id="@+id/inputFName_signup"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/username"
+            android:hint="First Name"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/teal_700"
+            app:errorEnabled="true"
+            app:hintTextColor="@color/teal_700"
+            app:startIconDrawable="@drawable/person"
+
+            >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editFName_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+
+            />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLastName_signup"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/last_name"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/teal_700"
             app:errorEnabled="true"
@@ -43,7 +60,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editUserName_signup"
+                android:id="@+id/editLastName_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"

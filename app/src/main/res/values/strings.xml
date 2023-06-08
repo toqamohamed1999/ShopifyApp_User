@@ -13,4 +13,6 @@
     <string name="haveAccount">Already have account?</string>
     <string name="username">UserName</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="second_name">Second Name</string>
+    <string name="last_name">Last Name</string>
 </resources>
