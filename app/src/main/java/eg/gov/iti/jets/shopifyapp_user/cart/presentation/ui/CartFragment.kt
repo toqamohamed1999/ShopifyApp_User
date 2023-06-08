@@ -1,4 +1,4 @@
-package eg.gov.iti.jets.shopifyapp_user
+package eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
