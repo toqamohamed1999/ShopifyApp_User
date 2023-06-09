@@ -45,6 +45,7 @@ android {
         buildConfig = true
         viewBinding true
     }
+
 }
 
 dependencies {
@@ -150,12 +151,9 @@ dependencies {
 
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
 
-    //payment
+    //rounded images
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
-    //PayPal
-    implementation 'com.paypal.checkout:android-sdk:0.112.0'
-
-    //google pay
-    implementation 'com.google.android.gms:play-services-wallet:19.2.0-beta01'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 }
