@@ -150,4 +150,12 @@ dependencies {
 
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
 
+    //payment
+
+    //PayPal
+    implementation 'com.paypal.checkout:android-sdk:0.112.0'
+
+    //google pay
+    implementation 'com.google.android.gms:play-services-wallet:19.2.0-beta01'
+
 }
