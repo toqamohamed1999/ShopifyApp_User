@@ -9,7 +9,7 @@
     >
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/cart_imageViewDeleteProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -19,7 +19,7 @@
         />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/cart_imageViewProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -91,7 +91,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/cart_item_total_price"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
