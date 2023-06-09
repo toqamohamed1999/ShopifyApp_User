@@ -2,7 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eg.gov.iti.jets.shopifyapp_user.categories.presentation.CategoryFragment
