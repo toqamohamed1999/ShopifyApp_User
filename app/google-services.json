@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "1019122962158-ce58togfp6ntgrir5pgas3hdqviago31.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "eg.gov.iti.jets.shopifyapp_user",
-            "certificate_hash": "0eaccec7aefd2d56026d2f263f4e109b48441d47"
-          }
-        },
-        {
           "client_id": "1019122962158-gcv3bn3advnm8f06ejhmnhb0va6ahurv.apps.googleusercontent.com",
           "client_type": 3
         }
