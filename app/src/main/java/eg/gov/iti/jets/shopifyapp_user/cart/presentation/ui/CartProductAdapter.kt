@@ -2,13 +2,14 @@ package eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.CartItemBinding
-/*
-class CartProductAdapter: ListAdapter<Product,CartProductAdapter.CartItemViewHolder>(CartDiffUtil()) {
+
+class CartProductAdapter: ListAdapter<LineItem,CartProductAdapter.CartItemViewHolder>(CartDiffUtil()) {
 
     lateinit var binding: CartItemBinding
 
@@ -23,11 +24,14 @@ class CartProductAdapter: ListAdapter<Product,CartProductAdapter.CartItemViewHol
         return CartItemViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
-
     override fun onBindViewHolder(holder: CartItemViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val product = getItem(position)
+        holder.binding.cartImageViewDecreaseProduct.setOnClickListener {
+
+        }
+        holder.binding.cartImageViewIncreaseProduct.setOnClickListener {
+
+        }
+        Picasso.get().load(product.properties[0]).into(holder.binding.cartImageViewProduct)
     }
-}*/
+}
