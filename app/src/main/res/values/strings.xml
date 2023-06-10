@@ -26,6 +26,7 @@
     <string name="title_toolBar">Title</string>
     <string name="search_hint">"search "</string>
     <string name="brands_header">Brands</string>
+    <string name="settings">Settings</string>
     /** nada **/
 
 </resources>
