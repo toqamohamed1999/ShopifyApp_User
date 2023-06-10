@@ -3,11 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signUpFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/signUpFragment"
         android:name="eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.ui.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.home.presentation.ui.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.ProductsFragment"
+        android:label="ProductsFragment" >
+        <argument
+            android:name="brand"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

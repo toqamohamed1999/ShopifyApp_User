@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import eg.gov.iti.jets.shopifyapp_user.databinding.BrandRowBinding
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.SmartCollection
 
-class BrandAdapter(private var brandList: List<SmartCollection>, val context: Context) :
+class BrandAdapter(private var brandList: List<SmartCollection>, val context: Context, var myListener: OnClickBrand) :
     RecyclerView.Adapter<BrandAdapter.ViewHolder>() {
 
     private lateinit var binding: BrandRowBinding
@@ -30,6 +30,9 @@ class BrandAdapter(private var brandList: List<SmartCollection>, val context: Co
         Glide.with(context)
             .load(currentBrand.image?.src)
             .into(holder.binding.brandImageView)
+        holder.binding.brandCardView.setOnClickListener {
+            myListener.onBrandClick(currentBrand.title)
+        }
     }
 
     override fun getItemCount() = brandList.size
