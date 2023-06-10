@@ -8,7 +8,7 @@
         android:title="@string/home_header"/>
 
     <item
-        android:id="@+id/category"
+        android:id="@+id/categoryFragment"
         android:enabled="true"
         android:icon="@drawable/category_icon"
         android:title="@string/category_header"/>

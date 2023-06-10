@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import eg.gov.iti.jets.shopifyapp_user.databinding.ProductRowBinding
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
+import eg.gov.iti.jets.shopifyapp_user.util.getTitleOfProduct
 
 class ProductsAdapter(private var productList: List<Product>, val context: Context) :
     RecyclerView.Adapter<ProductsAdapter.ViewHolder>() {
@@ -26,7 +27,7 @@ class ProductsAdapter(private var productList: List<Product>, val context: Conte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = productList[position]
-        holder.binding.productTitleTextView.text = currentProduct.title
+        holder.binding.productTitleTextView.text = getTitleOfProduct(currentProduct.title)
         holder.binding.productPriceTextView.text = currentProduct.variants[0].price
         Glide.with(context)
             .load(currentProduct.image.src)
