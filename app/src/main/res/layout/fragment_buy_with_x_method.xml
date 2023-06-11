@@ -23,13 +23,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/method_pay_cach_on_delivery"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="2dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="1dp"
-            android:layout_weight="1"
 
+            android:layout_weight="1"
             android:background="@drawable/googlepay_button_no_shadow_background_image"
             android:cropToPadding="false"
             android:paddingBottom="5dp"
@@ -37,12 +38,13 @@
             app:srcCompat="@drawable/cash_on_delivery" />
 
         <ImageView
+            android:id="@+id/method_pay_google_pay"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:background="@drawable/googlepay_button_no_shadow_background_image"
 
+            android:background="@drawable/googlepay_button_no_shadow_background_image"
             android:cropToPadding="true"
             android:padding="3dp"
             android:scaleType="fitCenter"

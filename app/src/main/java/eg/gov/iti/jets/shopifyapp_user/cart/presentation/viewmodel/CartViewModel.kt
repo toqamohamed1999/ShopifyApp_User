@@ -2,10 +2,11 @@ package eg.gov.iti.jets.shopifyapp_user.cart.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAiState
+import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -13,29 +14,102 @@ import kotlinx.coroutines.launch
 
 class CartViewModel(private val repo:CartRepository):ViewModel() {
 
-     private val _cartOrder:MutableStateFlow<DraftOrderAiState> = MutableStateFlow(DraftOrderAiState.Loading())
-     val cartOrder:StateFlow<DraftOrderAiState> = _cartOrder
+     private val _cartOrder:MutableStateFlow<DraftOrderAPIState> = MutableStateFlow(DraftOrderAPIState.Loading())
+     val cartOrder:StateFlow<DraftOrderAPIState> = _cartOrder
+     private var cartDraftOrder:DraftOrderResponse? = null
+
+
+    fun setCartDraftOrder(order:DraftOrderResponse?){
+        cartDraftOrder = order
+    }
 
      fun addProductToCart(product: LineItem){
+
          viewModelScope.launch {
-             repo.addProductToCart(product)
+             launch {
+                 addProductToList(product)
+             }.join()
+             launch {
+                 repo.updateProductsInCart(
+                     cartDraftOrder?.draft_order?.order_id?:"",
+                     cartDraftOrder ?: DraftOrderResponse()
+                 )
+             }
          }
      }
+    private fun addProductToList(product:LineItem){
+        val mlist:MutableList<LineItem> = mutableListOf()
+        mlist.addAll(cartDraftOrder?.draft_order?.line_items?: listOf())
+        mlist.add(product)
+        cartDraftOrder?.draft_order?.line_items = mlist
+    }
      fun removeProductFromCart(product: LineItem){
          viewModelScope.launch {
-             repo.removeProductFromCart(product)
+             launch {
+                 removeProductFromList(product)
+             }.join()
+             launch {
+                 repo.updateProductsInCart(
+                     cartDraftOrder?.draft_order?.order_id?:"",
+                     cartDraftOrder ?: DraftOrderResponse()
+                 )
+             }
          }
      }
-     fun updateProductInCart(product: LineItem){
-         viewModelScope.launch {
-             repo.updateProductInCart(product)
-         }
-     }
+    private fun removeProductFromList(product:LineItem){
+        val mlist:MutableList<LineItem> = mutableListOf()
+        mlist.addAll(cartDraftOrder?.draft_order?.line_items?: listOf())
+        mlist.remove(product)
+        cartDraftOrder?.draft_order?.line_items = mlist
+    }
+    fun updateProduct(type:Int,product: LineItem){
+
+        if(type==1)
+        {
+            increaseProductQuantity(product)
+        }else if (type==-1){
+            decreaseProductQuantity(product)
+        }
+
+    }
+    private fun increaseProductQuantity(product: LineItem){
+        cartDraftOrder?.draft_order?.line_items?.forEach {
+            if(it.product_id==product.product_id)
+            {
+                it.quantity+=1
+            }
+        }
+        viewModelScope.launch {
+            repo.updateProductsInCart(
+                cartDraftOrder?.draft_order?.order_id?:"",
+                cartDraftOrder ?: DraftOrderResponse()
+            )
+        }
+    }
+    private fun decreaseProductQuantity(product: LineItem){
+        if(product.quantity==1){
+            removeProductFromCart(product)
+        }else {
+            cartDraftOrder?.draft_order?.line_items?.forEach {
+                if (it.product_id == product.product_id) {
+                    it.quantity -= 1
+                }
+            }
+            viewModelScope.launch {
+                repo.updateProductsInCart(
+                    cartDraftOrder?.draft_order?.order_id?:"",
+                    cartDraftOrder ?: DraftOrderResponse()
+                )
+            }
+        }
+    }
+
      fun getCartProducts() {
          viewModelScope.launch {
-             repo.getCartProducts().collectLatest {
+             repo.getCartProducts(UserSettings.cartDraftOrderId).collectLatest {
                  _cartOrder.value = it
              }
          }
      }
+
 }
