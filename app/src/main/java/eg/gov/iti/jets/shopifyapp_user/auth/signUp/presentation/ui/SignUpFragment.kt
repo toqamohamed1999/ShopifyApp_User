@@ -8,14 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.AuthRemoteSourceImp
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
+import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupModel
+import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupRequest
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.FirebaseRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.remote.AuthRepo
@@ -23,14 +28,25 @@ import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUp
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSignUpBinding
 import eg.gov.iti.jets.shopifyapp_user.util.isInternetAvailable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SignUpFragment : Fragment() {
-    private val viewModel: SignUpViewModel by viewModels {
-        SignUpViewModelFactory(
+    private val viewModel: SignUpViewModel by lazy {
+        val factory = SignUpViewModelFactory(
             AuthRepo(FirebaseRepoImplementation(Firebase.auth)),
-            APIRepoImplementation(AuthRemoteSourceImp())
+            APIRepoImplementation.getInstance(AuthRemoteSourceImp())!!
         )
+        ViewModelProvider(this, factory)[SignUpViewModel::class.java]
     }
+
+
+//    private val viewModel: SignUpViewModel by viewModels {
+//        SignUpViewModelFactory(
+//            AuthRepo(FirebaseRepoImplementation(Firebase.auth)),
+//            APIRepoImplementation(AuthRemoteSourceImp())
+//        )
+//    }
     lateinit var binding: FragmentSignUpBinding
     var uid: String = ""
     private var email = ""
@@ -49,54 +65,69 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        (activity as AppCompatActivity).findViewById<AppBarLayout>(R.id.custom_toolBar)?.visibility =
+            View.GONE
         binding.btnSignUp.setOnClickListener {
             if (isInternetAvailable(requireContext().applicationContext)) {
                 email = binding.editEmailSignup.text.toString().trim()
                 pass = binding.editPassSignup.text.toString().trim()
                 confirmPass = binding.editConfirmPasswordSignUp.text.toString().trim()
-                fName = binding.editFNameSignup.toString()
-                lName = binding.editLastNameSignup.toString()
+                fName = binding.editFNameSignup.text.toString().trim()
+                lName = binding.editLastNameSignup.text.toString().trim()
+                clearErrors()
 
                 if (fName.isEmpty()) {
-                    binding.editFNameSignup.error = "First name is required"
+                    binding.inputFNameSignup.error = "First name is required"
                     return@setOnClickListener
                 }
                 if (lName.isEmpty()) {
-                    binding.editLastNameSignup.error = "Last name is required"
+                    binding.inputLastNameSignup.error = "Last name is required"
                     return@setOnClickListener
                 }
                 if (email.isEmpty()) {
-                    binding.editEmailSignup.error = "Email is required"
-                    return@setOnClickListener
-                }
-                if (pass.isEmpty()) {
-                    binding.editPassSignup.error = "Password is required"
-                    return@setOnClickListener
-                }
-                if (confirmPass.isEmpty()) {
-                    binding.editConfirmPasswordSignUp.error = "Confirm Password is required"
-                    return@setOnClickListener
-                }
-                if (pass != confirmPass) {
-                    binding.editConfirmPasswordSignUp.error = "Passwords do not match"
+                    binding.inputEmailSignup.error = "Email is required"
                     return@setOnClickListener
                 }
                 if (!email.isValidEmail()) {
-                    binding.editEmailSignup.error = "Invalid email format"
+                    binding.inputEmailSignup.error = "Invalid email format"
                     return@setOnClickListener
                 }
-                if (!pass.isValidEmail()) {
-                    binding.editPassSignup.error = "Invalid password format"
+                if (pass.isEmpty()) {
+                    binding.inputPassSignup.error = "Password is required"
                     return@setOnClickListener
-                } else {
-                    val signupUser = SignupUser(
-                        fName,
-                        lName,
-                        email,
-                        pass
+                }
+                if (!pass.isValidPassword()) {
+                    binding.inputPassSignup.error = "Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character."
+                    return@setOnClickListener
+                }
+                if (confirmPass.isEmpty()) {
+                    binding.inputConfirmPassSignUp.error = "Confirm Password is required"
+                    return@setOnClickListener
+                }
+                if (pass != confirmPass) {
+                    binding.inputConfirmPassSignUp.error = "Passwords do not match"
+                    return@setOnClickListener
+                }
+
+               else {
+//                    val signupUser = SignupUser(
+//                        fName,
+//                        lName,
+//                        email,
+//                        pass
+//                    )
+//                    viewModel.signUpUser(signupUser)
+
+                    val customer = Customer(
+                        email = email,
+                        first_name =  fName,
+                        last_name = lName,
+                        tags = pass,
+                        note = uid
                     )
-                    viewModel.signUpUser(signupUser)
+
+                    viewModel.createCustomerAccount(SignupRequest( customer))
+
                 }
 
             } else {
@@ -110,30 +141,57 @@ class SignUpFragment : Fragment() {
 
         }
         lifecycleScope.launchWhenStarted {
-            viewModel.signUpResult.collect { result ->
-                when (result) {
-                    is ResponseState.Loading -> {
+            viewModel.apisignUpResult.collect{
+                when(it){
+                    is ResponseState.Loading->{
                         println("/////////////Loading//////////////////////")
                     }
                     is ResponseState.Success -> {
-                        uid = result.data.toString()
-                        println("/////////////Success ${uid}//////////////////////")
-                        val customer = Customer(
-                            email = email,
-                            note = uid,
-                            firstName = fName,
-                            lastName = lName,
-                            tags = pass
-                        )
-                        viewModel.createCustomerAccount(customer)
+                        println("/////////////Success ${it.data?.customerList?.count()}//////////////////////")
                     }
                     is ResponseState.Error -> {
-                        println("/////////////Error ${result.exception}//////////////////////")
-                        binding.editEmailSignup.error = "Email is already Exist"
+                        println("/////////////Error ${it.exception.toString()}//////////////////////")
                     }
+
                 }
             }
         }
+//        lifecycleScope.launchWhenStarted {
+//            viewModel.signUpResult.collect { result ->
+//                when (result) {
+//                    is ResponseState.Loading -> {
+//                        println("/////////////Loading//////////////////////")
+//                    }
+//                    is ResponseState.Success -> {
+//                        uid = result.data.toString()
+//                        println("/////////////Success ${uid}//////////////////////")
+//                        val customer = SignupModel(
+//                            email = email,
+//                            first_name =  fName,
+//                            last_name = lName,
+//                            password = pass,
+//                            note = uid
+//                        )
+//
+//                            viewModel.createCustomerAccount(customer)
+//
+//                    }
+//                    is ResponseState.Error -> {
+//                        println("/////////////Error ${result.exception}//////////////////////")
+//                        binding.editEmailSignup.error = "Email is already Exist"
+//                    }
+//                }
+//            }
+      //  }
+    }
+
+    private fun clearErrors() {
+        binding.inputPassSignup.error = null
+        binding.inputFNameSignup.error = null
+        binding.inputLastNameSignup.error = null
+        binding.inputConfirmPassSignUp.error = null
+        binding.inputEmailSignup.error = null
+
     }
 }
 
