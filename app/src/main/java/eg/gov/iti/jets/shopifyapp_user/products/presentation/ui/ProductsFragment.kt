@@ -22,7 +22,7 @@ import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductsV
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProductsFragment : Fragment() {
+class ProductsFragment : Fragment(), OnClickProduct {
 
     private lateinit var binding: FragmentProductsBinding
     private lateinit var productsAdapter: ProductsAdapter
@@ -56,7 +56,7 @@ class ProductsFragment : Fragment() {
         if (brand != null) {
             viewModel.getProductsBrand(brand)
         }
-        productsAdapter = ProductsAdapter(ArrayList(), requireActivity())
+        productsAdapter = ProductsAdapter(ArrayList(), requireActivity() , this)
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.productsRecyclerView.layoutManager = layoutManager
 
@@ -102,6 +102,14 @@ class ProductsFragment : Fragment() {
         mainActivity.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    override fun onClickFavIcon(product: Product) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickProductCard(product: Product) {
+        TODO("Not yet implemented")
     }
 
 }

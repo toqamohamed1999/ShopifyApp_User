@@ -9,7 +9,7 @@ import eg.gov.iti.jets.shopifyapp_user.databinding.ProductRowBinding
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.util.getTitleOfProduct
 
-class ProductsAdapter(private var productList: List<Product>, val context: Context) :
+class ProductsAdapter(private var productList: List<Product>, val context: Context, var myListener: OnClickProduct) :
     RecyclerView.Adapter<ProductsAdapter.ViewHolder>() {
 
     private lateinit var binding: ProductRowBinding
@@ -32,6 +32,9 @@ class ProductsAdapter(private var productList: List<Product>, val context: Conte
         Glide.with(context)
             .load(currentProduct.image.src)
             .into(holder.binding.productImageView)
+        holder.binding.productCardView.setOnClickListener {
+            myListener.onClickProductCard(currentProduct)
+        }
     }
 
     override fun getItemCount() = productList.size
