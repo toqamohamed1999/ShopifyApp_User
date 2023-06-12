@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav = findViewById(R.id.bottom_navigation)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        NavigationUI.setupWithNavController(bottomNav,navController)
+        NavigationUI.setupWithNavController(bottomNav, navController)
         setUpNavBottom(navController)
 
         //Title of Fragments
