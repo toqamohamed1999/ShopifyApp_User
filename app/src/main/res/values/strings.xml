@@ -27,6 +27,9 @@
     <string name="search_hint">"search "</string>
     <string name="brands_header">Brands</string>
     <string name="settings">Settings</string>
+    <string name="description">Description</string>
+    <string name="reviews">Reviews</string>
+    <string name="seemorereviews...">SeeMoreReviews...</string>
     /** nada **/
 
 </resources>
