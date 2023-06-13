@@ -14,20 +14,23 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
-import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.base.model.Review
+import eg.gov.iti.jets.shopifyapp_user.base.model.toLineItem
+import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
+import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
+import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
+import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductDetailsBinding
-import eg.gov.iti.jets.shopifyapp_user.home.presentation.ui.HomeFragmentDirections
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModel
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ProductDetailsFragment : Fragment() {
     lateinit var binding: FragmentProductDetailsBinding
     private val viewModel by viewModels<ProductDetailsViewModel> {
-        ProductDetailsViewModelFactory(CartRepositoryImpl(DraftOrderRemoteSourceImpl(AppRetrofit.retrofit.create(DraftOrderNetworkServices::class.java))))
+        ProductDetailsViewModelFactory(CartRepositoryImpl(DraftOrderRemoteSourceImpl(AppRetrofit.retrofit.create(
+            DraftOrderNetworkServices::class.java))))
     }
    private val args: ProductDetailsFragmentArgs by navArgs()
     override fun onCreateView(
