@@ -37,8 +37,8 @@ class ProductsViewModel(private val productsRepo: ProductsBrandRepo) : ViewModel
         viewModelScope.launch {
             _filterProduct.value = withContext(Dispatchers.Default) {
                 productsList.filter { product ->
-                    val price: Float = product.variants[0].price.toFloat()
-                    price >= productPrice
+                    val price: Float? = product.variants[0].price?.toFloat()
+                    price!! >= productPrice
                 }
             }
         }
