@@ -39,6 +39,9 @@
             android:id="@+id/action_productsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
+            android:id="@+id/action_productsFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
             android:id="@+id/action_productsFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
         <action
@@ -49,7 +52,21 @@
         android:id="@+id/categoryFragment"
         android:name="eg.gov.iti.jets.shopifyapp_user.categories.presentation.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" >
+        tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.ui.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details" >
+        <action
+            android:id="@+id/action_productDetailsFragment_to_reviewsFragment"
+            app:destination="@id/reviewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsFragment"
+        android:label="fragment_reviews"
+        tools:layout="@layout/fragment_reviews">
         <action
             android:id="@+id/action_categoryFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
