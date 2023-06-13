@@ -35,28 +35,6 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
         NavigationUI.setupWithNavController(bottomNav, navController)
         setUpNavBottom(navController)
 
-        //Title of Fragments
-        bottomNav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.homeFragment -> {
-                    binding.titleTextView.text = "Home"
-                    true
-                }
-                R.id.categoryFragment -> {
-                    binding.titleTextView.text = "Category"
-                    true
-                }
-                R.id.favorite -> {
-                    binding.titleTextView.text = "Favorite"
-                    true
-                }
-                R.id.profile -> {
-                    binding.titleTextView.text = "Profile"
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
     override fun changeBadgeCartCount(count: Int) {
