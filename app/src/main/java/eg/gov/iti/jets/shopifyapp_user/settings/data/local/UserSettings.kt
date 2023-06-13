@@ -6,7 +6,7 @@ object UserSettings {
     var userName:String = ""
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
-    var currencyCode:String = ""
+    var currencyCode:String = "EGB"
     var shippingAddress:String = ""
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = ""

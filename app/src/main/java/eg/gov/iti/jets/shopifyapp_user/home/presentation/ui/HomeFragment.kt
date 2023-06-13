@@ -18,10 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.shopifyapp_user.home.data.model.BrandResultState
+import eg.gov.iti.jets.shopifyapp_user.home.data.remote.AddsRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.home.data.remote.BrandRemoteSource
+import eg.gov.iti.jets.shopifyapp_user.home.data.repo.AddsRepoImpl
 import eg.gov.iti.jets.shopifyapp_user.home.data.repo.BrandRepoImp
+import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -35,7 +39,8 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
 
     private val viewModel: HomeViewModel by lazy {
         val factory = HomeFactoryViewModel(
-            BrandRepoImp.getInstance(BrandRemoteSource())!!
+            BrandRepoImp.getInstance(BrandRemoteSource())!!,
+            AddsRepoImpl(AddsRemoteSourceImpl(AppRetrofit.retrofit.create(AddsAPIServices::class.java)))
         )
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
     }

@@ -48,10 +48,10 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*setUpArticleRecyclerView()
+        setUpArticleRecyclerView()
         observeData()
         setUpActions()
-        viewModel.getCartProducts()*/
+        viewModel.getCartProducts()
     }
 
     private fun observeData() {

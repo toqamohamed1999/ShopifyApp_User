@@ -9,7 +9,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
     override suspend fun createNewDraftOrder(order: DraftOrderResponse): MutableStateFlow<DraftOrderAPIState> {
        return MutableStateFlow( try {
                DraftOrderAPIState.Success(retrofitServices.createNewDraftOrder(order))
-           }catch( error:Error){
+           }catch( error:java.lang.Exception){
                DraftOrderAPIState.Error(error.message.toString())
            })
     }
@@ -18,7 +18,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
        return  MutableStateFlow(
            try{
                DraftOrderAPIState.Success(retrofitServices.getDraftOrder(orderId))
-           }catch (error:Error){
+           }catch (error:java.lang.Exception){
                DraftOrderAPIState.Error(error.message.toString())
            }
        )
@@ -29,7 +29,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
             try{
                 retrofitServices.deleteDraftOrder(orderId)
                 DraftOrderAPIState.Success(null)
-            }catch (error:Error){
+            }catch (error:java.lang.Exception){
                 DraftOrderAPIState.Error(error.message.toString())
             }
         )
@@ -42,7 +42,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
         return MutableStateFlow(
             try{
                 DraftOrderAPIState.Success(retrofitServices.updateDraftOrder(orderId,order))
-            }catch (error:Error){
+            }catch (error:java.lang.Exception){
                 DraftOrderAPIState.Error(error.message.toString())
             }
         )
