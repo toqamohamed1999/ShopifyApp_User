@@ -5,7 +5,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
-    id 'kotlinx-serialization'
+   // id 'kotlinx-serialization'
 }
 
 android {
@@ -160,8 +160,8 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     // PayPal Checkout SDK Libraries
-    implementation 'com.paypal.checkout:android-sdk:0.112.0'
+   // implementation 'com.paypal.checkout:android-sdk:0.112.0'
 
     // Other Dependencies Related To Sample App
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+   // implementation fileTree(dir: "libs", include: ["*.jar"])
 }

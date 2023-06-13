@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.MainActivity
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductsBinding
+import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.ui.ProductDetailsFragmentDirections
 import eg.gov.iti.jets.shopifyapp_user.products.data.model.ProductBrandState
 import eg.gov.iti.jets.shopifyapp_user.products.data.remote.ProductsBrandRS
 import eg.gov.iti.jets.shopifyapp_user.products.data.repo.ProductsBrandRepoImp
@@ -85,8 +87,8 @@ class ProductsFragment : Fragment(), OnClickProduct {
         binding.rangeSlider.addOnChangeListener { slider, value, fromUser ->
             productsAdapter.setProductList(productsList.filter {
                 val values = binding.rangeSlider.values
-                val price: Float = it.variants[0].price.toFloat()
-                price >= values[0] && price <= values[1]
+                val price: Float? = it.variants[0].price?.toFloat()
+                price!! >= values[0] && price <= values[1]
             })
             productsAdapter.notifyDataSetChanged()
         }
@@ -109,7 +111,8 @@ class ProductsFragment : Fragment(), OnClickProduct {
     }
 
     override fun onClickProductCard(product: Product) {
-        TODO("Not yet implemented")
+        val action = ProductsFragmentDirections.actionProductsFragmentToProductDetailsFragment(product)
+        binding.root.findNavController().navigate(action)
     }
 
 }

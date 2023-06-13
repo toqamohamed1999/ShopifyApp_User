@@ -84,6 +84,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <argument
+            android:name="product"
+            app:argType="eg.gov.iti.jets.shopifyapp_user.base.model.Product" />
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"

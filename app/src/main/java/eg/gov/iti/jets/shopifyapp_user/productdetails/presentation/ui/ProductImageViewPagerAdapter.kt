@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.base.model.Image
 import eg.gov.iti.jets.shopifyapp_user.databinding.CouponImageBinding
 
 private lateinit var binding: CouponImageBinding
 
-class ProductImageViewPagerAdapter(private val images: List<String>) :
+class ProductImageViewPagerAdapter(private val images: List<Image>) :
     RecyclerView.Adapter<ProductImageViewPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(var binding: CouponImageBinding) : RecyclerView.ViewHolder(binding.root)
@@ -21,10 +22,10 @@ class ProductImageViewPagerAdapter(private val images: List<String>) :
        binding = CouponImageBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
-    fun setImage(imageUrl: String) {
+    fun setImage(image: Image) {
 
         Glide.with(binding.root.context)
-            .load(imageUrl)
+            .load(image.src)
             .error(R.drawable.noimage)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.couponImageView)

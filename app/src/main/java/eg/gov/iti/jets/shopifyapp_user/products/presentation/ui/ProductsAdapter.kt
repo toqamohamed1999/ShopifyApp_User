@@ -27,7 +27,7 @@ class ProductsAdapter(private var productList: List<Product>, val context: Conte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = productList[position]
-        holder.binding.productTitleTextView.text = getTitleOfProduct(currentProduct.title)
+        holder.binding.productTitleTextView.text = currentProduct?.title?.let { getTitleOfProduct(it) }
         holder.binding.productPriceTextView.text = currentProduct.variants[0].price
         Glide.with(context)
             .load(currentProduct.image.src)
