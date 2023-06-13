@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
 import eg.gov.iti.jets.shopifyapp_user.base.model.Review
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductDetailsBinding
+import eg.gov.iti.jets.shopifyapp_user.home.presentation.ui.HomeFragmentDirections
 
 class ProductDetailsFragment : Fragment() {
     lateinit var binding: FragmentProductDetailsBinding
@@ -45,7 +47,7 @@ class ProductDetailsFragment : Fragment() {
             Review(
                 "David Lee",
                 5.0,
-                "https://www.shutterstock.com/image-photo/photo-cheerful-minded-lady-interested-260nw-2047307549.jpg",
+                "https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/E12KS1G65-W0168RE00G7-133faf432639-512.jpeg",
                 "This product is fantastic! It's incredibly easy to use and has saved me a lot of time and effort. I highly recommend it."
             )
         )
@@ -65,7 +67,12 @@ class ProductDetailsFragment : Fragment() {
             binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)
             binding.reviewsRecycler.adapter=ReviewsAdapter(requireContext(),reviews)
 
+            binding.txtSeeMoreReviews.setOnClickListener {
+                val action = ProductDetailsFragmentDirections.actionProductDetailsFragmentToReviewsFragment(product.title!!,product.images[0].src!!)
+                binding.root.findNavController().navigate(action)
+            }
         }
+
     }
 
     private fun createDots(numDots: Int) {

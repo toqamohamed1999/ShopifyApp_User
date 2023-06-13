@@ -10,7 +10,7 @@ import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.model.Image
 import eg.gov.iti.jets.shopifyapp_user.databinding.CouponImageBinding
 
-private lateinit var binding: CouponImageBinding
+lateinit var binding: CouponImageBinding
 
 class ProductImageViewPagerAdapter(private val images: List<Image>) :
     RecyclerView.Adapter<ProductImageViewPagerAdapter.ViewHolder>() {
