@@ -8,9 +8,11 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui.BadgeDrawable
 import eg.gov.iti.jets.shopifyapp_user.databinding.ActivityMainBinding
+import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BadgeChanger {
 
     lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
@@ -24,34 +26,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         backButton = binding.backButton
-
+        binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
+         navController.navigate(R.id.cartFragment)
+        }
+        binding.backButton.setOnClickListener {
+            navController.popBackStack()
+        }
         bottomNav = findViewById(R.id.bottom_navigation)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupWithNavController(bottomNav, navController)
         setUpNavBottom(navController)
 
-        //Title of Fragments
-        bottomNav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.homeFragment -> {
-                    binding.titleTextView.text = "Home"
-                    true
-                }
-                R.id.categoryFragment -> {
-                    binding.titleTextView.text = "Category"
-                    true
-                }
-                R.id.favorite -> {
-                    binding.titleTextView.text = "Favorite"
-                    true
-                }
-                R.id.profile -> {
-                    binding.titleTextView.text = "Profile"
-                    true
-                }
-                else -> false
-            }
-        }
+    }
+
+    override fun changeBadgeCartCount(count: Int) {
+        val badge = BadgeDrawable(this)
+        badge.setCount((count).toString())
+        binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).foreground = badge
     }
 
     private fun setUpNavBottom(navController: NavController) {
@@ -61,6 +52,11 @@ class MainActivity : AppCompatActivity() {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Products"
+            }else if (navDestination.id == R.id.cartFragment
+            ) {
+                bottomNav.visibility = View.GONE
+                binding.backButton.visibility = View.VISIBLE
+                binding.titleTextView.text = "Cart"
             } else if (navDestination.id == R.id.subCategoryFragment
             ) {
                 bottomNav.visibility = View.GONE

@@ -14,13 +14,13 @@
         android:title="@string/category_header"/>
 
     <item
-        android:id="@+id/favorite"
+        android:id="@+id/favoriteFragment"
         android:enabled="true"
         android:icon="@drawable/favorite_icon"
         android:title="@string/favorite_header"/>
 
     <item
-        android:id="@+id/profile"
+        android:id="@+id/profileFragment"
         android:enabled="true"
         android:icon="@drawable/profile_icon"
         android:title="@string/profile_header"/>
