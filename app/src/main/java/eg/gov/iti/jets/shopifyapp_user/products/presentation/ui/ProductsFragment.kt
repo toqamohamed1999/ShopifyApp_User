@@ -92,18 +92,7 @@ class ProductsFragment : Fragment(), OnClickProduct {
             })
             productsAdapter.notifyDataSetChanged()
         }
-//        lifecycleScope.launch {
-//            viewModel.filterProduct.collectLatest { filteredProducts ->
-//                productsAdapter.setProductList(filteredProducts)
-//                binding.productsRecyclerView.adapter = productsAdapter
-//                productsAdapter.notifyDataSetChanged()
-//            }
-//        }
 
-        val mainActivity = requireActivity() as MainActivity
-        mainActivity.backButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     override fun onClickFavIcon(product: Product) {

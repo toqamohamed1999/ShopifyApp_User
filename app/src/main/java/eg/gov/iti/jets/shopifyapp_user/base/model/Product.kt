@@ -2,8 +2,11 @@ package eg.gov.iti.jets.shopifyapp_user.base.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.AppliedDiscount
+import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.TaxLineX
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
+
 @Parcelize
 data class Product (
     @SerializedName("id") var id : Long?=0,
@@ -25,3 +28,38 @@ data class Product (
     @SerializedName("images") var images : List<Image>,
     @SerializedName("image") var image : Image
 ):Parcelable
+fun Product.toLineItem():LineItem{
+    return LineItem(
+        id = id,
+    variant_id = null,
+    product_id = null,
+    title =title,
+    variant_title = null,
+    sku =null,
+    vendor = null,
+    quantity = 1,
+    requires_shipping = false,
+    taxable = true,
+    gift_card = false,
+    fulfillment_service = "manual",
+    grams = 0,
+    tax_lines = listOf( TaxLineX(
+        rate= 0.14,
+        title="GST",
+        price="22.68"
+    ))
+    ,
+    applied_discount = AppliedDiscount(
+            description =image.src,
+            value ="10.0",
+            title = "Custom",
+            amount = "20.00",
+        value_type = "percentage"
+    ),
+    name = title,
+    properties = listOf(),
+    custom = true,
+    price ="20.00",
+    admin_graphql_api_id = "gid://shopify/DraftOrderLineItem/58260103233817"
+    )
+}

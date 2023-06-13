@@ -3,26 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardElevation="8dp"
+    android:layout_height="130dp"
     android:layout_margin="16dp"
-    >
+    android:layoutDirection="ltr"
+    app:cardElevation="8dp">
 
     <ImageView
         android:id="@+id/cart_imageViewDeleteProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        app:srcCompat="@drawable/baseline_delete_forever_24"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        />
+        android:layoutDirection="ltr"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/baseline_delete_forever_24" />
 
     <ImageView
         android:id="@+id/cart_imageViewProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="start|center_vertical"
         android:layout_margin="5dp"
+        android:layoutDirection="ltr"
         android:scaleType="fitCenter"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -30,8 +33,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:orientation="horizontal"
         android:layout_marginBottom="10dp"
+        android:layoutDirection="ltr"
+        android:orientation="horizontal"
         android:weightSum="3">
 
         <ImageView
@@ -41,8 +45,9 @@
             android:layout_gravity="end"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:background="@drawable/cert_product_ad1_back"
-            app:srcCompat="@drawable/cart_product_add_back" />
+            android:background="@drawable/cart_product_less1_back"
+            android:layoutDirection="ltr"
+            app:srcCompat="@drawable/cart_product_less_back" />
 
         <TextView
             android:id="@+id/cart_textViewAmount"
@@ -52,6 +57,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
+            android:layoutDirection="ltr"
             android:text="10"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -63,8 +69,9 @@
             android:layout_gravity="end"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/cart_product_less1_back"
-            app:srcCompat="@drawable/cart_product_less_back" />
+            android:background="@drawable/cert_product_ad1_back"
+            android:layoutDirection="ltr"
+            app:srcCompat="@drawable/cart_product_add_back" />
     </LinearLayout>
 
     <TextView
@@ -74,9 +81,10 @@
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_marginStart="60dp"
         android:layout_marginBottom="20dp"
+        android:layoutDirection="ltr"
         android:text="ali"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <TextView
@@ -86,6 +94,7 @@
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_marginStart="60dp"
         android:layout_marginTop="5dp"
+        android:layoutDirection="ltr"
         android:text="150$"
         android:textAlignment="center"
         android:textSize="16sp" />
@@ -97,6 +106,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginStart="13dp"
         android:layout_marginBottom="10dp"
+        android:layoutDirection="ltr"
         android:text="Total : 1500$"
         android:textAlignment="center"
         android:textSize="16sp" />

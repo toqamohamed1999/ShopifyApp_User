@@ -48,10 +48,10 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*setUpArticleRecyclerView()
+        setUpArticleRecyclerView()
         observeData()
         setUpActions()
-        viewModel.getCartProducts()*/
+        viewModel.getCartProducts()
     }
 
     private fun observeData() {
@@ -61,8 +61,10 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
                     is DraftOrderAPIState.Success->{
                         viewModel.setCartDraftOrder(it.order)
                         productsIncCard = mutableListOf()
-                        productsIncCard.addAll(it.order?.draft_order?.line_items?: listOf())
+                        productsIncCard.addAll(it.order?.draft_order?.line_items?.takeLast(((it.order.draft_order?.line_items?.size?:1)-1))?: listOf())
+                        calcTotalPrice()
                         cartAdapter.submitList(productsIncCard)
+                        cartAdapter.notifyDataSetChanged()
                     }
                     is DraftOrderAPIState.Error->{
                         Dialogs.SnakeToast(requireView(),it.errorMessage)
@@ -74,6 +76,19 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
             }
         }
 
+    }
+
+    private fun calcTotalPrice() {
+        var total = 0.0
+        if(productsIncCard.size==0){
+            binding?.cartCheckoutBtn?.isEnabled =false
+        }else{
+            binding?.cartCheckoutBtn?.isEnabled = true
+        }
+        productsIncCard.forEach {
+            total += it.price.toDouble()*it.quantity
+        }
+        binding?.cartTotalPrice?.text = "Total Price : ${total} "
     }
 
     private fun setUpActions() {
@@ -124,6 +139,8 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
     }
 
     override fun removerProduct(product: LineItem) {
+
         viewModel.removeProductFromCart(product)
+
     }
 }

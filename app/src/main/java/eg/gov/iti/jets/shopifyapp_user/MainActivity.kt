@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
             }else if (navDestination.id == R.id.cartFragment
             ) {
                 bottomNav.visibility = View.GONE
+                binding.toolbar.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Cart"
             } else if (navDestination.id == R.id.subCategoryFragment
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 binding.titleTextView.text = "Category"
             } else {
                 bottomNav.visibility = View.VISIBLE
+                binding.toolbar.visibility = View.VISIBLE
                 backButton.visibility = View.GONE
                 when (navDestination.id) {
                     R.id.homeFragment -> binding.titleTextView.text = "Home"

@@ -2,11 +2,15 @@ package eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui
 
 import android.content.Context
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.squareup.picasso.Picasso
+import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.CartItemBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
@@ -44,11 +48,16 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
                     i?.dismiss()
                 }.create().show()
         }
+        val imageUrl=product.applied_discount.description
         // item info
-        Picasso.get().load(product.properties[0]).into(holder.binding.cartImageViewProduct)
-        holder.binding.cartItemTitle.text = product.title
+        Glide.with(holder.binding.root.context)
+            .load(imageUrl)
+            .error(R.drawable.noimage)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(holder.binding.cartImageViewProduct)
+        holder.binding.cartItemTitle.text = product.title?.split("|")?.last()
         holder.binding.cartTextViewAmount.text = product.quantity.toString()
-        holder.binding.cartItemPrice.text = UserSettings.getPrice(product.price).toString()
-        holder.binding.cartItemTotalPrice.text = (UserSettings.getPrice(product.price)*product.quantity).toString()
+        holder.binding.cartItemPrice.text = "Price : "+UserSettings.getPrice(product.price.toDouble()).toString() + UserSettings.getPriceSymbol()
+        holder.binding.cartItemTotalPrice.text = "Total  : "+(UserSettings.getPrice(product.price.toDouble())*product.quantity).toString()
     }
 }
