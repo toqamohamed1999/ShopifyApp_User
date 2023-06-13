@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -40,6 +41,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
     }
 
     buildFeatures {
@@ -157,5 +159,9 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    // PayPal Checkout SDK Libraries
+    implementation 'com.paypal.checkout:android-sdk:0.112.0'
 
+    // Other Dependencies Related To Sample App
+    implementation fileTree(dir: "libs", include: ["*.jar"])
 }

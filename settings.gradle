@@ -10,6 +10,18 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven {
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                // Be sure to add these non-sensitive credentials in order to retrieve dependencies from
+                // the private repository.
+                username 'ShopifyApp'
+                password 'EAtJ8LV8Bb5BkEaLYKnitk8GwcdIJhlyd38ahMIYLdJ_oV2Sx0QYR_me1JFaTe7Zgn-RfCuxHU2M49t6'
+            }
+        }
     }
 }
 rootProject.name = "ShopifyApp_User"
