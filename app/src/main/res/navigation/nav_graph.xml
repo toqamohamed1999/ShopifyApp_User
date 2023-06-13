@@ -63,12 +63,15 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="eg.gov.iti.jets.shopifyapp_user.categories.presentation.CategoryFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.categories.presentation.ui.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" >
+        tools:layout="@layout/fragment_category">
         <action
             android:id="@+id/action_categoryFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_categoryFragment_to_subCategoryFragment"
+            app:destination="@id/subCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -87,6 +90,9 @@
         <argument
             android:name="product"
             app:argType="eg.gov.iti.jets.shopifyapp_user.base.model.Product" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_subCategoryFragment"
+            app:destination="@id/subCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
@@ -205,5 +211,20 @@
         <action
             android:id="@+id/action_favoriteFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subCategoryFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.subcategory.presentation.ui.SubCategoryFragment"
+        android:label="SubCategoryFragment" >
+        <action
+            android:id="@+id/action_subCategoryFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+        <argument
+            android:name="categoryID"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_subCategoryFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

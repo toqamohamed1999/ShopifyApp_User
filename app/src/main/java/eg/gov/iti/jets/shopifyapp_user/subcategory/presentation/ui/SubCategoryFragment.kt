@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSubCategoryBinding
@@ -16,6 +17,7 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.products.data.model.ProductBrandState
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.OnClickProduct
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.ProductsAdapter
+import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.ProductsFragmentDirections
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.model.SubCategoryState
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.remote.SubCategoryRS
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.repo.SubCategoryRepoImp
@@ -119,7 +121,8 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
     }
 
     override fun onClickProductCard(product: Product) {
-        TODO("Not yet implemented")
+        val action = SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(product)
+        binding.root.findNavController().navigate(action)
     }
 
 }

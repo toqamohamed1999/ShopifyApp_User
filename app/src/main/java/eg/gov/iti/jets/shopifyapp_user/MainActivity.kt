@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 when (navDestination.id) {
                     R.id.homeFragment -> binding.titleTextView.text = "Home"
                     R.id.categoryFragment -> binding.titleTextView.text = "Category"
-                    R.id.favorite -> binding.titleTextView.text = "Favorite"
-                    R.id.profile -> binding.titleTextView.text = "Profile"
+                    R.id.favoriteFragment -> binding.titleTextView.text = "Favorite"
+                    R.id.profileFragment -> binding.titleTextView.text = "Profile"
                 }
             }
         }
