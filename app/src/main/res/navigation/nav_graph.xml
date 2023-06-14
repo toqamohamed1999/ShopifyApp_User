@@ -146,7 +146,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="eg.gov.iti.jets.shopifyapp_user.ProfileFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.profile.ui.view.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
