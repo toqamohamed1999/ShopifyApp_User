@@ -1,16 +1,18 @@
 package eg.gov.iti.jets.shopifyapp_user.settings.data.local
 
 import eg.gov.iti.jets.shopifyapp_user.base.local.sharedpreferances.SharedOperations
+import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 
 object UserSettings {
     var userName:String = ""
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
-    var currencyCode:String = ""
+    var currencyCode:String = "EGB"
     var shippingAddress:String = ""
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = ""
-    var cartDraftOrderId:String = ""
+    var cartDraftOrderId:String = "1118663508249"
+    var userCurrentDiscountCopy:DiscountCode? = null
     fun saveSettings(){
         SharedOperations.getInstance().edit()
             .putString("userName", userName)
@@ -35,6 +37,19 @@ object UserSettings {
                 value
             }
         }
+    }
+    fun getPriceSymbol():String{
+            return when (currencyCode) {
+                "USD" -> {
+                    " $"
+                }
+                "EUR" -> {
+                    " €"
+                }
+                else -> {
+                    " £"
+                }
+            }
     }
     fun loadSettings(){
        val instance = SharedOperations.getInstance()

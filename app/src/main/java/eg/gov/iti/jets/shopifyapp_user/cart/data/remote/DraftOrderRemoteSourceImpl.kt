@@ -1,5 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.cart.data.remote
 
+import android.util.Log
+import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderRemoteSource
@@ -9,7 +11,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
     override suspend fun createNewDraftOrder(order: DraftOrderResponse): MutableStateFlow<DraftOrderAPIState> {
        return MutableStateFlow( try {
                DraftOrderAPIState.Success(retrofitServices.createNewDraftOrder(order))
-           }catch( error:Error){
+           }catch( error:java.lang.Exception){
                DraftOrderAPIState.Error(error.message.toString())
            })
     }
@@ -18,7 +20,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
        return  MutableStateFlow(
            try{
                DraftOrderAPIState.Success(retrofitServices.getDraftOrder(orderId))
-           }catch (error:Error){
+           }catch (error:java.lang.Exception){
                DraftOrderAPIState.Error(error.message.toString())
            }
        )
@@ -29,7 +31,7 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
             try{
                 retrofitServices.deleteDraftOrder(orderId)
                 DraftOrderAPIState.Success(null)
-            }catch (error:Error){
+            }catch (error:java.lang.Exception){
                 DraftOrderAPIState.Error(error.message.toString())
             }
         )
@@ -42,7 +44,9 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
         return MutableStateFlow(
             try{
                 DraftOrderAPIState.Success(retrofitServices.updateDraftOrder(orderId,order))
-            }catch (error:Error){
+            }catch (error:java.lang.Exception){
+
+                Log.e("","00000000000000000000000000000000000000000${error.localizedMessage}0000000000000000000000000000000")
                 DraftOrderAPIState.Error(error.message.toString())
             }
         )
