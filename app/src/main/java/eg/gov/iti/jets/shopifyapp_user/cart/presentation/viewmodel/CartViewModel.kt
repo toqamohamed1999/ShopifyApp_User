@@ -31,8 +31,8 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
              }.join()
              launch {
                  repo.updateProductsInCart(
-                     cartDraftOrder?.draft_order?.order_id?:"",
-                     cartDraftOrder ?: DraftOrderResponse()
+                     cartDraftOrder?.draft_order?.order_id as String,
+                     cartDraftOrder ?: DraftOrderResponse(null)
                  )
              }
          }
@@ -44,45 +44,50 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
         cartDraftOrder?.draft_order?.line_items = mlist
     }
      fun removeProductFromCart(product: LineItem){
-         viewModelScope.launch {
-             launch {
-                 removeProductFromList(product)
-             }.join()
-             launch {
-                 repo.updateProductsInCart(
-                     cartDraftOrder?.draft_order?.order_id?:"",
-                     cartDraftOrder ?: DraftOrderResponse()
-                 )
-             }
-         }
+                removeProductFromList(product)
      }
     private fun removeProductFromList(product:LineItem){
         val mlist:MutableList<LineItem> = mutableListOf()
-        mlist.addAll(cartDraftOrder?.draft_order?.line_items?: listOf())
-        mlist.remove(product)
+        cartDraftOrder?.draft_order?.line_items?.forEach {
+            if(it.id!=product.id)
+            {
+                mlist.add(it)
+            }
+        }
         cartDraftOrder?.draft_order?.line_items = mlist
+        viewModelScope.launch {
+            cartDraftOrder?.let {
+                repo.updateProductsInCart(
+                    UserSettings.cartDraftOrderId,
+                    it
+                )
+            }
+            _cartOrder.value = DraftOrderAPIState.Success(cartDraftOrder)
+        }
     }
     fun updateProduct(type:Int,product: LineItem){
 
         if(type==1)
         {
             increaseProductQuantity(product)
+            _cartOrder.value = DraftOrderAPIState.Success(cartDraftOrder)
         }else if (type==-1){
             decreaseProductQuantity(product)
+            _cartOrder.value = DraftOrderAPIState.Success(cartDraftOrder)
         }
 
     }
     private fun increaseProductQuantity(product: LineItem){
         cartDraftOrder?.draft_order?.line_items?.forEach {
-            if(it.product_id==product.product_id)
+            if(it.id==product.id)
             {
                 it.quantity+=1
             }
         }
         viewModelScope.launch {
             repo.updateProductsInCart(
-                cartDraftOrder?.draft_order?.order_id?:"",
-                cartDraftOrder ?: DraftOrderResponse()
+                UserSettings.cartDraftOrderId,
+                cartDraftOrder ?: DraftOrderResponse(null)
             )
         }
     }
@@ -91,15 +96,16 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
             removeProductFromCart(product)
         }else {
             cartDraftOrder?.draft_order?.line_items?.forEach {
-                if (it.product_id == product.product_id) {
+                if (it.id == product.id) {
                     it.quantity -= 1
                 }
             }
             viewModelScope.launch {
                 repo.updateProductsInCart(
-                    cartDraftOrder?.draft_order?.order_id?:"",
-                    cartDraftOrder ?: DraftOrderResponse()
+                    UserSettings.cartDraftOrderId,
+                    cartDraftOrder ?: DraftOrderResponse(null)
                 )
+                _cartOrder.value = DraftOrderAPIState.Success(cartDraftOrder)
             }
         }
     }

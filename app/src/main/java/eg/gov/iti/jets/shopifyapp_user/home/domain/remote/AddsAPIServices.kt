@@ -23,7 +23,10 @@ interface AddsAPIServices {
     )
     @GET("price_rules/{ruleId}/discount_codes.json")
     suspend fun getAllDiscountsForPriceRule(@Path("ruleId")ruleId:String): Discounts
-
+    @Headers(
+        "Content-Type:application/json",
+        "X-Shopify-Access-Token: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"
+    )
     @PUT("price_rules/{ruleId}/discount_codes/{discount_code_id}.json")
     suspend fun updateUsageCountForDiscount(@Path(value ="ruleId")ruleId:String,
                                     @Path(value ="discount_code_id")discount_code_id:String,@Body discountCode: DiscountCodeBody

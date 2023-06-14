@@ -1,5 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.cart.data.remote
 
+import android.util.Log
+import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderRemoteSource
@@ -43,6 +45,8 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
             try{
                 DraftOrderAPIState.Success(retrofitServices.updateDraftOrder(orderId,order))
             }catch (error:java.lang.Exception){
+
+                Log.e("","00000000000000000000000000000000000000000${error.localizedMessage}0000000000000000000000000000000")
                 DraftOrderAPIState.Error(error.message.toString())
             }
         )

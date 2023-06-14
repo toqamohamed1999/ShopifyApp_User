@@ -25,9 +25,12 @@ import eg.gov.iti.jets.shopifyapp_user.home.data.remote.AddsRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.home.data.remote.BrandRemoteSource
 import eg.gov.iti.jets.shopifyapp_user.home.data.repo.AddsRepoImpl
 import eg.gov.iti.jets.shopifyapp_user.home.data.repo.BrandRepoImp
+import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeViewModel
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,7 +39,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var dotsLayout: LinearLayout
     private lateinit var brandAdapter: BrandAdapter
-
+    private lateinit var  sliderPagerAdapter:CouponAdapter
     private val viewModel: HomeViewModel by lazy {
         val factory = HomeFactoryViewModel(
             BrandRepoImp.getInstance(BrandRemoteSource())!!,
@@ -48,7 +51,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -56,20 +59,27 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sliderPagerAdapter = CouponAdapter(listOf(), this)
         dotsLayout = view.findViewById(R.id.dotsLayout)
-        val images = listOf(R.drawable.coupon1, R.drawable.coupon1, R.drawable.coupon1)
-        val sliderPagerAdapter = CouponAdapter(images, this)
-        binding.couponsViewPager.adapter = sliderPagerAdapter
-
-        createDots(images.size)
-        updateDots(0)
+        dotsLayout.removeAllViews()
         binding.couponsViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateDots(position)
             }
         })
+        //adds
+        viewModel.getAdds()
+        binding.couponsViewPager.adapter = sliderPagerAdapter
+        lifecycleScope.launch {
+            viewModel.adds.collectLatest {
+                sliderPagerAdapter.discounts = it
+                //createDots(it.size)
+                //updateDots(0)
+                //dotsLayout.refreshDrawableState()
 
+            }
+        }
         //adapter and recyclerview
         viewModel.getBrands()
         brandAdapter = BrandAdapter(ArrayList(), requireActivity(), this)
@@ -121,9 +131,9 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         }
     }
 
-    override fun onImageClick(position: Int) {
-        Toast.makeText(context, "Clicked on image with resource: $position", Toast.LENGTH_SHORT)
-            .show()
+    override fun onImageClick(discountCode: DiscountCode) {
+        UserSettings.userCurrentDiscountCopy = discountCode
+        Dialogs.SnakeToast(requireView(),"Code Copied please paste with in checkout process")
     }
 
     override fun onBrandClick(brandName: String?) {

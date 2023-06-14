@@ -12,6 +12,7 @@ class AddsRemoteSourceImpl(private val services:AddsAPIServices):AddsRemoteSourc
         return  try{
             MutableStateFlow(services.getAllPriceRules())
         }catch (exception:java.lang.Exception){
+            print(exception.localizedMessage)
             MutableStateFlow(null)
         }
     }
