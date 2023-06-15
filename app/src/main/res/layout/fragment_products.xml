@@ -52,13 +52,13 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:visibility="gone"
             android:valueFrom="0.0"
             android:valueTo="10000.0"
-            app:values="@array/initial_slider_values"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_search" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_search"
+            app:values="@array/initial_slider_values" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/products_recyclerView"
@@ -72,5 +72,21 @@
             app:layout_constraintTop_toBottomOf="@+id/range_slider"
             app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:id="@+id/txt_noResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
+            android:text="@string/no_match_results"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/txt_search"
+            app:layout_constraintTop_toBottomOf="@+id/txt_search" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>

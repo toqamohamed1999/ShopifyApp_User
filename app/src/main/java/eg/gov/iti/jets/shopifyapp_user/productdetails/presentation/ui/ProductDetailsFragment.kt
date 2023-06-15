@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
-import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.base.model.Review
 import eg.gov.iti.jets.shopifyapp_user.base.model.toLineItem
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
@@ -26,14 +26,13 @@ import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.Pro
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ProductDetailsFragment : Fragment() {
     lateinit var binding: FragmentProductDetailsBinding
-    private var product:Product?=null
     private val viewModel by viewModels<ProductDetailsViewModel> {
-        ProductDetailsViewModelFactory(CartRepositoryImpl(DraftOrderRemoteSourceImpl(AppRetrofit.retrofit.create(DraftOrderNetworkServices::class.java))))
+        ProductDetailsViewModelFactory(CartRepositoryImpl(DraftOrderRemoteSourceImpl(AppRetrofit.retrofit.create(
+            DraftOrderNetworkServices::class.java))))
     }
    private val args: ProductDetailsFragmentArgs by navArgs()
     override fun onCreateView(
@@ -47,7 +46,7 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         product = args.product
+        val product = args.product
         binding.btnAddToBag.setOnClickListener {
             var quantity = 0
             product?.variants?.forEach {variant->
@@ -90,12 +89,12 @@ class ProductDetailsFragment : Fragment() {
             Review(
                 "David Lee",
                 5.0,
-                "https://www.shutterstock.com/image-photo/photo-cheerful-minded-lady-interested-260nw-2047307549.jpg",
+                "https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/E12KS1G65-W0168RE00G7-133faf432639-512.jpeg",
                 "This product is fantastic! It's incredibly easy to use and has saved me a lot of time and effort. I highly recommend it."
             )
         )
         if (product != null) {
-            createDots(product!!.images.size)
+            createDots(product.images.size)
             updateDots(0)
             binding.viewPagerImages.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
@@ -104,13 +103,18 @@ class ProductDetailsFragment : Fragment() {
                 }
             })
             binding.progressBar.visibility = View.GONE
-            binding.txtProductPrice.text = product!!.variants[0].price
-            binding.txtProductName.text = product!!.title
-            binding.txtViewDescription.text = product!!.bodyHtml
-            binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product!!.images)
+            binding.txtProductPrice.text = product.variants[0].price
+            binding.txtProductName.text = product.title
+            binding.txtViewDescription.text = product.bodyHtml
+            binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)
             binding.reviewsRecycler.adapter=ReviewsAdapter(requireContext(),reviews)
 
+            binding.txtSeeMoreReviews.setOnClickListener {
+                val action = ProductDetailsFragmentDirections.actionProductDetailsFragmentToReviewsFragment(product.title!!,product.images[0].src!!)
+                binding.root.findNavController().navigate(action)
+            }
         }
+
     }
 
     private fun createDots(numDots: Int) {
