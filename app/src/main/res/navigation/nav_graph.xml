@@ -208,7 +208,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="eg.gov.iti.jets.shopifyapp_user.favorite.FavoriteFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.favorite.presentation.ui.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" >
         <action
