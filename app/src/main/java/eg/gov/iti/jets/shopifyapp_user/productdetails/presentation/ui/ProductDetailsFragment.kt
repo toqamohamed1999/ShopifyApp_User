@@ -23,6 +23,8 @@ import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServi
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductDetailsBinding
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModel
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModelFactory
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.launch
 
@@ -52,14 +54,18 @@ class ProductDetailsFragment : Fragment() {
             }
             viewModel.addProductToCart(product?.toLineItem(),quantity)
         }
+
         lifecycleScope.launch {
             viewModel.addedToCart.observe(viewLifecycleOwner) {
                 when (it) {
                     1 -> {
                         Dialogs.SnakeToast(requireView(), "Product Added To Cart")
+                        (requireActivity() as BadgeChanger).changeBadgeCartCount(UserSettings.cartQuantity)
+                        viewModel.resetAddToCart()
                     }
                     -1 -> {
                         Dialogs.SnakeToast(requireView(), "Fail To Add to Cart")
+                        viewModel.resetAddToCart()
                     }
                     else -> {
 

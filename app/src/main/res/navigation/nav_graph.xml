@@ -143,6 +143,9 @@
         <action
             android:id="@+id/action_fragmentPaymentInfo_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_fragmentPaymentInfo_to_fragmentLocationDetector"
+            app:destination="@id/fragmentLocationDetector" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -175,6 +178,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_fragmentLocationDetector"
+            app:destination="@id/fragmentLocationDetector" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -232,5 +238,16 @@
         <action
             android:id="@+id/action_subCategoryFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentLocationDetector"
+        android:name="eg.gov.iti.jets.shopifyapp_user.addressgetter.presentation.ui.FragmentLocationDetector"
+        android:label="FragmentLocationDetector" >
+        <action
+            android:id="@+id/action_fragmentLocationDetector_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_fragmentLocationDetector_to_fragmentPaymentInfo"
+            app:destination="@id/fragmentPaymentInfo" />
     </fragment>
 </navigation>

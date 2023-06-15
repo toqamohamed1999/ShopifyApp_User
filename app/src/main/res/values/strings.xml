@@ -34,6 +34,7 @@
     <string name="reviews">Reviews</string>
     <string name="seemorereviews...">SeeMoreReviews...</string>
     <string name="add_to_cart">Add To Cart</string>
+    <string name="choose_method">Choose Method</string>
     <string name="welcome">Welcome</string>
     <string name="orders">Orders</string>
     <string name="more">More...</string>
@@ -41,6 +42,7 @@
     <string name="product_title">Product Title</string>
     <string name="product_price">Product Price</string>
     <string name="no_match_results">no match results</string>
+
     /** nada **/
 
 </resources>

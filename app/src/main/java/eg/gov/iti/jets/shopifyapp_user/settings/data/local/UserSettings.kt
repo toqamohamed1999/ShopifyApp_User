@@ -13,6 +13,9 @@ object UserSettings {
     var favoriteDraftOrderId:String = ""
     var cartDraftOrderId:String = "1118663508249"
     var userCurrentDiscountCopy:DiscountCode? = null
+    var selectedAddress = ""
+    var isSelected=false
+    var cartQuantity = 0
     fun saveSettings(){
         SharedOperations.getInstance().edit()
             .putString("userName", userName)
@@ -23,6 +26,7 @@ object UserSettings {
             .putString("phoneNumber",phoneNumber)
             .putString("favoriteDraftOrderId",favoriteDraftOrderId)
             .putString("cartDraftOrderId",cartDraftOrderId)
+            .putInt("cartQuantity",cartQuantity)
             .apply()
     }
     fun getPrice(value:Double):Double{
@@ -61,5 +65,36 @@ object UserSettings {
          phoneNumber = instance.getString("phoneNumber","")!!
          favoriteDraftOrderId =instance.getString("favoriteDraftOrderId","")!!
          cartDraftOrderId = instance.getString("cartDraftOrderId","")!!
+         cartQuantity = instance.getInt("cartQuantity",0)
+    }
+    fun clearSettings(){
+         userName = ""
+         userEmail = ""
+         userPassword = "" // user firebase id
+         currencyCode = ""
+         shippingAddress = ""
+         phoneNumber = ""
+         favoriteDraftOrderId = ""
+         cartDraftOrderId = "1118663508249"
+         userCurrentDiscountCopy = null
+         cartQuantity = 0
+        SharedOperations.getInstance().edit()
+            .putString("userName", userName)
+            .putString("userEmail", userEmail)
+            .putString("userPassword",userPassword)
+            .putString("currencyCode",currencyCode)
+            .putString("shippingAddress",shippingAddress)
+            .putString("phoneNumber",phoneNumber)
+            .putString("favoriteDraftOrderId",favoriteDraftOrderId)
+            .putString("cartDraftOrderId",cartDraftOrderId)
+            .putInt("cartQuantity",cartQuantity)
+            .apply()
+    }
+
+    fun saveNewAddress() {
+        shippingAddress = selectedAddress
+        selectedAddress = ""
+        isSelected = false
+        SharedOperations.getInstance().edit().putString("shippingAddress",shippingAddress).apply()
     }
 }
