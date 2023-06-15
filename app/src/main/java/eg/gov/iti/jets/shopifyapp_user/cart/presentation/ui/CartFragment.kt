@@ -1,17 +1,18 @@
 package eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
-import eg.gov.iti.jets.shopifyapp_user.cart.data.local.CartSharedPrefsOperations
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
@@ -21,8 +22,8 @@ import eg.gov.iti.jets.shopifyapp_user.cart.presentation.model.OrderPaymentDetai
 import eg.gov.iti.jets.shopifyapp_user.cart.presentation.viewmodel.CartViewModel
 import eg.gov.iti.jets.shopifyapp_user.cart.presentation.viewmodel.CartViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentCartBinding
-import eg.gov.iti.jets.shopifyapp_user.payment.presentation.ui.FragmentPaymentMethod
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -80,21 +81,20 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
 
     private fun calcTotalPrice() {
         var total = 0.0
-        if(productsIncCard.size==0){
-            binding?.cartCheckoutBtn?.isEnabled =false
-        }else{
-            binding?.cartCheckoutBtn?.isEnabled = true
-        }
+        UserSettings.cartQuantity = 0
+        binding?.cartCheckoutBtn?.isEnabled = productsIncCard.size != 0
         productsIncCard.forEach {
             total += it.price.toDouble()*it.quantity
+            UserSettings.cartQuantity+=it.quantity
         }
-        binding?.cartTotalPrice?.text = "Total Price : ${total} "
+        UserSettings.saveSettings()
+        (requireActivity() as BadgeChanger).changeBadgeCartCount(UserSettings.cartQuantity)
+        binding?.cartTotalPrice?.text = "Total Price : ${total} ${UserSettings.getPriceSymbol()}"
     }
 
     private fun setUpActions() {
         binding?.cartCheckoutBtn?.setOnClickListener {
-            //check network
-            //SHOW info page
+            binding?.root?.findNavController()?.navigate(R.id.action_cartFragment_to_fragmentPaymentInfo)
         }
     }
 
@@ -108,11 +108,13 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
     }
 
     override fun getOrderPaymentMethod(paymentMethod: Int) {
+
+        Log.e("","PaymentMethod : $paymentMethod")
         if(paymentMethod==0)//cashOnDelivery
         {
 
         }else if(paymentMethod==1){//use GooglePay
-
+            Toast.makeText(requireContext(),"Cash On Delivery Selected",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -125,9 +127,6 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
         }
         orderPaymentDetails.paymentAddress = shippingAddress
         orderPaymentDetails.paymentPhone = phone
-        val fragmentMethod = FragmentPaymentMethod()
-        fragmentMethod.isCancelable = false
-        fragmentMethod.show(childFragmentManager,null)
     }
 
     override fun increaseProductInCart(product: LineItem) {
@@ -139,8 +138,6 @@ class CartFragment : Fragment(),CartPaymentDataCollector,CartItemListener {
     }
 
     override fun removerProduct(product: LineItem) {
-
         viewModel.removeProductFromCart(product)
-
     }
 }

@@ -50,16 +50,16 @@ fun Product.toLineItem():LineItem{
     ))
     ,
     applied_discount = AppliedDiscount(
-            description =image.src,
+            description =image.src,//line item /  image
             value ="10.0",
             title = "Custom",
             amount = "20.00",
-        value_type = "percentage"
+        value_type = bodyHtml.toString() // line item product description
     ),
     name = title,
     properties = listOf(),
     custom = true,
-    price ="20.00",
+    price =variants[0].price.toString(),
     admin_graphql_api_id = "gid://shopify/DraftOrderLineItem/58260103233817"
     )
 }

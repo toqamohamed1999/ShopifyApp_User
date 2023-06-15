@@ -34,6 +34,7 @@
     <string name="reviews">Reviews</string>
     <string name="seemorereviews...">SeeMoreReviews...</string>
     <string name="add_to_cart">Add To Cart</string>
+    <string name="choose_method">Choose Method</string>
     /** nada **/
 
 </resources>

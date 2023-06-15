@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.shopifyapp_user.home.data.model.BrandResultState
@@ -29,6 +30,7 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeViewModel
+import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.ui.ProductImageViewPagerAdapter
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.flow.collectLatest
@@ -37,7 +39,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var dotsLayout: LinearLayout
     private lateinit var brandAdapter: BrandAdapter
     private lateinit var  sliderPagerAdapter:CouponAdapter
     private val viewModel: HomeViewModel by lazy {
@@ -51,7 +52,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View{
+    ): View?{
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -59,9 +60,8 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sliderPagerAdapter = CouponAdapter(listOf(), this)
-        dotsLayout = view.findViewById(R.id.dotsLayout)
-        dotsLayout.removeAllViews()
+        sliderPagerAdapter = CouponAdapter(listOf(),this@HomeFragment)
+        binding.couponsViewPager.adapter = sliderPagerAdapter
         binding.couponsViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -69,17 +69,15 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
             }
         })
         //adds
-        viewModel.getAdds()
-        binding.couponsViewPager.adapter = sliderPagerAdapter
         lifecycleScope.launch {
-            viewModel.adds.collectLatest {
+            viewModel.adds.observe(viewLifecycleOwner) {
                 sliderPagerAdapter.discounts = it
-                //createDots(it.size)
-                //updateDots(0)
-                //dotsLayout.refreshDrawableState()
-
+                createDots(it.size)
+                updateDots(0)
+                binding.couponsViewPager.refreshDrawableState()
             }
         }
+        viewModel.getAdds()
         //adapter and recyclerview
         viewModel.getBrands()
         brandAdapter = BrandAdapter(ArrayList(), requireActivity(), this)
@@ -113,15 +111,15 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
             dotParams.setMargins(dotMargin, 0, dotMargin, 0)
             dot.layoutParams = dotParams
             dot.background = ContextCompat.getDrawable(requireContext(), R.drawable.dot_item)
-            dotsLayout.addView(dot)
+            binding.dotsLayout.addView(dot)
 
         }
     }
 
     private fun updateDots(currentPosition: Int) {
-        val numDots = dotsLayout.childCount
+        val numDots = binding.dotsLayout.childCount
         for (i in 0 until numDots) {
-            val dot = dotsLayout.getChildAt(i)
+            val dot = binding.dotsLayout.getChildAt(i)
             val drawable = if (i == currentPosition) {
                 ContextCompat.getDrawable(requireContext(), R.drawable.dot_selected)
             } else {
