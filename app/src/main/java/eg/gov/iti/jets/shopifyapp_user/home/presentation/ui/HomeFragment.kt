@@ -1,21 +1,19 @@
 package eg.gov.iti.jets.shopifyapp_user.home.presentation.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
@@ -25,6 +23,7 @@ import eg.gov.iti.jets.shopifyapp_user.home.data.remote.AddsRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.home.data.remote.BrandRemoteSource
 import eg.gov.iti.jets.shopifyapp_user.home.data.repo.AddsRepoImpl
 import eg.gov.iti.jets.shopifyapp_user.home.data.repo.BrandRepoImp
+import eg.gov.iti.jets.shopifyapp_user.home.domain.model.SmartCollection
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryViewModel
@@ -40,6 +39,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     private lateinit var dotsLayout: LinearLayout
     private lateinit var brandAdapter: BrandAdapter
     private lateinit var  sliderPagerAdapter:CouponAdapter
+    private var brandList :List<SmartCollection> = listOf()
     private val viewModel: HomeViewModel by lazy {
         val factory = HomeFactoryViewModel(
             BrandRepoImp.getInstance(BrandRemoteSource())!!,
@@ -92,6 +92,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                     is BrandResultState.Loading -> {
                     }
                     is BrandResultState.Success -> {
+                        brandList = it.brandList
                         brandAdapter.setBrandList(it.brandList)
                         Log.i("Counttttt", "count =  ${it.brandList.size}")
                         binding.brandsRecyclerview.adapter = brandAdapter
@@ -102,6 +103,26 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                 }
             }
         }
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // This method is called before the text is changed.
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val filteredList = filteredMyListWithSequence(s.toString())
+                showNoMatchingResultIfFilteredListIsEmpty(filteredList)
+                if (filteredList != null) {
+                    brandAdapter.setBrandList(filteredList)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // This method is called after the text has been changed.
+            }
+        }
+
+        binding.searchEditText.addTextChangedListener(textWatcher)
+
     }
 
     private fun createDots(numDots: Int) {
@@ -139,5 +160,19 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onBrandClick(brandName: String?) {
         val action = HomeFragmentDirections.actionHomeFragmentToProductsFragment(brandName)
         binding.root.findNavController().navigate(action)
+    }
+    private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
+
+        return brandList?.filter { it.title!!.lowercase().contains(s.lowercase()) }
+    }
+    private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<SmartCollection>?) {
+        if (filteredList.isNullOrEmpty()) {
+            binding.txtNoResults.visibility = View.VISIBLE
+            binding.brandsRecyclerview.visibility = View.GONE
+        } else {
+
+            binding.txtNoResults.visibility = View.GONE
+            binding.brandsRecyclerview.visibility = View.VISIBLE
+        }
     }
 }

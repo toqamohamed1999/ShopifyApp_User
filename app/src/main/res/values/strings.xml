@@ -40,6 +40,7 @@
     <string name="wishlist">WishList</string>
     <string name="product_title">Product Title</string>
     <string name="product_price">Product Price</string>
+    <string name="no_match_results">no match results</string>
     /** nada **/
 
 </resources>

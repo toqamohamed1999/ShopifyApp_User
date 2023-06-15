@@ -1,6 +1,9 @@
 package eg.gov.iti.jets.shopifyapp_user.products.presentation.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +25,7 @@ import eg.gov.iti.jets.shopifyapp_user.products.data.repo.ProductsBrandRepoImp
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductsViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class ProductsFragment : Fragment(), OnClickProduct {
@@ -46,6 +50,7 @@ class ProductsFragment : Fragment(), OnClickProduct {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -92,9 +97,44 @@ class ProductsFragment : Fragment(), OnClickProduct {
             })
             productsAdapter.notifyDataSetChanged()
         }
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // This method is called before the text is changed.
+            }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            val filteredList = filteredMyListWithSequence(s.toString())
+            showNoMatchingResultIfFilteredListIsEmpty(filteredList)
+            if (filteredList != null) {
+                productsAdapter.setProductList(filteredList)
+            }
+        }
 
+        override fun afterTextChanged(s: Editable?) {
+            // This method is called after the text has been changed.
+        }
     }
 
+    binding.searchEditText.addTextChangedListener(textWatcher)
+
+
+
+
+
+    }
+        private fun filteredMyListWithSequence(s: String): List<Product>? {
+
+        return productsList?.filter { it.title!!.lowercase().contains(s.lowercase()) }
+    }
+    private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<Product>?) {
+        if (filteredList.isNullOrEmpty()) {
+            binding.txtNoResults.visibility = View.VISIBLE
+            binding.productsRecyclerView.visibility = View.GONE
+        } else {
+
+            binding.txtNoResults.visibility = View.GONE
+            binding.productsRecyclerView.visibility = View.VISIBLE
+        }
+    }
     override fun onClickFavIcon(product: Product) {
         TODO("Not yet implemented")
     }

@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.home.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,8 +14,10 @@ class BrandAdapter(private var brandList: List<SmartCollection>, val context: Co
 
     private lateinit var binding: BrandRowBinding
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setBrandList(values: List<SmartCollection?>?) {
         this.brandList = values as List<SmartCollection>
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

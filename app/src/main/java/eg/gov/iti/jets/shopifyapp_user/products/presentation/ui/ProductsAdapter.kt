@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.products.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,8 +15,11 @@ class ProductsAdapter(private var productList: List<Product>, val context: Conte
 
     private lateinit var binding: ProductRowBinding
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setProductList(values: List<Product?>?) {
+        this.productList=ArrayList()
         this.productList = values as List<Product>
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
