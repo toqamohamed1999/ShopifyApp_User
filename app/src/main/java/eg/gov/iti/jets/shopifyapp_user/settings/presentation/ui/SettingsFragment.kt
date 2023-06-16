@@ -41,7 +41,7 @@ class SettingsFragment:Fragment(){
                 UserSettings.currencyCode = "EUR"
             }
             else->{
-                UserSettings.currencyCode = "EGB"
+                UserSettings.currencyCode = "EGP"
             }
         }
        }

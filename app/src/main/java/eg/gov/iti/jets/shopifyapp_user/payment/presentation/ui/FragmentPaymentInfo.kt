@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui.CartPaymentDataCollector
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentPaymentInfoBinding
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 
 class FragmentPaymentInfo: Fragment() {
@@ -28,12 +29,17 @@ class FragmentPaymentInfo: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showInfo()
+       setUpActions()
+    }
+
+    private fun setUpActions() {
         binding?.shippingInfoButtonContinuePayment?.setOnClickListener {
-               val address = binding?.shippingInfoEditTextAddress?.text.toString()
+            val address = binding?.shippingInfoEditTextAddress?.text.toString()
             val phone = binding?.shippingInfoEditTextPhone?.text.toString()
             if(validatePhone(phone)&& address.isNotEmpty())
             {
-                completeInfo?.getOrderPaymentDetails(address,phone,false)
+                completeInfo?.getOrderPaymentDetails(address,phone,binding?.checkBox?.isSelected?:false)
                 showMethodChooser()
 
             }else{
@@ -41,10 +47,23 @@ class FragmentPaymentInfo: Fragment() {
             }
         }
         binding?.shippingInfoImageButtonMapAddress?.setOnClickListener {
-            //show map to select address
+            binding?.root?.findNavController()?.navigate(R.id.action_fragmentPaymentInfo_to_fragmentLocationDetector)
         }
     }
 
+    private fun showInfo() {
+        binding?.shippingInfoEditTextAddress?.setText(UserSettings.shippingAddress)
+        binding?.shippingInfoEditTextPhone?.setText(UserSettings.phoneNumber)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(UserSettings.isSelected)
+        {
+            binding?.shippingInfoEditTextAddress?.setText(UserSettings.selectedAddress)
+            UserSettings.isSelected=false
+        }
+    }
     private fun showMethodChooser() {
         val inflater = this.layoutInflater
         val builder =  AlertDialog.Builder(requireContext())

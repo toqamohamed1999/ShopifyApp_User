@@ -12,6 +12,7 @@ object UserSettings {
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = ""
     var cartDraftOrderId:String = "1118663508249"
+    var userAPI_Id = "7098003489049"
     var userCurrentDiscountCopy:DiscountCode? = null
     var selectedAddress = ""
     var isSelected=false
