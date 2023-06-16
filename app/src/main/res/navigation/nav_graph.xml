@@ -87,12 +87,12 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
-        <argument
-            android:name="product"
-            app:argType="eg.gov.iti.jets.shopifyapp_user.base.model.Product" />
         <action
             android:id="@+id/action_productDetailsFragment_to_subCategoryFragment"
             app:destination="@id/subCategoryFragment" />
+        <argument
+            android:name="product_Id"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
