@@ -2,7 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.base.local.database.favorite
 
 import eg.gov.iti.jets.shopifyapp_user.base.local.database.ShopifyDatabase
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import kotlinx.coroutines.flow.Flow
 
 class FavLocalSourceImpl(private val favDAO: FavoriteDao =ShopifyDatabase.getInstance().getFavoriteDAO()):FavLocalSourceInterface {

@@ -5,7 +5,7 @@ import androidx.room.*
 import eg.gov.iti.jets.shopifyapp_user.base.local.database.favorite.FavoriteDao
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.base.model.ShopifyTypeConverter
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 
 @Database(entities = [LineItem::class], version = 2)
 @TypeConverters(ShopifyTypeConverter::class)

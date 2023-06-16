@@ -2,9 +2,9 @@ package eg.gov.iti.jets.shopifyapp_user.base.model
 
 import com.google.gson.Gson
 import androidx.room.TypeConverter
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.AppliedDiscount
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.TaxLineX
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.AppliedDiscount
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.TaxLineX
 
 class ShopifyTypeConverter {
     @TypeConverter

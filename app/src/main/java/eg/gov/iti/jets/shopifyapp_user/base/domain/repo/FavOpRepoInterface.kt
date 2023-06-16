@@ -1,6 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.base.domain.repo
 
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import kotlinx.coroutines.flow.Flow
 
 interface FavOpRepoInterface {

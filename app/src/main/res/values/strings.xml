@@ -51,6 +51,7 @@
     <string name="usd">USD</string>
     <string name="eur">EUR</string>
     <string name="egp">EGP</string>
+    <string name="networkNotAvilable">No Internet Connection !!</string>
 
     /** nada **/
 

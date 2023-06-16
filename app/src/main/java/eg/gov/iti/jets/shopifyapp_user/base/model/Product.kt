@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.AppliedDiscount
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.TaxLineX
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.AppliedDiscount
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.TaxLineX
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -30,7 +30,7 @@ data class Product (
     @SerializedName("images") var images : List<Image>,
     @SerializedName("image") var image : Image
 ):Parcelable
-fun Product.toLineItem():LineItem{
+fun Product.toLineItem(): LineItem {
     return LineItem(
         id = id,
     variant_id = 0,
@@ -49,7 +49,8 @@ fun Product.toLineItem():LineItem{
         rate= 0.14,
         title="GST",
         price="22.68"
-    ))
+    )
+    )
     ,
     applied_discount = AppliedDiscount(
             description =image.src,//line item /  image

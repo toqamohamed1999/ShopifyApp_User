@@ -2,8 +2,8 @@ package eg.gov.iti.jets.shopifyapp_user.cart.data.repo
 
 import eg.gov.iti.jets.shopifyapp_user.cart.data.local.CartSharedPrefsOperations
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderRemoteSource
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import kotlinx.coroutines.flow.MutableStateFlow
