@@ -118,4 +118,8 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
          }
      }
 
+    fun clearOrder() {
+        cartDraftOrder=null
+    }
+
 }

@@ -32,7 +32,7 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
     }
 
     override fun onBindViewHolder(holder: CartItemViewHolder, position: Int) {
-        val product = getItem(position)
+        val product:LineItem? = getItem(position)
         //item Actions
         holder.binding.cartImageViewDecreaseProduct.setOnClickListener {
             listener.increaseProductInCart(getItem(holder.adapterPosition))
@@ -48,16 +48,21 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
                     i?.dismiss()
                 }.create().show()
         }
-        val imageUrl=product.applied_discount.description
+        val imageUrl=product?.applied_discount?.description
         // item info
         Glide.with(holder.binding.root.context)
             .load(imageUrl)
             .error(R.drawable.noimage)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(holder.binding.cartImageViewProduct)
-        holder.binding.cartItemTitle.text = product.title?.split("|")?.last()
-        holder.binding.cartTextViewAmount.text = product.quantity.toString()
-        holder.binding.cartItemPrice.text = "Price : "+UserSettings.getPrice(product.price.toDouble()).toString() + UserSettings.getPriceSymbol()
-        holder.binding.cartItemTotalPrice.text = "Total  : "+(UserSettings.getPrice(product.price.toDouble())*product.quantity).toString()
+        holder.binding.cartItemTitle.text = product?.title?.split("|")?.last()
+        holder.binding.cartTextViewAmount.text = product?.quantity?.toString()
+        if(product!=null) {
+            holder.binding.cartItemPrice.text =
+                "Price : " + UserSettings.getPrice(product.price.toDouble())
+                    .toString() + UserSettings.getPriceSymbol()
+            holder.binding.cartItemTotalPrice.text =
+                "Total  : " + (UserSettings.getPrice(product.price.toDouble()) * product.quantity).toString()
+        }
     }
 }

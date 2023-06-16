@@ -37,7 +37,6 @@ class CartFragment : Fragment(),CartItemListener {
     }
     private lateinit var cartAdapter:CartProductAdapter
     private var productsIncCard:MutableList<LineItem> = mutableListOf()
-    private var orderPaymentDetails: OrderPaymentDetails = OrderPaymentDetails()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,7 +74,11 @@ class CartFragment : Fragment(),CartItemListener {
                 }
             }
         }
+    }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.clearOrder()
     }
 
     private fun calcTotalPrice() {

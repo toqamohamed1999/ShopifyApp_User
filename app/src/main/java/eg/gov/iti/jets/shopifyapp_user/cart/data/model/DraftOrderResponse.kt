@@ -1,10 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.cart.data.model
 
 import android.os.Parcelable
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.OrderBody
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.PaymentDetails
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.ShippingAddress
+import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import kotlinx.parcelize.Parcelize
 
@@ -19,6 +16,7 @@ fun DraftOrderResponse.toOrderBody():OrderBody{
             draft_order?.total_price?:"",
             listOf(),"","Bogus",draft_order?.line_items?: listOf(), PaymentDetails()
         , ShippingAddress(),true, listOf(),UserSettings.userAPI_Id.toInt()
+        , Customer(UserSettings.userAPI_Id.toLong())
         )
     )
 }

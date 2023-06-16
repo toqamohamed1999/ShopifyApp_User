@@ -22,7 +22,7 @@ class ProductDetailsViewModel(private val repo:CartRepository):ViewModel() {
       val addedToCart:LiveData<Int> = _addedToCart
       private  var cartDraftOrder: DraftOrderResponse = DraftOrderResponse(null)
 
-    init {
+    fun getCartProducts(){
         viewModelScope.launch {
             repo.getCartProducts(UserSettings.cartDraftOrderId).collect {
                 when (it) {
@@ -92,4 +92,6 @@ class ProductDetailsViewModel(private val repo:CartRepository):ViewModel() {
     fun resetAddToCart() {
         _addedToCart.value = 0
     }
+
+
 }

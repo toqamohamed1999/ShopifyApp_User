@@ -1,8 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.base.model
 
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.AppliedDiscount
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
@@ -33,12 +31,9 @@ data class Product (
 fun Product.toLineItem(): LineItem {
     return LineItem(
         id = id,
-    variant_id = 0,
     product_id = id,
     title =title,
-    variant_title = null,
     sku =null,
-    vendor = null,
     quantity = 1,
     requires_shipping = false,
     taxable = true,
@@ -57,13 +52,14 @@ fun Product.toLineItem(): LineItem {
             value ="10.0",
             title = "Custom",
             amount = "20.00",
-        value_type = bodyHtml.toString() // line item product description
+        value_type = "percentage"
     ),
     name = title,
     properties = listOf(),
     custom = true,
     price =variants[0].price.toString(),
-    admin_graphql_api_id = "gid://shopify/DraftOrderLineItem/58260103233817"
+     variant_id = null, variant_title = bodyHtml.toString() // Product Description
+         , vendor = null
     )
 }
 fun Product.toFavRoomPojo():FavRoomPojo{

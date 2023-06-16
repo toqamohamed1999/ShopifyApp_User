@@ -4,7 +4,6 @@ import eg.gov.iti.jets.shopifyapp_user.base.domain.repo.FavOpRepoInterface
 import eg.gov.iti.jets.shopifyapp_user.base.local.database.favorite.FavLocalSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.base.local.database.favorite.FavLocalSourceInterface
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
 import kotlinx.coroutines.flow.Flow
 
 class FavOpRepoImpl(private val favLocalSource: FavLocalSourceInterface = FavLocalSourceImpl()) :

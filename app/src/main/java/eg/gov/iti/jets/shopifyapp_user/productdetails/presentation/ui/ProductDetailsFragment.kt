@@ -47,12 +47,13 @@ class ProductDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val product = args.product
+        viewModel.getCartProducts()
         binding.btnAddToBag.setOnClickListener {
             var quantity = 0
-            product?.variants?.forEach {variant->
+            product.variants.forEach {variant->
                 quantity+=variant.inventoryQuantity?:0
             }
-            viewModel.addProductToCart(product?.toLineItem(),quantity)
+            viewModel.addProductToCart(product.toLineItem(),quantity)
         }
 
         lifecycleScope.launch {
@@ -116,7 +117,6 @@ class ProductDetailsFragment : Fragment() {
         }
 
     }
-
     private fun createDots(numDots: Int) {
         for (i in 0 until numDots) {
             val dot = View(context)
