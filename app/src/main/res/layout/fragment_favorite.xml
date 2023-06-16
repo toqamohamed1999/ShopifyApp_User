@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".favorite.FavoriteFragment">
+    tools:context=".favorite.presentation.ui.FavoriteFragment">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_search"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

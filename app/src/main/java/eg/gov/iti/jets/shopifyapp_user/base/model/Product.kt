@@ -1,6 +1,8 @@
 package eg.gov.iti.jets.shopifyapp_user.base.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.AppliedDiscount
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
@@ -31,8 +33,8 @@ data class Product (
 fun Product.toLineItem():LineItem{
     return LineItem(
         id = id,
-    variant_id = null,
-    product_id = null,
+    variant_id = 0,
+    product_id = id,
     title =title,
     variant_title = null,
     sku =null,
