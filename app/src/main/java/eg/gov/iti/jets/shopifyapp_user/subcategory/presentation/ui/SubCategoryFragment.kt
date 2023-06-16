@@ -120,8 +120,8 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
         TODO("Not yet implemented")
     }
 
-    override fun onClickProductCard(product: Product) {
-        val action = SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(product)
+    override fun onClickProductCard(product_Id: Long) {
+        val action = SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(product_Id)
         binding.root.findNavController().navigate(action)
     }
 
