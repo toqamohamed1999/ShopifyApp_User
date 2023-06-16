@@ -11,10 +11,10 @@ class FavViewModel(private val repo:FavLocalRepoInterface=FavLocalRepoImpl()) :V
 
     var list: List<LineItem>? = null
 
-     fun deleteFavProductWithId(lineItemId:Long) {
+    fun deleteFavProductWithId(productId: Long) {
         viewModelScope.launch {
 
-            repo.deleteFavProductWithId(lineItemId)
+            repo.deleteFavProductWithId(productId)
         }
     }
 }

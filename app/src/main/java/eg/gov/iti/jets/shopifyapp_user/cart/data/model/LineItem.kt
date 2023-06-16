@@ -1,13 +1,10 @@
-package eg.gov.iti.jets.shopifyapp_user.cart.data.model
+package eg.gov.iti.jets.shopifyapp_user.cart.domain.model
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-@Entity(tableName = "FavoriteProducts")
+
 data class LineItem(
     var admin_graphql_api_id: String,
     var applied_discount: AppliedDiscount,
@@ -15,7 +12,6 @@ data class LineItem(
     var fulfillment_service: String,
     var gift_card: Boolean,
     var grams: Int,
-    @PrimaryKey
     var id: Long?,
     var name: String?,
     var price: String,
@@ -30,4 +26,4 @@ data class LineItem(
     var variant_id: Long?,
     var variant_title: String?,
     var vendor: String?
-):Parcelable
+)

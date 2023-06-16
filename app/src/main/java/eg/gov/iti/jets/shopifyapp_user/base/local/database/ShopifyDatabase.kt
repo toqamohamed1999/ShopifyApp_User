@@ -3,12 +3,12 @@ package eg.gov.iti.jets.shopifyapp_user.base.local.database
 import android.content.Context
 import androidx.room.*
 import eg.gov.iti.jets.shopifyapp_user.base.local.database.favorite.FavoriteDao
+import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.base.model.ShopifyTypeConverter
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 
-@Database(entities = [LineItem::class], version = 2)
-@TypeConverters(ShopifyTypeConverter::class)
+@Database(entities = [FavRoomPojo::class], version = 3)
 abstract class ShopifyDatabase: RoomDatabase() {
     abstract fun getFavoriteDAO():FavoriteDao
 
