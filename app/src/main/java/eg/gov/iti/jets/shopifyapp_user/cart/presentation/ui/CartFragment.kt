@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
@@ -98,8 +99,14 @@ class CartFragment : Fragment(),CartItemListener {
         binding?.cartCheckoutBtn?.setOnClickListener {
             if(UserStates.checkConnectionState(requireContext())) {
 
-                binding?.root?.findNavController()
-                    ?.navigate(R.id.action_cartFragment_to_fragmentPaymentInfo)
+                val action = (viewModel.cartOrder.value as DraftOrderAPIState.Success).order?.let { it1 ->
+                    CartFragmentDirections.actionCartFragmentToFragmentPaymentInfo(
+                        it1
+                    )
+                }
+                if (action != null) {
+                    binding?.root?.findNavController()?.navigate(action)
+                }
             }else{
                 Dialogs.SnakeToast(requireView(),getString(R.string.networkNotAvilable))
             }
@@ -114,18 +121,6 @@ class CartFragment : Fragment(),CartItemListener {
             adapter = cartAdapter
         }
     }
-
-
-   /* override fun getOrderPaymentDetails(shippingAddress: String, phone: String,saveForEveryTime:Boolean) {
-        if(saveForEveryTime)
-        {
-            UserSettings.shippingAddress=shippingAddress
-            UserSettings.phoneNumber =phone
-            UserSettings.saveSettings()
-        }
-        orderPaymentDetails.paymentAddress = shippingAddress
-        orderPaymentDetails.paymentPhone = phone
-    }*/
 
     override fun increaseProductInCart(product: LineItem) {
         viewModel.updateProduct(1,product)

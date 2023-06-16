@@ -65,7 +65,16 @@ class FragmentPaymentInfo: Fragment() {
             binding?.root?.findNavController()?.navigate(R.id.action_fragmentPaymentInfo_to_fragmentLocationDetector)
         }
     }
-
+    /* override fun getOrderPaymentDetails(shippingAddress: String, phone: String,saveForEveryTime:Boolean) {
+            if(saveForEveryTime)
+            {
+                UserSettings.shippingAddress=shippingAddress
+                UserSettings.phoneNumber =phone
+                UserSettings.saveSettings()
+            }
+            orderPaymentDetails.paymentAddress = shippingAddress
+            orderPaymentDetails.paymentPhone = phone
+        }*/
     private fun showInfo() {
 
         binding?.shippingInfoEditTextAddress?.setText(UserSettings.shippingAddress)
