@@ -14,5 +14,6 @@ data class Order(
     val shipping_address: ShippingAddress,
     val test: Boolean,
     val transactions: List<Transaction>,
-    val user_id: Int
+    val user_id: Int,
+    val customer: Customer
 )
