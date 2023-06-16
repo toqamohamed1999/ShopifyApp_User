@@ -1,7 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.favorite.domain.repo
 
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface FavRemoteRepoInterface {

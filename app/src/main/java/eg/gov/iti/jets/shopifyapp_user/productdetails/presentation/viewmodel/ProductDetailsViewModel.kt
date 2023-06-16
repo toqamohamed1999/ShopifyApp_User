@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import kotlinx.coroutines.flow.*
@@ -20,9 +20,9 @@ class ProductDetailsViewModel(private val repo:CartRepository):ViewModel() {
 
       private val _addedToCart: MutableLiveData<Int> = MutableLiveData(0)
       val addedToCart:LiveData<Int> = _addedToCart
-      private  var cartDraftOrder:DraftOrderResponse = DraftOrderResponse(null)
+      private  var cartDraftOrder: DraftOrderResponse = DraftOrderResponse(null)
 
-    init {
+    fun getCartProducts(){
         viewModelScope.launch {
             repo.getCartProducts(UserSettings.cartDraftOrderId).collect {
                 when (it) {
@@ -38,7 +38,7 @@ class ProductDetailsViewModel(private val repo:CartRepository):ViewModel() {
             }
         }
     }
-    fun addProductToCart(product: LineItem?,quantity:Int){
+    fun addProductToCart(product: LineItem?, quantity:Int){
 
         val mlist:MutableList<LineItem> = mutableListOf()
         var flag =false
@@ -92,4 +92,6 @@ class ProductDetailsViewModel(private val repo:CartRepository):ViewModel() {
     fun resetAddToCart() {
         _addedToCart.value = 0
     }
+
+
 }

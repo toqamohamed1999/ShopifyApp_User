@@ -2,7 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.cart.data.remote
 
 import android.util.Log
 import com.google.gson.Gson
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderRemoteSource
 import kotlinx.coroutines.flow.MutableStateFlow

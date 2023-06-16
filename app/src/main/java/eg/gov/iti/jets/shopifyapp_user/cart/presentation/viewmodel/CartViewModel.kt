@@ -3,8 +3,8 @@ package eg.gov.iti.jets.shopifyapp_user.cart.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.DraftOrderResponse
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +16,10 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
 
      private val _cartOrder:MutableStateFlow<DraftOrderAPIState> = MutableStateFlow(DraftOrderAPIState.Loading())
      val cartOrder:StateFlow<DraftOrderAPIState> = _cartOrder
-     private var cartDraftOrder:DraftOrderResponse? = null
+     private var cartDraftOrder: DraftOrderResponse? = null
 
 
-    fun setCartDraftOrder(order:DraftOrderResponse?){
+    fun setCartDraftOrder(order: DraftOrderResponse?){
         cartDraftOrder = order
     }
 
@@ -37,7 +37,7 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
              }
          }
      }
-    private fun addProductToList(product:LineItem){
+    private fun addProductToList(product: LineItem){
         val mlist:MutableList<LineItem> = mutableListOf()
         mlist.addAll(cartDraftOrder?.draft_order?.line_items?: listOf())
         mlist.add(product)
@@ -46,7 +46,7 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
      fun removeProductFromCart(product: LineItem){
                 removeProductFromList(product)
      }
-    private fun removeProductFromList(product:LineItem){
+    private fun removeProductFromList(product: LineItem){
         val mlist:MutableList<LineItem> = mutableListOf()
         cartDraftOrder?.draft_order?.line_items?.forEach {
             if(it.id!=product.id)
@@ -117,5 +117,9 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
              }
          }
      }
+
+    fun clearOrder() {
+        cartDraftOrder=null
+    }
 
 }

@@ -2,9 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.base.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.AppliedDiscount
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.TaxLineX
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 
 @Entity(tableName = "FavoriteProducts")
 data class FavRoomPojo(
@@ -15,7 +13,7 @@ data class FavRoomPojo(
     val price: String?,
     val bodyHtml:String?
 )
-fun FavRoomPojo.toLineItem():LineItem{
+/*fun FavRoomPojo.toLineItem(): LineItem {
     return LineItem(
         id = productId,
         variant_id = 0,
@@ -50,4 +48,4 @@ fun FavRoomPojo.toLineItem():LineItem{
         price =price.toString(),
         admin_graphql_api_id = "gid://shopify/DraftOrderLineItem/58260103233817"
     )
-}
+}*/
