@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "FavoriteProducts")
+
 data class LineItem(
     var admin_graphql_api_id: String,
     var applied_discount: AppliedDiscount,
@@ -12,7 +12,6 @@ data class LineItem(
     var fulfillment_service: String,
     var gift_card: Boolean,
     var grams: Int,
-    @PrimaryKey
     var id: Long?,
     var name: String?,
     var price: String,

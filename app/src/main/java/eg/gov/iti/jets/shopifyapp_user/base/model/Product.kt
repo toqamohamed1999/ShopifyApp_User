@@ -65,3 +65,12 @@ fun Product.toLineItem():LineItem{
     admin_graphql_api_id = "gid://shopify/DraftOrderLineItem/58260103233817"
     )
 }
+fun Product.toFavRoomPojo():FavRoomPojo{
+    return FavRoomPojo(
+        productId = id,
+        title=title,
+        imageSrc = images[0].src,
+        price=variants[0].price,
+        bodyHtml=bodyHtml
+    )
+}
