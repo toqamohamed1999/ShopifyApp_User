@@ -1,8 +1,8 @@
 package eg.gov.iti.jets.shopifyapp_user.base.model.orders
 
 data class ShippingAddress(
-    var address1: String="",
-    var address2: String="",
+    var address1: String? ="",
+    var address2: String? ="",
     var city: String="",
     var company: Any?=null,
     var country: String="",

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +26,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import eg.gov.iti.jets.shopifyapp_user.util.UserStates
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -77,8 +79,8 @@ class CartFragment : Fragment(),CartItemListener {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onStop() {
+        super.onStop()
         viewModel.clearOrder()
     }
 
@@ -98,15 +100,11 @@ class CartFragment : Fragment(),CartItemListener {
     private fun setUpActions() {
         binding?.cartCheckoutBtn?.setOnClickListener {
             if(UserStates.checkConnectionState(requireContext())) {
-
-                val action = (viewModel.cartOrder.value as DraftOrderAPIState.Success).order?.let { it1 ->
-                    CartFragmentDirections.actionCartFragmentToFragmentPaymentInfo(
-                        it1
-                    )
-                }
-                if (action != null) {
-                    binding?.root?.findNavController()?.navigate(action)
-                }
+                    if(productsIncCard.size>0) {
+                        binding?.root?.findNavController()?.navigate(R.id.action_cartFragment_to_fragmentPaymentInfo)
+                    }else{
+                        Toast.makeText(requireContext(),"Cart Empty !!",Toast.LENGTH_SHORT).show()
+                    }
             }else{
                 Dialogs.SnakeToast(requireView(),getString(R.string.networkNotAvilable))
             }
