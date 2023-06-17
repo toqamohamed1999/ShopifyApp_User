@@ -48,7 +48,12 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
                     i?.dismiss()
                 }.create().show()
         }
-        val imageUrl=product?.applied_discount?.description
+        var imageUrl=""
+        try{
+           imageUrl= product?.applied_discount?.description?.split(")")?.get(1) ?: ""
+        }catch (exception:java.lang.Exception){
+
+        }
         // item info
         Glide.with(holder.binding.root.context)
             .load(imageUrl)

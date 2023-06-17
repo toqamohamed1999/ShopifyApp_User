@@ -1,7 +1,10 @@
 package eg.gov.iti.jets.shopifyapp_user.settings.data.local
 
+import android.location.Address
 import eg.gov.iti.jets.shopifyapp_user.base.local.sharedpreferances.SharedOperations
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
+import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.AddressBody
+import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.Addresse
 
 object UserSettings {
     var userName:String = ""
@@ -14,7 +17,7 @@ object UserSettings {
     var cartDraftOrderId:String = "1118663508249"
     var userAPI_Id = "7098003489049"
     var userCurrentDiscountCopy:DiscountCode? = null
-    var selectedAddress = ""
+    var selectedAddress: Address?=null
     var isSelected=false
     var cartQuantity = 0
     fun saveSettings(){
@@ -93,9 +96,19 @@ object UserSettings {
     }
 
     fun saveNewAddress() {
-        shippingAddress = selectedAddress
-        selectedAddress = ""
+        shippingAddress = selectedAddress?.countryName + selectedAddress?.adminArea
+        selectedAddress = null
         isSelected = false
         SharedOperations.getInstance().edit().putString("shippingAddress",shippingAddress).apply()
+    }
+    fun Address.toAddressBody():AddressBody{
+        return AddressBody(
+            Addresse(
+            address1 = this.getAddressLine(0)?.toString(), address2 = this.getAddressLine(1)?.toString()
+        , city = this.adminArea,company = null, country = this.countryName, country_code = this.countryCode
+                , first_name =  userName, name =  userName
+            , last_name =  userName, phone =  phoneNumber,
+                zip = this.postalCode?:"", country_name = "", customer_id = userAPI_Id.toLong(), default = false, province_code = ""
+        ))
     }
 }

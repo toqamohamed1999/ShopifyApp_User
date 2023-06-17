@@ -147,8 +147,8 @@
             android:id="@+id/action_fragmentPaymentInfo_to_fragmentLocationDetector"
             app:destination="@id/fragmentLocationDetector" />
         <argument
-            android:name="DraftOrder"
-            app:argType="eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse" />
+            android:name="order"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

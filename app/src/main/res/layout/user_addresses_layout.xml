@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rescleView_addresses_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/shipping_addresses"
+        android:textAlignment="gravity"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+</FrameLayout>

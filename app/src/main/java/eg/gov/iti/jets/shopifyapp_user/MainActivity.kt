@@ -64,8 +64,19 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Category"
-            } else if (navDestination.id == R.id.allOrdersFragment
+            }else if (navDestination.id == R.id.fragmentPaymentInfo
             ) {
+                binding.toolbar.visibility = View.GONE
+                bottomNav.visibility = View.GONE
+                binding.backButton.visibility = View.VISIBLE
+
+            }else if (navDestination.id == R.id.settingsFragment||navDestination.id == R.id.fragmentLocationDetector)
+             {
+                binding.toolbar.visibility = View.GONE
+                bottomNav.visibility = View.GONE
+                binding.backButton.visibility = View.VISIBLE
+
+            } else if (navDestination.id == R.id.allOrdersFragment) {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "All Orders"

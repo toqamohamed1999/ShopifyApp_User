@@ -13,6 +13,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
+import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
+import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
+import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentPaymentInfoBinding
 import eg.gov.iti.jets.shopifyapp_user.payment.data.remote.PaymentRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.payment.data.repo.PaymentRepoImpl
@@ -22,14 +25,17 @@ import eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel.PaymentVie
 import eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel.PaymentViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.ui.ProductDetailsFragmentArgs
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.toAddressBody
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import retrofit2.create
 
 class FragmentPaymentInfo: Fragment() {
     private var binding: FragmentPaymentInfoBinding? = null
-    private val args: FragmentPaymentInfoArgs by navArgs()
     private val viewModel by viewModels<PaymentViewModel> {
-        PaymentViewModelFactory(PaymentRepoImpl(PaymentRemoteSourceImpl(
+        PaymentViewModelFactory(
+            CartRepositoryImpl(DraftOrderRemoteSourceImpl(
+            AppRetrofit.retrofit.create(DraftOrderNetworkServices::class.java))),
+            PaymentRepoImpl(PaymentRemoteSourceImpl(
             AppRetrofit.retrofit.create(PaymentAPIServices::class.java))))
     }
     override fun onCreateView(
@@ -43,7 +49,7 @@ class FragmentPaymentInfo: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setDraftOrder(args.draftOrder)
+        viewModel.getCartDraftOrder()
         showInfo()
        setUpActions()
     }
@@ -65,7 +71,16 @@ class FragmentPaymentInfo: Fragment() {
             binding?.root?.findNavController()?.navigate(R.id.action_fragmentPaymentInfo_to_fragmentLocationDetector)
         }
     }
-
+    /* override fun getOrderPaymentDetails(shippingAddress: String, phone: String,saveForEveryTime:Boolean) {
+            if(saveForEveryTime)
+            {
+                UserSettings.shippingAddress=shippingAddress
+                UserSettings.phoneNumber =phone
+                UserSettings.saveSettings()
+            }
+            orderPaymentDetails.paymentAddress = shippingAddress
+            orderPaymentDetails.paymentPhone = phone
+        }*/
     private fun showInfo() {
 
         binding?.shippingInfoEditTextAddress?.setText(UserSettings.shippingAddress)
@@ -76,7 +91,7 @@ class FragmentPaymentInfo: Fragment() {
         super.onResume()
         if(UserSettings.isSelected)
         {
-            binding?.shippingInfoEditTextAddress?.setText(UserSettings.selectedAddress)
+            binding?.shippingInfoEditTextAddress?.setText(UserSettings.selectedAddress?.toAddressBody()?.address?.address1)
             UserSettings.isSelected=false
         }
     }

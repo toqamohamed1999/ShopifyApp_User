@@ -7,14 +7,12 @@ import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class CartViewModel(private val repo:CartRepository):ViewModel() {
 
-     private val _cartOrder:MutableStateFlow<DraftOrderAPIState> = MutableStateFlow(DraftOrderAPIState.Loading())
+    private val _cartOrder:MutableStateFlow<DraftOrderAPIState> = MutableStateFlow(DraftOrderAPIState.Loading())
      val cartOrder:StateFlow<DraftOrderAPIState> = _cartOrder
      private var cartDraftOrder: DraftOrderResponse? = null
 
@@ -23,26 +21,6 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
         cartDraftOrder = order
     }
 
-     fun addProductToCart(product: LineItem){
-
-         viewModelScope.launch {
-             launch {
-                 addProductToList(product)
-             }.join()
-             launch {
-                 repo.updateProductsInCart(
-                     cartDraftOrder?.draft_order?.order_id as String,
-                     cartDraftOrder ?: DraftOrderResponse(null)
-                 )
-             }
-         }
-     }
-    private fun addProductToList(product: LineItem){
-        val mlist:MutableList<LineItem> = mutableListOf()
-        mlist.addAll(cartDraftOrder?.draft_order?.line_items?: listOf())
-        mlist.add(product)
-        cartDraftOrder?.draft_order?.line_items = mlist
-    }
      fun removeProductFromCart(product: LineItem){
                 removeProductFromList(product)
      }

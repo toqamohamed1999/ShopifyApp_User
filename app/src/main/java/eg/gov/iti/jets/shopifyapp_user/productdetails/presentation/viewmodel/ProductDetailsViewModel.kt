@@ -32,6 +32,7 @@ class ProductDetailsViewModel(
 ) : ViewModel() {
 
 
+    private var productsIncCard:MutableList<LineItem> = mutableListOf()
     private val _addedToCart: MutableLiveData<Int> = MutableLiveData(0)
     val addedToCart: LiveData<Int> = _addedToCart
     private var cartDraftOrder: DraftOrderResponse = DraftOrderResponse(null)
@@ -42,9 +43,10 @@ class ProductDetailsViewModel(
                 when (it) {
                     is DraftOrderAPIState.Success -> {
                         cartDraftOrder = it.order!!
-                        UserSettings.cartQuantity =
-                            (it.order.draft_order?.line_items?.size ?: 0) - 1
-                        if (UserSettings.cartQuantity < 0) UserSettings.cartQuantity = 0
+                        productsIncCard = mutableListOf()
+                        productsIncCard.addAll(it.order?.draft_order?.line_items?.takeLast(((it.order.draft_order?.line_items?.size?:1)-1))?: listOf())
+
+                        calc_quantity()
                     }
                     else -> {
 
@@ -53,13 +55,19 @@ class ProductDetailsViewModel(
             }
         }
     }
+    private fun calc_quantity(){
+       UserSettings.cartQuantity = 0
+        productsIncCard.forEach {
+            UserSettings.cartQuantity+=it.quantity
+        }
+    }
 
     fun addProductToCart(product: LineItem?, quantity: Int) {
 
         val mlist: MutableList<LineItem> = mutableListOf()
         var flag = false
         cartDraftOrder.draft_order?.line_items?.forEach {
-            if (product?.id == it.id) {
+            if (product?.applied_discount?.description?.split(")")?.get(0) == it.applied_discount.description?.split(")")?.get(0)) {
                 flag = true
                 if (it.quantity < quantity) {
                     increaseProductQuantity(it)

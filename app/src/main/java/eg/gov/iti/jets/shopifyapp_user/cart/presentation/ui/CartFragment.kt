@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
@@ -24,6 +26,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import eg.gov.iti.jets.shopifyapp_user.util.UserStates
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -76,8 +79,8 @@ class CartFragment : Fragment(),CartItemListener {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onStop() {
+        super.onStop()
         viewModel.clearOrder()
     }
 
@@ -97,9 +100,11 @@ class CartFragment : Fragment(),CartItemListener {
     private fun setUpActions() {
         binding?.cartCheckoutBtn?.setOnClickListener {
             if(UserStates.checkConnectionState(requireContext())) {
-
-                binding?.root?.findNavController()
-                    ?.navigate(R.id.action_cartFragment_to_fragmentPaymentInfo)
+                    if(productsIncCard.size>0) {
+                        binding?.root?.findNavController()?.navigate(R.id.action_cartFragment_to_fragmentPaymentInfo)
+                    }else{
+                        Toast.makeText(requireContext(),"Cart Empty !!",Toast.LENGTH_SHORT).show()
+                    }
             }else{
                 Dialogs.SnakeToast(requireView(),getString(R.string.networkNotAvilable))
             }
@@ -114,18 +119,6 @@ class CartFragment : Fragment(),CartItemListener {
             adapter = cartAdapter
         }
     }
-
-
-   /* override fun getOrderPaymentDetails(shippingAddress: String, phone: String,saveForEveryTime:Boolean) {
-        if(saveForEveryTime)
-        {
-            UserSettings.shippingAddress=shippingAddress
-            UserSettings.phoneNumber =phone
-            UserSettings.saveSettings()
-        }
-        orderPaymentDetails.paymentAddress = shippingAddress
-        orderPaymentDetails.paymentPhone = phone
-    }*/
 
     override fun increaseProductInCart(product: LineItem) {
         viewModel.updateProduct(1,product)

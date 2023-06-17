@@ -70,12 +70,13 @@ class ProductDetailsFragment : Fragment() {
 
         viewModel.getCartProducts()
         binding.btnAddToBag.setOnClickListener {
-            val product = receivedProduct!!
+
+            val product=receivedProduct
             var quantity = 0
-            product.variants.forEach { variant ->
+            product?.variants?.forEach { variant ->
                 quantity += variant.inventoryQuantity ?: 0
             }
-            viewModel.addProductToCart(product.toLineItem(), quantity)
+            viewModel.addProductToCart(product?.toLineItem(), quantity)
         }
 
         lifecycleScope.launch {
