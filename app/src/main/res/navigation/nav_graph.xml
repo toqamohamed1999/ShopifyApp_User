@@ -229,6 +229,9 @@
         <action
             android:id="@+id/action_favoriteFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/subCategoryFragment"
