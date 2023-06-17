@@ -48,7 +48,7 @@ fun Product.toLineItem(): LineItem {
     )
     ,
     applied_discount = AppliedDiscount(
-            description =image.src,//line item /  image
+            description ="$id)${image.src}",//line item /  image
             value ="10.0",
             title = "Custom",
             amount = "20.00",
