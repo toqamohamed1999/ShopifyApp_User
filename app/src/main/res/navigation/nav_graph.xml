@@ -149,7 +149,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="eg.gov.iti.jets.shopifyapp_user.profile.ui.view.ProfileFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.profile.presentation.ui.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -170,6 +170,9 @@
         <action
             android:id="@+id/action_profileFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_allOrdersFragment"
+            app:destination="@id/allOrdersFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -249,5 +252,14 @@
         <action
             android:id="@+id/action_fragmentLocationDetector_to_fragmentPaymentInfo"
             app:destination="@id/fragmentPaymentInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/allOrdersFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.profile.presentation.ui.AllOrdersFragment"
+        android:label="fragment_all_orders"
+        tools:layout="@layout/fragment_all_orders" >
+        <action
+            android:id="@+id/action_allOrdersFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>
