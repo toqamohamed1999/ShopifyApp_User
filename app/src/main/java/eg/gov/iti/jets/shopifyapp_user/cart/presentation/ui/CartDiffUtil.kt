@@ -1,7 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui
 
 import androidx.recyclerview.widget.DiffUtil
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 
 class CartDiffUtil : DiffUtil.ItemCallback<LineItem>() {
 

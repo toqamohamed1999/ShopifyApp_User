@@ -45,6 +45,16 @@
     <string name="price_header">Price:</string>
     <string name="orderNumber">Order Number:</string>
     <string name="date_header">Date:</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="shipping_info">Shipping Info</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="enter_your_address">Enter Your Address</string>
+    <string name="enter_your_phone">Enter Your Phone</string>
+    <string name="save_information_for_every_time">Save Information \n For every time</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
+    <string name="egp">EGP</string>
+    <string name="networkNotAvilable">No Internet Connection !!</string>
 
     /** nada **/
 
