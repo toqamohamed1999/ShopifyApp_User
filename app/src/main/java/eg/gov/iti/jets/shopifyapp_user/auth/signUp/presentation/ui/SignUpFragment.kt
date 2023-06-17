@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
@@ -19,17 +18,14 @@ import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.AuthRemoteSourceImp
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
-import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupModel
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupRequest
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.FirebaseRepoImplementation
-import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.remote.AuthRepo
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModel
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSignUpBinding
-import eg.gov.iti.jets.shopifyapp_user.util.isInternetAvailable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+
 
 class SignUpFragment : Fragment() {
     private val viewModel: SignUpViewModel by lazy {
@@ -68,7 +64,7 @@ class SignUpFragment : Fragment() {
         (activity as AppCompatActivity).findViewById<AppBarLayout>(R.id.custom_toolBar)?.visibility =
             View.GONE
         binding.btnSignUp.setOnClickListener {
-            if (isInternetAvailable(requireContext().applicationContext)) {
+            if (isConnected(requireContext().applicationContext)) {
                 email = binding.editEmailSignup.text.toString().trim()
                 pass = binding.editPassSignup.text.toString().trim()
                 confirmPass = binding.editConfirmPasswordSignUp.text.toString().trim()

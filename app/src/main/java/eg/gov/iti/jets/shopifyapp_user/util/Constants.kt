@@ -11,15 +11,9 @@ fun getTitleOfProduct(title: String): String {
     val parts = title.split("|").map { it.trim() }
     return if (parts.size >= 2) parts[1] else title
 }
-fun isInternetAvailable(context: Context): Boolean {
-    val connectivityManager = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-    } else {
-        val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-        return networkInfo.isConnected
-    }
+fun isConnected(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
+        .isConnected
 }

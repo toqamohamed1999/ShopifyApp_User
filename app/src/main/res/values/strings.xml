@@ -16,7 +16,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="second_name">Second Name</string>
     <string name="last_name">Last Name</string>
-
+    <string name="noInternetConnection">No Internet!,check your connection</string>
+    <string name="delete_MSG_from_favorites">This Product Deleted Successfully From Favorites</string>
 
     /** nada **/
     <string name="home_header">Home</string>

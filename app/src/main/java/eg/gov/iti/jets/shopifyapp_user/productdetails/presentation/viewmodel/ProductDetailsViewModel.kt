@@ -6,6 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
+import eg.gov.iti.jets.shopifyapp_user.base.domain.repo.FavOpRepoInterface
+import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
+import eg.gov.iti.jets.shopifyapp_user.base.repo.FavOpRepoImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
@@ -18,11 +22,13 @@ import eg.gov.iti.jets.shopifyapp_user.productdetails.domain.repo.ProductRepoInt
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.lang.Thread.State
 
 class ProductDetailsViewModel(
     private val repo: CartRepository,
-    private val productRepo: ProductRepoInterface = ProductRepoImpl()
+    private val productRepo: ProductRepoInterface = ProductRepoImpl(),
+    private val favRepo: FavOpRepoInterface = FavOpRepoImpl()
 ) : ViewModel() {
 
 
@@ -105,13 +111,34 @@ class ProductDetailsViewModel(
     var product = MutableStateFlow<SingleProductState>(SingleProductState.Loading())
     fun getSingleProductById(product_id: Long) {
         viewModelScope.launch {
-            productRepo.getSingleProductById(product_id)?.catch {
-                e->product.value=SingleProductState.Error(e.toString())
+            productRepo.getSingleProductById(product_id)?.catch { e ->
+                product.value = SingleProductState.Error(e.toString())
             }
-                ?.collectLatest {
-                    data->product.value=SingleProductState.Success(data)
+                ?.collectLatest { data ->
+                    product.value = SingleProductState.Success(data)
                 }
         }
     }
 
+    var favProduct = MutableStateFlow<ResponseState<FavRoomPojo>>(ResponseState.Loading)
+    fun getFavProductWithId(productId: Long){
+        viewModelScope.launch {
+            favRepo.getFavProductWithId(productId)?.catch {error->
+                favProduct.value=ResponseState.Error(Exception(error))
+            }?.collectLatest {
+                data->
+                favProduct.value=ResponseState.Success(data)
+            }
+        }
+    }
+    fun deleteFavProductWithId(productId: Long){
+        viewModelScope.launch {
+            favRepo.deleteFavProductWithId(productId)
+        }
+    }
+    fun insertFavProduct(favRoomPojo: FavRoomPojo){
+        viewModelScope.launch {
+            favRepo.insertFavProduct(favRoomPojo)
+        }
+    }
 }
