@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class DraftOrderResponse(
     var draft_order: DraftOrder?
 ):Parcelable
-fun DraftOrderResponse.toOrderBody():OrderBody{
+/*fun DraftOrderResponse.toOrderBody():OrderBody{
     return OrderBody(
         Order(
             draft_order?.applied_discount?.value?:"",
@@ -19,4 +19,4 @@ fun DraftOrderResponse.toOrderBody():OrderBody{
         , Customer(UserSettings.userAPI_Id.toLong())
         )
     )
-}
+}*/

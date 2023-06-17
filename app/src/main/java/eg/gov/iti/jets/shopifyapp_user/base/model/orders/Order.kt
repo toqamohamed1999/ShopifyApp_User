@@ -1,6 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.base.model.orders
 
-import eg.gov.iti.jets.shopifyapp_user.cart.domain.model.LineItem
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 
 data class Order(
     val admin_graphql_api_id: String,
