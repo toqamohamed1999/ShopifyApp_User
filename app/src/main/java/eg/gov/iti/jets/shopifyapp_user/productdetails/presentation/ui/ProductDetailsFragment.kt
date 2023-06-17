@@ -1,5 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.ui
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +14,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
+import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.base.model.Review
+import eg.gov.iti.jets.shopifyapp_user.base.model.toFavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.base.model.toLineItem
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
@@ -28,7 +33,7 @@ import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.Pro
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
-import eg.gov.iti.jets.shopifyapp_user.util.isInternetAvailable
+import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -47,7 +52,8 @@ class ProductDetailsFragment : Fragment() {
     }
     private val args: ProductDetailsFragmentArgs by navArgs()
     private var receivedProduct: Product? = null
-    private var product_Id:Long?=null
+    private var product_Id: Long? = null
+    private var isFav: Boolean = false
     private var reviews = listOf<Review>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +66,11 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       product_Id = args.productId
+        product_Id = args.productId
 
         viewModel.getCartProducts()
         binding.btnAddToBag.setOnClickListener {
+
             val product=receivedProduct
             var quantity = 0
             product?.variants?.forEach { variant ->
@@ -110,16 +117,27 @@ class ProductDetailsFragment : Fragment() {
                 "This product is fantastic! It's incredibly easy to use and has saved me a lot of time and effort. I highly recommend it."
             )
         )
-        if (isInternetAvailable(requireContext())) {
+        if (isConnected(requireContext())) {
+            if (UserSettings.userAPI_Id.isNullOrEmpty()) {
+                binding.cardViewIsFavorite.visibility = View.GONE
+                binding.btnAddToBag.visibility = View.GONE
+            } else {
+                binding.cardViewIsFavorite.visibility = View.VISIBLE
+                binding.btnAddToBag.visibility = View.VISIBLE
+            }
             viewModel.getSingleProductById(product_Id!!)
             lifecycleScope.launch {
                 viewModel.product.collectLatest { result ->
                     when (result) {
                         is SingleProductState.Loading -> {
-
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.linearContainer.visibility = View.GONE
                         }
                         is SingleProductState.Success -> {
-                            receivedProduct=result.product.product
+                            binding.progressBar.visibility = View.GONE
+                            binding.linearContainer.visibility = View.VISIBLE
+                            receivedProduct = result.product.product
+                            viewModel.getFavProductWithId(receivedProduct?.id!!)
                             bindDataToView(receivedProduct!!)
                         }
                         is SingleProductState.Error -> {
@@ -128,8 +146,66 @@ class ProductDetailsFragment : Fragment() {
                     }
                 }
             }
-        }
+            lifecycleScope.launch {
+                viewModel.favProduct.collectLatest { result ->
+                    when (result) {
+                        is ResponseState.Loading -> {
 
+                        }
+                        is ResponseState.Success -> {
+                            if (result.data?.productId != null) {
+                                isFav = true
+                                binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_icon)
+                            }
+                        }
+                        is ResponseState.Error -> {
+
+                        }
+                    }
+                }
+            }
+
+        } else {
+            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                .show()
+        }
+        binding.cardViewIsFavorite.setOnClickListener {
+            if (isConnected(requireContext())) {
+
+
+                if (isFav) {
+                    val alertDialog = AlertDialog.Builder(context)
+
+                    alertDialog.apply {
+                        setIcon(R.drawable.baseline_delete_24)
+                        setTitle("Delete")
+                        setMessage("Are you sure you want to delete the Product from favorite?")
+                        setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
+                            isFav = false
+                            viewModel.deleteFavProductWithId(product_Id!!)
+                            binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_border_icon)
+                            Snackbar.make(
+                                binding.root,
+                                R.string.delete_MSG_from_favorites,
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        setNegativeButton("Cancel") { _, _ ->
+
+                        }
+
+
+                    }.create().show()
+                } else {
+                    isFav = true
+                    viewModel.insertFavProduct(receivedProduct?.toFavRoomPojo()!!)
+                    binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_icon)
+                }
+            } else {
+                Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        }
 
     }
 

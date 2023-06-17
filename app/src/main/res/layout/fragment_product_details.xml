@@ -1,195 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".productdetails.presentation.ui.ProductDetailsFragment">
 
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:orientation="vertical"
-       android:gravity="center">
-      <ProgressBar
-          android:id="@+id/progressBar"
-          android:layout_width="50dp"
-          android:layout_height="50dp"
-          android:layout_gravity="center"
-          android:layout_margin="10dp"
-          android:indeterminateTint="@color/purple_500"
-          android:visibility="visible" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-      <androidx.cardview.widget.CardView
-          android:id="@+id/cardView2"
-          android:layout_width="match_parent"
-          android:layout_height="190dp"
-          android:layout_marginStart="16dp"
-          android:layout_marginTop="16dp"
-          android:layout_marginEnd="16dp"
-          android:elevation="24dp"
-          app:cardCornerRadius="16dp"
-          >
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:indeterminateTint="@color/purple_500"
+            android:visibility="visible" />
 
-         <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/linearContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPagerImages"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="190dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:elevation="24dp"
+                app:cardCornerRadius="16dp">
 
-            <LinearLayout
-                android:id="@+id/dotsLayout"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPagerImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:paddingStart="32dp"
+                        android:paddingEnd="32dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/dotsLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/viewPagerImages" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewIsFavorite"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="-24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/white"
+                android:elevation="32dp"
+                app:cardCornerRadius="24dp"
+                app:layout_constraintEnd_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                <ImageView
+                    android:id="@+id/imgViewFavoriteIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/favorite_border_icon"
+                    tools:ignore="ContentDescription" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/txtProductPrice"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewPagerImages"
-                />
-         </LinearLayout>
-      </androidx.cardview.widget.CardView>
-      <androidx.cardview.widget.CardView
-          android:id="@+id/cardViewIsFavorite"
-          android:layout_width="42dp"
-          android:layout_height="42dp"
-          android:layout_gravity="end"
-          android:layout_marginTop="-24dp"
-          android:layout_marginEnd="24dp"
-          android:background="@color/white"
-          android:elevation="32dp"
-          app:cardCornerRadius="24dp"
-          app:layout_constraintEnd_toEndOf="@+id/cardView2"
-          app:layout_constraintTop_toBottomOf="@+id/cardView2">
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:layout_marginStart="5dp"
+                android:text="1000 LE"
+                android:textAlignment="viewStart"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-         <ImageView
-             android:id="@+id/imgViewFavoriteIcon"
-             android:layout_width="30dp"
-             android:layout_height="30dp"
-             android:layout_gravity="center"
-             android:src="@drawable/favorite_border_icon"
-             tools:ignore="ContentDescription" />
-      </androidx.cardview.widget.CardView>
-      <TextView
-          android:id="@+id/txtProductPrice"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="12dp"
-          android:layout_marginStart="5dp"
-          android:text="1000 LE"
-          android:textAlignment="viewStart"
-          android:textSize="15sp"
-          android:textStyle="bold"
-          />
-      <TextView
-          android:id="@+id/txtProductName"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="12dp"
-          android:layout_marginStart="12dp"
-          android:maxLines="2"
-          android:text="ADIDAS | SUPERSTAR 80S"
-          android:textAlignment="viewStart"
-          android:textColor="@color/black"
-          android:textSize="20sp"
-          android:textStyle="bold"
-           />
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:layout_marginStart="5dp"
-          android:text="@string/description"
-          android:textAlignment="viewStart"
-          android:textSize="15sp"
-          android:textStyle="bold"
-          />
-      <androidx.cardview.widget.CardView
-          android:id="@+id/cardView8"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:backgroundTint="#F1F1F1"
-          android:elevation="32dp"
-          app:cardCornerRadius="24dp">
+            <TextView
+                android:id="@+id/txtProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:maxLines="2"
+                android:text="ADIDAS | SUPERSTAR 80S"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-         <TextView
-             android:id="@+id/txtViewDescription"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:layout_margin="8dp"
-             android:text="There's a shell toe for every season, and the adidas Originals Superstar 80s shoes have a full grain leather upper with a shiny badge on the tongue that makes these shoes ready for any time of year."
-             android:textAlignment="viewStart"
-             android:textSize="20sp" />
-      </androidx.cardview.widget.CardView>
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:layout_marginStart="5dp"
-          android:maxLines="4"
-          android:text="@string/reviews"
-          android:textAlignment="viewStart"
-          android:textSize="15sp"
-          android:textStyle="bold"
-          />
-      <androidx.cardview.widget.CardView
-          android:id="@+id/cardViewReviews"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:backgroundTint="#F1F1F1"
-          android:elevation="32dp"
-          app:cardCornerRadius="24dp">
-         <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/description"
+                android:textAlignment="viewStart"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/reviewsRecycler"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-          android:orientation="vertical"
-          tools:itemCount="3"
-          tools:listitem="@layout/review_item" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#F1F1F1"
+                android:elevation="32dp"
+                app:cardCornerRadius="24dp">
 
-      <TextView
-          android:id="@+id/txtSeeMoreReviews"
-          android:layout_width="135dp"
-          android:layout_gravity="end"
-          android:layout_height="wrap_content"
-          android:layout_margin="12dp"
-          android:layout_marginStart="5dp"
-          android:text="@string/seemorereviews..."
-         android:textColor="@color/purple_700"
-          android:textSize="15sp"
-          android:textStyle="bold"
-          />
-         </LinearLayout>
-      </androidx.cardview.widget.CardView>
-      <com.google.android.material.button.MaterialButton
-          android:id="@+id/btnAddToBag"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="10dp"
-          android:text="@string/add_to_cart"
-          android:textAllCaps="false"
-          app:cornerRadius="10dp" />
-   </LinearLayout>
+                <TextView
+                    android:id="@+id/txtViewDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:text="There's a shell toe for every season, and the adidas Originals Superstar 80s shoes have a full grain leather upper with a shiny badge on the tongue that makes these shoes ready for any time of year."
+                    android:textAlignment="viewStart"
+                    android:textSize="20sp" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
+                android:maxLines="4"
+                android:text="@string/reviews"
+                android:textAlignment="viewStart"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewReviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#F1F1F1"
+                android:elevation="32dp"
+                app:cardCornerRadius="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/reviewsRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/review_item" />
+
+                    <TextView
+                        android:id="@+id/txtSeeMoreReviews"
+                        android:layout_width="135dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_margin="12dp"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/seemorereviews..."
+                        android:textColor="@color/purple_700"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddToBag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/add_to_cart"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.core.widget.NestedScrollView>

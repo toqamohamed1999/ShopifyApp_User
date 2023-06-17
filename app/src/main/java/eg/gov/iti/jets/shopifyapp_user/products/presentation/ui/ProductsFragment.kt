@@ -135,7 +135,7 @@ class ProductsFragment : Fragment(), OnClickProduct {
             binding.productsRecyclerView.visibility = View.VISIBLE
         }
     }
-    override fun onClickFavIcon(product: Product) {
+    override fun onClickFavIcon(product_Id : Long) {
         TODO("Not yet implemented")
     }
 
