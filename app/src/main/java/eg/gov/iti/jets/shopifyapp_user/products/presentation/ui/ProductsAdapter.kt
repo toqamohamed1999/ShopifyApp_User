@@ -37,7 +37,7 @@ class ProductsAdapter(private var productList: List<Product>, val context: Conte
             .load(currentProduct.image.src)
             .into(holder.binding.productImageView)
         holder.binding.productCardView.setOnClickListener {
-            myListener.onClickProductCard(currentProduct)
+            myListener.onClickProductCard(currentProduct.id!!)
         }
     }
 

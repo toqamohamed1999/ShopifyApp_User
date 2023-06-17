@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
+import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.base.model.Review
 import eg.gov.iti.jets.shopifyapp_user.base.model.toLineItem
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
@@ -21,20 +22,33 @@ import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceIm
 import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductDetailsBinding
+import eg.gov.iti.jets.shopifyapp_user.productdetails.data.model.SingleProductState
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModel
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
+import eg.gov.iti.jets.shopifyapp_user.util.isInternetAvailable
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ProductDetailsFragment : Fragment() {
     lateinit var binding: FragmentProductDetailsBinding
     private val viewModel by viewModels<ProductDetailsViewModel> {
-        ProductDetailsViewModelFactory(CartRepositoryImpl(DraftOrderRemoteSourceImpl(AppRetrofit.retrofit.create(
-            DraftOrderNetworkServices::class.java))))
+        ProductDetailsViewModelFactory(
+            CartRepositoryImpl(
+                DraftOrderRemoteSourceImpl(
+                    AppRetrofit.retrofit.create(
+                        DraftOrderNetworkServices::class.java
+                    )
+                )
+            )
+        )
     }
-   private val args: ProductDetailsFragmentArgs by navArgs()
+    private val args: ProductDetailsFragmentArgs by navArgs()
+    private var receivedProduct: Product? = null
+    private var product_Id:Long?=null
+    private var reviews = listOf<Review>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,14 +60,16 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val product = args.product
+       product_Id = args.productId
+
         viewModel.getCartProducts()
         binding.btnAddToBag.setOnClickListener {
+            val product=receivedProduct!!
             var quantity = 0
-            product.variants.forEach {variant->
-                quantity+=variant.inventoryQuantity?:0
+            product.variants.forEach { variant ->
+                quantity += variant.inventoryQuantity ?: 0
             }
-            viewModel.addProductToCart(product.toLineItem(),quantity)
+            viewModel.addProductToCart(product.toLineItem(), quantity)
         }
 
         lifecycleScope.launch {
@@ -74,7 +90,7 @@ class ProductDetailsFragment : Fragment() {
                 }
             }
         }
-        val reviews = listOf(
+        reviews = listOf(
             Review(
                 "John Smith",
                 4.5,
@@ -94,6 +110,30 @@ class ProductDetailsFragment : Fragment() {
                 "This product is fantastic! It's incredibly easy to use and has saved me a lot of time and effort. I highly recommend it."
             )
         )
+        if (isInternetAvailable(requireContext())) {
+            viewModel.getSingleProductById(product_Id!!)
+            lifecycleScope.launch {
+                viewModel.product.collectLatest { result ->
+                    when (result) {
+                        is SingleProductState.Loading -> {
+
+                        }
+                        is SingleProductState.Success -> {
+                            receivedProduct=result.product.product
+                            bindDataToView(receivedProduct!!)
+                        }
+                        is SingleProductState.Error -> {
+                            println("/////////Error ${result.error}")
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private fun bindDataToView(product: Product) {
         if (product != null) {
             createDots(product.images.size)
             updateDots(0)
@@ -108,15 +148,19 @@ class ProductDetailsFragment : Fragment() {
             binding.txtProductName.text = product.title
             binding.txtViewDescription.text = product.bodyHtml
             binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)
-            binding.reviewsRecycler.adapter=ReviewsAdapter(requireContext(),reviews)
+            binding.reviewsRecycler.adapter = ReviewsAdapter(requireContext(), reviews)
 
             binding.txtSeeMoreReviews.setOnClickListener {
-                val action = ProductDetailsFragmentDirections.actionProductDetailsFragmentToReviewsFragment(product.title!!,product.images[0].src!!)
+                val action =
+                    ProductDetailsFragmentDirections.actionProductDetailsFragmentToReviewsFragment(
+                        product.title!!,
+                        product.images[0].src!!
+                    )
                 binding.root.findNavController().navigate(action)
             }
         }
-
     }
+
     private fun createDots(numDots: Int) {
         for (i in 0 until numDots) {
             val dot = View(context)

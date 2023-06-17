@@ -1,4 +1,3 @@
-package eg.gov.iti.jets.shopifyapp_user.base.model.orders
 
 data class ShippingAddress(
     var address1: String? ="",

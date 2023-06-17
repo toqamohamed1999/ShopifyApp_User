@@ -27,8 +27,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
 
         backButton = binding.backButton
         binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
-         //navController.navigate(R.id.cartFragment)
-            navController.navigate(R.id.settingsFragment)
+         navController.navigate(R.id.cartFragment)
         }
         binding.backButton.setOnClickListener {
             navController.popBackStack()
@@ -58,6 +57,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 bottomNav.visibility = View.GONE
                 binding.toolbar.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
+                binding.titleTextView.text = "Cart"
             } else if (navDestination.id == R.id.subCategoryFragment
             ) {
                 bottomNav.visibility = View.GONE

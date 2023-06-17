@@ -139,8 +139,8 @@ class ProductsFragment : Fragment(), OnClickProduct {
         TODO("Not yet implemented")
     }
 
-    override fun onClickProductCard(product: Product) {
-        val action = ProductsFragmentDirections.actionProductsFragmentToProductDetailsFragment(product)
+    override fun onClickProductCard(product_Id: Long) {
+        val action = ProductsFragmentDirections.actionProductsFragmentToProductDetailsFragment(product_Id)
         binding.root.findNavController().navigate(action)
     }
 
