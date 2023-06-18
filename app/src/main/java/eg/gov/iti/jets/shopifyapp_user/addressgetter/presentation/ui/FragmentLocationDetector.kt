@@ -138,8 +138,9 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
         val geocoder= Geocoder(requireContext(),Locale("en"))
         if(latitude.isNotEmpty())
             address =  geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(),1)
+
         if(!address.isNullOrEmpty())
-        UserSettings.selectedAddress = address[0]
+          UserSettings.selectedAddress = address[0]
         binding?.mapView?.onDestroy()
         binding?.root?.findNavController()?.popBackStack()
     }

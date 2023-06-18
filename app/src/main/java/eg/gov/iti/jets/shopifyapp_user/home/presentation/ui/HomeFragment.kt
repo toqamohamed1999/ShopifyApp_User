@@ -1,6 +1,9 @@
 package eg.gov.iti.jets.shopifyapp_user.home.presentation.ui
 
+import android.graphics.Canvas
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,6 +17,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
@@ -36,10 +42,20 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
+    private lateinit var handler: Handler
+    private  var adsImages: ArrayList<DiscountCode> = arrayListOf(
+        DiscountCode("SS12223#1","-12",12223541,111245553,"",1)
+       ,DiscountCode("101FFA","-13",12223541,111245553,"",1)
+       ,DiscountCode("md4a3","-10",12223541,111245553,"",1)
 
+    )
+    private lateinit var adsAdapter: CouponAdapter
+    private lateinit var viewPager2: ViewPager2
+    private val runnable = Runnable {
+        viewPager2.currentItem = viewPager2.currentItem + 1
+    }
     private lateinit var binding: FragmentHomeBinding
     private lateinit var brandAdapter: BrandAdapter
-    private lateinit var  sliderPagerAdapter:CouponAdapter
     private var brandList :List<SmartCollection> = listOf()
     private val viewModel: HomeViewModel by lazy {
         val factory = HomeFactoryViewModel(
@@ -54,27 +70,41 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         savedInstanceState: Bundle?
     ): View?{
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        viewPager2 = binding.couponsViewPager
+        init()
+        setUpTarnsformer()
+        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                handler.removeCallbacks(runnable)
+                handler.postDelayed(runnable, 5000)
+                updateDots(position)
+            }
+        })
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.postDelayed(runnable, 5000)
+    }
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sliderPagerAdapter = CouponAdapter(listOf(),this@HomeFragment)
-        binding.couponsViewPager.adapter = sliderPagerAdapter
-        binding.couponsViewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                updateDots(position)
-            }
-        })
+
         //adds
         lifecycleScope.launch {
             viewModel.adds.observe(viewLifecycleOwner) {
-                sliderPagerAdapter.discounts = it
+                adsImages.clear()
+                adsImages.addAll(it)
+                adsAdapter.discounts = adsImages
                 createDots(it.size)
                 updateDots(0)
-                binding.couponsViewPager.refreshDrawableState()
             }
         }
         viewModel.getAdds()
@@ -122,7 +152,26 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         binding.searchEditText.addTextChangedListener(textWatcher)
 
     }
+    private fun init() {
+        handler = Handler(Looper.myLooper()!!)
+        adsAdapter = CouponAdapter(adsImages,this, viewPager2)
+        binding.couponsViewPager.adapter = adsAdapter
+        adsAdapter.discounts = adsImages
+        createDots(adsImages.size)
+        updateDots(0)
+        viewPager2.clipToPadding = false
+        viewPager2.clipChildren = false
+        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+    }
+    private fun setUpTarnsformer() {
+        val transformer = CompositePageTransformer()
+        transformer.addTransformer(MarginPageTransformer(40))
+        transformer.addTransformer { page, position ->
 
+            page.scaleY = 0.85f
+        }
+        viewPager2.setPageTransformer(transformer)
+    }
     private fun createDots(numDots: Int) {
         for (i in 0 until numDots) {
             val dot = View(context)

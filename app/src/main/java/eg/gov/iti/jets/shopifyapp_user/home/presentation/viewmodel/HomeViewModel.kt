@@ -1,6 +1,5 @@
 package eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.BrandRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRepo) : ViewModel() {
@@ -41,6 +39,8 @@ class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRe
                 }
             }
           }
+        }else{
+            _adds.value = discounts
         }
     }
     private fun getDiscounts(ruleId:String,value:String){

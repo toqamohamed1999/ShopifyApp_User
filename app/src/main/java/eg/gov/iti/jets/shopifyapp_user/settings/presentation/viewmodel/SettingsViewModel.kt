@@ -1,10 +1,11 @@
 package eg.gov.iti.jets.shopifyapp_user.settings.presentation.viewmodel
 
+ import android.util.Log
  import androidx.lifecycle.ViewModel
  import androidx.lifecycle.viewModelScope
+ import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
  import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.AddressBody
  import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.AdressesResponse
- import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.CurrencysResponse
  import eg.gov.iti.jets.shopifyapp_user.settings.domain.repo.SettingsRepo
  import kotlinx.coroutines.flow.MutableStateFlow
  import kotlinx.coroutines.flow.StateFlow
@@ -13,9 +14,9 @@ package eg.gov.iti.jets.shopifyapp_user.settings.presentation.viewmodel
 class SettingsViewModel(private val settingsRepo: SettingsRepo):ViewModel() {
 
     private val _addresses: MutableStateFlow<AdressesResponse?> = MutableStateFlow(null)
-    private val _currencies: MutableStateFlow<CurrencysResponse?> = MutableStateFlow(null)
+    private val _currencies: MutableStateFlow<List<List<String>>?> = MutableStateFlow(null)
      val addresses: StateFlow<AdressesResponse?> = _addresses
-     val currencies:StateFlow<CurrencysResponse?> = _currencies
+     val currencies:StateFlow<List<List<String>>?> = _currencies
      fun getAllAddressesForUser(userId:String){
         viewModelScope.launch {
             settingsRepo.getAllAddressesForUser(userId).collect{
@@ -46,14 +47,23 @@ class SettingsViewModel(private val settingsRepo: SettingsRepo):ViewModel() {
          }
      }
 
-      fun getAllCurrencyCodesAvailable(){
+      fun getAllCurrencyCodes(){
           viewModelScope.launch {
-              settingsRepo.getAllCurrencyCodesAvailable().collect{
-                  _currencies.value = it
+              settingsRepo.getAllCurrencies().collect{
+                  _currencies.value = it?.supported_codes
               }
-
           }
       }
-
+    fun changeCurrency(fromCode:String,toCode:String){
+        viewModelScope.launch {
+            settingsRepo.changeCurrency(fromCode,toCode).collect{
+                if(it!=null)
+                {
+                    UserSettings.currentCurrencyValue = it.conversion_rate
+                    UserSettings.saveSettings()
+                }
+            }
+        }
+    }
 
 }

@@ -7,10 +7,11 @@ import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.AddressBody
 import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.Addresse
 
 object UserSettings {
+    var currentCurrencyValue: Double = 1.0
     var userName:String = ""
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
-    var currencyCode:String = "EGB"
+    var currencyCode:String = "EGP"
     var shippingAddress:String = ""
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = ""
@@ -22,6 +23,7 @@ object UserSettings {
     var cartQuantity = 0
     fun saveSettings(){
         SharedOperations.getInstance().edit()
+            .putString("currentCurrencyValue",currentCurrencyValue.toString())
             .putString("userName", userName)
             .putString("userEmail", userEmail)
             .putString("userPassword",userPassword)
@@ -61,6 +63,7 @@ object UserSettings {
     }
     fun loadSettings(){
        val instance = SharedOperations.getInstance()
+        currentCurrencyValue= instance.getString("currentCurrencyValue","0.0")?.toDouble()?:1.0
          userName = instance.getString("userName","")!!
          userEmail = instance.getString("userEmail","")!!
          userPassword = instance.getString("userPassword","")!!
@@ -82,7 +85,9 @@ object UserSettings {
          cartDraftOrderId = "1118663508249"
          userCurrentDiscountCopy = null
          cartQuantity = 0
+        currentCurrencyValue=1.0
         SharedOperations.getInstance().edit()
+            .putString("currentCurrencyValue",currentCurrencyValue.toString())
             .putString("userName", userName)
             .putString("userEmail", userEmail)
             .putString("userPassword",userPassword)
@@ -95,9 +100,8 @@ object UserSettings {
             .apply()
     }
 
-    fun saveNewAddress() {
-        shippingAddress = selectedAddress?.countryName + selectedAddress?.adminArea
-        selectedAddress = null
+    fun saveNewAddress(address:String) {
+        shippingAddress = address
         isSelected = false
         SharedOperations.getInstance().edit().putString("shippingAddress",shippingAddress).apply()
     }

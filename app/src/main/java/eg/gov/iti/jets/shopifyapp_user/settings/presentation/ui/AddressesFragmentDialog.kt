@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 class AddressesFragmentDialog():DialogFragment() {
    private lateinit var adapter:AdressesAdapter
    lateinit var owner:ViewModelStoreOwner
+   lateinit var settingListener: SettingListener
    private lateinit var viewModel:SettingsViewModel
     var binding:UserAddressesLayoutBinding?=null
     override fun onCreateView(
@@ -40,15 +41,15 @@ class AddressesFragmentDialog():DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(owner,SettingViewModelFactory(
             SettingsRepoImpl(
-                SettingsRemoteSourceImpl(AppRetrofit.retrofit.create(SettingsAPIServices::class.java))
+                SettingsRemoteSourceImpl()
             )
         )
         )[SettingsViewModel::class.java]
 
-        adapter = AdressesAdapter(listOf()) {
+        adapter = AdressesAdapter(listOf(), {
             viewModel.removeAddress(it.id.toString(),UserSettings.userAPI_Id)
             viewModel.getAllAddressesForUser(UserSettings.userAPI_Id)
-        }
+        },settingListener)
         binding?.rescleViewAddressesContainer?.layoutManager = LinearLayoutManager(requireContext())
         binding?.rescleViewAddressesContainer?.adapter = adapter
 

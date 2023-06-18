@@ -21,7 +21,15 @@ class SettingsRepoImpl(private val settingsRemoteSource: SettingsRemoteSource):S
         return settingsRemoteSource.removeAddress(address_id,userId)
     }
 
-    override suspend fun getAllCurrencyCodesAvailable(): MutableStateFlow<CurrencysResponse?> {
-       return settingsRemoteSource.getAllCurrencyCodesAvailable()
+    override suspend fun getAllCurrencies(): MutableStateFlow<CurrenciesResponse?> {
+       return settingsRemoteSource.getAllCurrencies()
     }
+
+    override suspend fun changeCurrency(
+        fromCode: String,
+        toCode: String
+    ): MutableStateFlow<ExchangerResponse?> {
+        return  settingsRemoteSource.changeCurrency(fromCode,toCode)
+    }
+
 }

@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
 
-            }else if (navDestination.id == R.id.settingsFragment||navDestination.id == R.id.fragmentLocationDetector)
+            }else if (navDestination.id == R.id.settingsFragment||navDestination.id == R.id.fragmentLocationDetector||navDestination.id==R.id.settingsFragment)
              {
                 binding.toolbar.visibility = View.GONE
                 bottomNav.visibility = View.GONE
