@@ -12,12 +12,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.R
-import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.databinding.CurrenciesLauoutBinding
-import eg.gov.iti.jets.shopifyapp_user.databinding.UserAddressesLayoutBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.remote.SettingsRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.settings.data.repo.SettingsRepoImpl
-import eg.gov.iti.jets.shopifyapp_user.settings.domain.remote.SettingsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.settings.presentation.viewmodel.SettingViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.settings.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -29,6 +26,7 @@ class CurrencyFragmentDialog():DialogFragment() {
     lateinit var owner: ViewModelStoreOwner
     private lateinit var viewModel: SettingsViewModel
     var currencyListener:CurrencyListener?=null
+    private var allCurrencies= mutableListOf<List<String>>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,24 +39,21 @@ class CurrencyFragmentDialog():DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(owner, SettingViewModelFactory(
             SettingsRepoImpl(
-                SettingsRemoteSourceImpl(AppRetrofit.retrofit.create(SettingsAPIServices::class.java))
+                SettingsRemoteSourceImpl()
             )
         )
         )[SettingsViewModel::class.java]
 
-        adapter = CurrencyAdapter(listOf(),currencyListener!!)
+        adapter = CurrencyAdapter(mutableListOf(),currencyListener!!)
         binding?.currenciesRecycleView?.layoutManager = LinearLayoutManager(requireContext())
         binding?.currenciesRecycleView?.adapter = adapter
         lifecycleScope.launch{
             viewModel.currencies.collectLatest {
-               val c = mutableListOf<String>()
-                it?.currencies?.forEach {ii->
-                    c.add(ii.currency)
-                }
-                adapter.setCurrencies(c)
+                it?.let { it1 -> allCurrencies.addAll(it1) }
+                adapter.setCurrencies(allCurrencies)
             }
         }
-        viewModel.getAllCurrencyCodesAvailable()
+        viewModel.getAllCurrencyCodes()
     }
 
     override fun onResume() {

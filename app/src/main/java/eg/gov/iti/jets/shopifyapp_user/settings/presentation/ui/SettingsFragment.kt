@@ -29,7 +29,7 @@ class SettingsFragment:Fragment(),CurrencyListener{
     private  lateinit var addressesDialog:AddressesFragmentDialog
 
     private val viewModel by viewModels<SettingsViewModel> {
-        SettingViewModelFactory(SettingsRepoImpl(SettingsRemoteSourceImpl(AppRetrofit.retrofit.create(SettingsAPIServices::class.java))))
+        SettingViewModelFactory(SettingsRepoImpl(SettingsRemoteSourceImpl()))
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,7 +111,7 @@ class SettingsFragment:Fragment(),CurrencyListener{
     private fun showSettigs() {
         binding?.buttonSavePhone?.visibility = View.INVISIBLE
         binding?.editTextPhone?.setText(UserSettings.phoneNumber)
-
+        binding?.textViewCurrancyList?.text=UserSettings.currencyCode
     }
 
     override fun onResume() {
@@ -124,10 +124,12 @@ class SettingsFragment:Fragment(),CurrencyListener{
         }
     }
     override fun selectCurrency(currency: String) {
+        viewModel.changeCurrency(UserSettings.currencyCode,currency)
         UserSettings.currencyCode = currency
         UserSettings.saveSettings()
         currenciesDialog.dismiss()
         binding?.textViewCurrancyList?.text = currency
+
     }
 
 }

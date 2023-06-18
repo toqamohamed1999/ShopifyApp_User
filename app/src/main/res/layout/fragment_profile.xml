@@ -19,7 +19,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtongotToSetting"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -106,6 +106,19 @@
         android:layout_marginStart="15dp"
         tools:layout_editor_absoluteX="14dp"
         tools:listitem="@layout/wishlist_item" />
+
+    <ImageButton
+        android:id="@+id/imageButtongotToSetting"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/back_transparent"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/txtWelcomeMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtWelcomeMessage"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_settings_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

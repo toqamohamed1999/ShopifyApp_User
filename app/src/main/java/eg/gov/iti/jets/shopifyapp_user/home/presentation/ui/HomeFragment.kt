@@ -43,7 +43,12 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     private lateinit var handler: Handler
-    private  var adsImages: ArrayList<DiscountCode> = arrayListOf()
+    private  var adsImages: ArrayList<DiscountCode> = arrayListOf(
+        DiscountCode("SS12223#1","-12",12223541,111245553,"",1)
+       ,DiscountCode("101FFA","-13",12223541,111245553,"",1)
+       ,DiscountCode("md4a3","-10",12223541,111245553,"",1)
+
+    )
     private lateinit var adsAdapter: CouponAdapter
     private lateinit var viewPager2: ViewPager2
     private val runnable = Runnable {
@@ -151,6 +156,9 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         handler = Handler(Looper.myLooper()!!)
         adsAdapter = CouponAdapter(adsImages,this, viewPager2)
         binding.couponsViewPager.adapter = adsAdapter
+        adsAdapter.discounts = adsImages
+        createDots(adsImages.size)
+        updateDots(0)
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER

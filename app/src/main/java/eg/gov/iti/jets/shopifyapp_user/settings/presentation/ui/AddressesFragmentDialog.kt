@@ -40,7 +40,7 @@ class AddressesFragmentDialog():DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(owner,SettingViewModelFactory(
             SettingsRepoImpl(
-                SettingsRemoteSourceImpl(AppRetrofit.retrofit.create(SettingsAPIServices::class.java))
+                SettingsRemoteSourceImpl()
             )
         )
         )[SettingsViewModel::class.java]

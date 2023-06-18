@@ -70,6 +70,9 @@ class ProfileFragment : Fragment() {
         binding.txtMoreOrders.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
         }
+        binding.imageButtongotToSetting.setOnClickListener {
+            findNavController().navigate(R.id.settingsFragment)
+        }
     }
 
 }

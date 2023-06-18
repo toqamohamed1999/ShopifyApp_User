@@ -4,12 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import eg.gov.iti.jets.shopifyapp_user.databinding.AddressItemBinding
 import eg.gov.iti.jets.shopifyapp_user.databinding.CurrencyItemBinding
-import eg.gov.iti.jets.shopifyapp_user.databinding.ReviewItemBinding
-import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.Addresse
 
-class CurrencyAdapter(private var currencies:List<String>, var currencySelected:CurrencyListener):
+class CurrencyAdapter(private var currencies:MutableList<List<String>>, var currencySelected:CurrencyListener):
     RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
     private lateinit var binding:CurrencyItemBinding
    inner class CurrencyViewHolder(var binding:CurrencyItemBinding):RecyclerView.ViewHolder(binding.root)
@@ -20,7 +17,7 @@ class CurrencyAdapter(private var currencies:List<String>, var currencySelected:
         binding =CurrencyItemBinding.inflate(inflater, parent, false)
         return CurrencyViewHolder(binding)
     }
-    fun setCurrencies(currencies:List<String>){
+    fun setCurrencies(currencies: MutableList<List<String>>){
         this.currencies = currencies
         notifyDataSetChanged()
     }
@@ -31,9 +28,9 @@ class CurrencyAdapter(private var currencies:List<String>, var currencySelected:
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
        val currency = currencies[position]
-        holder.binding.currencyTectView.text =currency
+        holder.binding.currencyTectView.text =currency?.get(0)+"/n"+currency?.get(1)
         holder.binding.currencyTectView.setOnClickListener {
-            currencySelected.selectCurrency(currencies[holder.adapterPosition])
+            currencySelected.selectCurrency(currencies[holder.adapterPosition][0])
         }
     }
 
