@@ -16,6 +16,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
+import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentFavoriteBinding
@@ -34,6 +36,7 @@ class FavoriteFragment : Fragment(), OnClickProduct {
     private lateinit var viewModel: FavViewModel
     private lateinit var favAdapter:FavProductAdapter
     private var favList:List<FavRoomPojo> = emptyList()
+    private var favDraftOrderResponse : FavDraftOrderResponse = FavDraftOrderResponse()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,7 +113,23 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
     override fun onClickFavIcon(product_Id : Long) {
         if (isConnected(requireContext())) {
+            lifecycleScope.launch {
+                viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+                viewModel.favProducts.collectLatest {
+                    when (it) {
+                        is ResponseState.Loading -> {
 
+                        }
+                        is ResponseState.Success -> {
+                            favDraftOrderResponse=it.data!!
+                            println("///////////${favDraftOrderResponse.draft_order?.lineItems?.size}")
+                        }
+                        is ResponseState.Error -> {
+                            println("Draft order Error ${it.exception}")
+                        }
+                    }
+                }
+            }
             val alertDialog = AlertDialog.Builder(context)
 
             alertDialog.apply {
@@ -118,6 +137,10 @@ class FavoriteFragment : Fragment(), OnClickProduct {
                 setTitle("Delete")
                 setMessage("Are you sure you want to delete the Product from favorite?")
                 setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
+
+                    favDraftOrderResponse.draft_order?.lineItems?.removeIf {e->e.productId==product_Id }
+                    println("/////////////Product_ID /////${product_Id}")
+                    viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
                     viewModel.deleteFavProductWithId(product_Id!!)
                     Snackbar.make(
                         binding.root,
