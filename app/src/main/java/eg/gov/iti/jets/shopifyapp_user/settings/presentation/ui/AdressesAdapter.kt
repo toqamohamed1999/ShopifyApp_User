@@ -8,7 +8,7 @@ import eg.gov.iti.jets.shopifyapp_user.databinding.AddressItemBinding
 import eg.gov.iti.jets.shopifyapp_user.databinding.ReviewItemBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.Addresse
 
-class AdressesAdapter(private var addresses:List<Addresse>, var removeAddress:(address:Addresse)->Unit):
+class AdressesAdapter(private var addresses:List<Addresse>, var removeAddress:(address:Addresse)->Unit,val listener:SettingListener):
     RecyclerView.Adapter<AdressesAdapter.AddressViewHolder>() {
     private lateinit var binding:AddressItemBinding
    inner class AddressViewHolder(var binding:AddressItemBinding):RecyclerView.ViewHolder(binding.root)
@@ -34,6 +34,9 @@ class AdressesAdapter(private var addresses:List<Addresse>, var removeAddress:(a
            removeAddress(address)
        }
         holder.binding.textViewAddress.text = "${address.country} ${address.city}\n ${address.address1}"
+        holder.binding.addressCardHolder.setOnClickListener {
+            listener.selectAddress(holder.binding.textViewAddress.text.toString())
+        }
     }
 
 }

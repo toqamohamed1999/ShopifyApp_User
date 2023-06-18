@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/address_card_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -11,10 +12,12 @@
 
     <TextView
         android:id="@+id/textViewAddress"
-        android:layout_width="342dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_margin="10dp"
+        android:layout_marginEnd="60dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:fontFamily="@font/acme"
         android:text="TextView"
         android:textAlignment="viewStart"
@@ -27,5 +30,6 @@
         android:layout_height="29dp"
         android:layout_gravity="end"
         android:layout_margin="10dp"
-        android:background="@drawable/delete_address" />
+        android:background="@drawable/delete_address"
+        android:gravity="center_vertical|end" />
 </androidx.cardview.widget.CardView>

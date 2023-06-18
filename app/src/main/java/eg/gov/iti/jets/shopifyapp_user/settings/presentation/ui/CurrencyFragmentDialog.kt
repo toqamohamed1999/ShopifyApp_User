@@ -25,7 +25,7 @@ class CurrencyFragmentDialog():DialogFragment() {
     var binding:CurrenciesLauoutBinding?=null
     lateinit var owner: ViewModelStoreOwner
     private lateinit var viewModel: SettingsViewModel
-    var currencyListener:CurrencyListener?=null
+    var currencyListener:SettingListener?=null
     private var allCurrencies= mutableListOf<List<String>>()
     override fun onCreateView(
         inflater: LayoutInflater,

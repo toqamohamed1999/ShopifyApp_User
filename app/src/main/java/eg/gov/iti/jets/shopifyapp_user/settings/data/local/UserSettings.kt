@@ -100,9 +100,8 @@ object UserSettings {
             .apply()
     }
 
-    fun saveNewAddress() {
-        shippingAddress = selectedAddress?.countryName + selectedAddress?.adminArea
-        selectedAddress = null
+    fun saveNewAddress(address:String) {
+        shippingAddress = address
         isSelected = false
         SharedOperations.getInstance().edit().putString("shippingAddress",shippingAddress).apply()
     }
