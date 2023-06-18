@@ -13,7 +13,7 @@ object UserSettings {
     var currencyCode:String = "EGB"
     var shippingAddress:String = ""
     var phoneNumber:String = ""
-    var favoriteDraftOrderId:String = ""
+    var favoriteDraftOrderId:String = "1118696472857"
     var cartDraftOrderId:String = "1118663508249"
     var userAPI_Id = "7098003489049"
     var userCurrentDiscountCopy:DiscountCode? = null

@@ -18,10 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
-import eg.gov.iti.jets.shopifyapp_user.base.model.Product
-import eg.gov.iti.jets.shopifyapp_user.base.model.Review
-import eg.gov.iti.jets.shopifyapp_user.base.model.toFavRoomPojo
-import eg.gov.iti.jets.shopifyapp_user.base.model.toLineItem
+import eg.gov.iti.jets.shopifyapp_user.base.model.*
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
@@ -55,6 +52,7 @@ class ProductDetailsFragment : Fragment() {
     private var product_Id: Long? = null
     private var isFav: Boolean = false
     private var reviews = listOf<Review>()
+    private var favDraftOrderResponse :FavDraftOrderResponse= FavDraftOrderResponse()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,10 +66,27 @@ class ProductDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         product_Id = args.productId
 
+        lifecycleScope.launch {
+            viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+            viewModel.favProducts.collectLatest {
+                when (it) {
+                    is ResponseState.Loading -> {
+
+                    }
+                    is ResponseState.Success -> {
+                       favDraftOrderResponse=it.data!!
+                    }
+                    is ResponseState.Error -> {
+                        println("Draft order Error ${it.exception}")
+                    }
+                }
+            }
+        }
+
         viewModel.getCartProducts()
         binding.btnAddToBag.setOnClickListener {
 
-            val product=receivedProduct
+            val product = receivedProduct
             var quantity = 0
             product?.variants?.forEach { variant ->
                 quantity += variant.inventoryQuantity ?: 0
@@ -137,6 +152,7 @@ class ProductDetailsFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             binding.linearContainer.visibility = View.VISIBLE
                             receivedProduct = result.product.product
+                            println("/////////receivedProduct//////////////${receivedProduct!!.id}")
                             viewModel.getFavProductWithId(receivedProduct?.id!!)
                             bindDataToView(receivedProduct!!)
                         }
@@ -183,7 +199,11 @@ class ProductDetailsFragment : Fragment() {
                         setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                             isFav = false
                             viewModel.deleteFavProductWithId(product_Id!!)
+
+                            favDraftOrderResponse.draft_order?.lineItems?.removeIf {e->e.productId==receivedProduct?.id }
+                            viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
                             binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_border_icon)
+
                             Snackbar.make(
                                 binding.root,
                                 R.string.delete_MSG_from_favorites,
@@ -199,6 +219,8 @@ class ProductDetailsFragment : Fragment() {
                 } else {
                     isFav = true
                     viewModel.insertFavProduct(receivedProduct?.toFavRoomPojo()!!)
+                    favDraftOrderResponse.draft_order?.lineItems?.add(receivedProduct!!.toLineItems()!!)
+                    viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
                     binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_icon)
                 }
             } else {
