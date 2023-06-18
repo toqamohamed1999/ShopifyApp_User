@@ -37,9 +37,9 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/coupons_viewPager"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="210dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="3dp"
         app:chainUseRtl="true"
         android:layout_marginEnd="16dp"
         
