@@ -2,5 +2,79 @@
     <string name="app_name">ShopifyApp_User</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="checkout">Checkout</string>
+    <string name="checkout">Proceed to Checkout</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="noAccount">Don\'t have an account? </string>
+    <string name="signup">SignUp</string>
+    <string name="password">Password</string>
+    <string name="or">OR</string>
+    <string name="haveAccount">Already have account?</string>
+    <string name="username">UserName</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="second_name">Second Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="noInternetConnection">No Internet!,check your connection</string>
+    <string name="delete_MSG_from_favorites">This Product Deleted Successfully From Favorites</string>
+
+    /** nada **/
+    <string name="home_header">Home</string>
+    <string name="category_header">Category</string>
+    <string name="favorite_header">Favorite</string>
+    <string name="profile_header">Profile</string>
+    <string name="title_toolBar">Title</string>
+    <string name="search_hint">"search "</string>
+    <string name="brands_header">Brands</string>
+    <string name="settings">Settings</string>
+    <string name="shoes">Shoes</string>
+    <string name="t_shirts">T-Shirts</string>
+    <string name="accessories">Accessories</string>
+    <string name="description">Description</string>
+    <string name="reviews">Reviews</string>
+    <string name="seemorereviews...">SeeMoreReviews...</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="choose_method">Choose Method</string>
+    <string name="welcome">Welcome</string>
+    <string name="orders">Orders</string>
+    <string name="more">More...</string>
+    <string name="wishlist">WishList</string>
+    <string name="product_title">Product Title</string>
+    <string name="product_price">Product Price</string>
+    <string name="no_match_results">no match results</string>
+    <string name="price_header">Price:</string>
+    <string name="orderNumber">Order Number:</string>
+    <string name="date_header">Date:</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="shipping_info">Shipping Info</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="enter_your_address">Enter Your Address</string>
+    <string name="enter_your_phone">Enter Your Phone</string>
+    <string name="save_information_for_every_time">Save Information \n For every time</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
+    <string name="egp">EGP</string>
+    <string name="networkNotAvilable">No Internet Connection !!</string>
+    <string name="shipping_addresses">Shipping Addresses</string>
+    <string name="show">Show All</string>
+    <string name="add_new">Add New</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="select_using_maps">Select using maps</string>
+    <string name="save">Save</string>
+    <string name="voutcher">voutcher</string>
+    <string name="logout">Logout</string>
+    <string name="paymrnt_method">choose Payment Method</string>
+    <string name="online_payment">Online Payment</string>
+    <string name="chache_delivery">Cache on Delivery</string>
+    <string name="products_fees">Products Fees</string>
+    <string name="delevary_fees">Delivery Fees</string>
+    <string name="vat">Vat</string>
+    <string name="total_fees">Total Fees</string>
+    <string name="discount">Discount</string>
+    <string name="checkoutt">Checkout</string>
+
+    /** nada **/
+
 </resources>

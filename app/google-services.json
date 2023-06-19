@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1019122962158",
+    "project_id": "shopifyapp-user",
+    "storage_bucket": "shopifyapp-user.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019122962158:android:bdab10c16715fb4322edff",
+        "android_client_info": {
+          "package_name": "eg.gov.iti.jets.shopifyapp_user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019122962158-r8q90q44n21ri1a8v2k7n1lh1bdh07jt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNDWGAB8h43w-NMzrG2X_KrxVK85Ti_8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019122962158-r8q90q44n21ri1a8v2k7n1lh1bdh07jt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
