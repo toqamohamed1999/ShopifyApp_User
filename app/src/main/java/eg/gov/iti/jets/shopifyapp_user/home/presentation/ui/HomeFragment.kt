@@ -16,7 +16,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import eg.gov.iti.jets.shopifyapp_user.R
-import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.shopifyapp_user.home.data.model.BrandResultState
@@ -29,10 +28,8 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeViewModel
-import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.ui.ProductImageViewPagerAdapter
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {

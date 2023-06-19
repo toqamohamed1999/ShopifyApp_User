@@ -55,6 +55,11 @@
     <string name="eur">EUR</string>
     <string name="egp">EGP</string>
     <string name="networkNotAvilable">No Internet Connection !!</string>
+    <string name="no_items">Sorry, no items available</string>
+    <string name="price_products">Products Price:</string>
+    <string name="tax_price">Tax Price:</string>
+    <string name="title">Title</string>
+    <string name="quantity">Quantity</string>
 
     /** nada **/
 

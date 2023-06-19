@@ -176,6 +176,9 @@
         <action
             android:id="@+id/action_profileFragment_to_allOrdersFragment"
             app:destination="@id/allOrdersFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -263,6 +266,24 @@
         tools:layout="@layout/fragment_all_orders" >
         <action
             android:id="@+id/action_allOrdersFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_allOrdersFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="eg.gov.iti.jets.shopifyapp_user.profile.presentation.ui.OrderDetailsFragment"
+        android:label="fragment_order_details"
+        tools:layout="@layout/fragment_order_details" >
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_allOrdersFragment"
+            app:destination="@id/allOrdersFragment" />
+        <argument
+            android:name="order"
+            app:argType="eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

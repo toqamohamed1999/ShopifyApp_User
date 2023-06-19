@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.categories.data.model.CategoryState
 import eg.gov.iti.jets.shopifyapp_user.categories.data.remote.CategoryRemoteSource
 import eg.gov.iti.jets.shopifyapp_user.categories.data.repo.CategoryRepoImp
@@ -44,7 +45,10 @@ class CategoryFragment : Fragment(), OnClickCategory {
         //adapter and recyclerview
         viewModel.getCategories()
         categoryAdapter = CategoryAdapter(ArrayList(), requireActivity(), this)
-        val layoutManager = GridLayoutManager(requireContext(), 2)
+//        val layoutManager = GridLayoutManager(requireContext(), 2)
+//        binding.categoryRecyclerView.layoutManager = layoutManager
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.categoryRecyclerView.layoutManager = layoutManager
 
         lifecycleScope.launch {
