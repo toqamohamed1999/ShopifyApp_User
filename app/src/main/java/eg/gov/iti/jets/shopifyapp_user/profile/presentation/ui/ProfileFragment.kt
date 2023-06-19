@@ -78,7 +78,7 @@ class ProfileFragment : Fragment(), OnClickOrder {
             binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
         }
         binding.imageButtongotToSetting.setOnClickListener {
-            findNavController().navigate(R.id.settingsFragment)
+            binding.root.findNavController().navigate(R.id.settingsFragment)
         }
     }
 

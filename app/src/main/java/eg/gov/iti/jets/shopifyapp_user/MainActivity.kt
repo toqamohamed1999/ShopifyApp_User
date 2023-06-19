@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "All Orders"
+            }
+            else if (navDestination.id == R.id.productDetailsFragment) {
+                bottomNav.visibility = View.GONE
+                binding.backButton.visibility = View.VISIBLE
+                binding.titleTextView.text = "Product Details"
             } else {
                 bottomNav.visibility = View.VISIBLE
                 binding.toolbar.visibility = View.VISIBLE
