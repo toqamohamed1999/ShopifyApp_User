@@ -27,12 +27,3 @@ data class LineItem(
     var variant_title: @RawValue Any?,
     var vendor: @RawValue Any?
 ):Parcelable
-fun LineItem.toFavRoomPojo():FavRoomPojo{
-    return FavRoomPojo(
-        productId = product_id,
-        price=price,
-        imageSrc =applied_discount.description,
-        title = title,
-        bodyHtml = variant_title.toString()
-    )
-}

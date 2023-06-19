@@ -95,11 +95,20 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
             viewModel.productState.collect {
                 when (it) {
                     is SubCategoryState.Loading -> {
+                        binding.productsRecyclerview.visibility = View.GONE
+                        binding.noItemsTextView.visibility = View.GONE
                     }
                     is SubCategoryState.Success -> {
-                        productsAdapter.setProductList(it.productsList)
-                        Log.i("Counttttt22", "count =  ${it.productsList.size}")
-                        binding.productsRecyclerview.adapter = productsAdapter
+                        if(it.productsList.isEmpty()){
+                            binding.productsRecyclerview.visibility = View.GONE
+                            binding.noItemsTextView.visibility = View.VISIBLE
+                        }else{
+                            binding.noItemsTextView.visibility = View.GONE
+                            binding.productsRecyclerview.visibility = View.VISIBLE
+                            productsAdapter.setProductList(it.productsList)
+                            binding.productsRecyclerview.adapter = productsAdapter
+
+                        }
                     }
                     else -> {
                         Log.i("TAG", "Errrrorrrr: $it")

@@ -74,6 +74,11 @@
     <string name="total_fees">Total Fees</string>
     <string name="discount">Discount</string>
     <string name="checkoutt">Checkout</string>
+    <string name="no_items">Sorry, no items available</string>
+    <string name="price_products">Products Price:</string>
+    <string name="tax_price">Tax Price:</string>
+    <string name="title">Title</string>
+    <string name="quantity">Quantity</string>
     <string name="place_order">Place Order</string>
 
     /** nada **/
