@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.LineItemsOrder
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.ItemsOrderRowBinding
+import eg.gov.iti.jets.shopifyapp_user.util.splitItemOrder
 
-class ItemOrderAdapter(private var itemOrderList: List<LineItemsOrder>, val context: Context) : RecyclerView.Adapter<ItemOrderAdapter.ViewHolder>() {
+class ItemOrderAdapter(private var itemOrderList: List<LineItemsOrder>, val context: Context, var myListener: OnClickItemOrder) : RecyclerView.Adapter<ItemOrderAdapter.ViewHolder>() {
 
     private lateinit var binding: ItemsOrderRowBinding
 
@@ -26,15 +28,24 @@ class ItemOrderAdapter(private var itemOrderList: List<LineItemsOrder>, val cont
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItemOrder = itemOrderList[position]
-        holder.binding.orderTitleValue.text = currentItemOrder.title
+        val result = splitItemOrder(currentItemOrder.title!!)
+        val title = result.first
+        val id = result.second
+        holder.binding.orderTitleValue.text = title
         holder.binding.quantityValue.text = currentItemOrder.quantity.toString()
         holder.binding.priceValue.text = currentItemOrder.price
-        holder.binding.itemOrderCardView.startAnimation(
-            AnimationUtils.loadAnimation(
-                holder.itemView.context,
-                R.anim.anim_recyclerview
-            )
-        )
+        Glide.with(context)
+            .load(currentItemOrder.properties[0].value)
+            .into(holder.binding.itemImageView)
+        holder.binding.itemOrderCardView.setOnClickListener {
+            myListener.onClickItemOrder(id.toLong())
+        }
+//        holder.binding.itemOrderCardView.startAnimation(
+//            AnimationUtils.loadAnimation(
+//                holder.itemView.context,
+//                R.anim.anim_recyclerview
+//            )
+//        )
     }
 
     override fun getItemCount(): Int = itemOrderList.size

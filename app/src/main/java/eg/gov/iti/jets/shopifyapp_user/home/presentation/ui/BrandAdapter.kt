@@ -32,12 +32,12 @@ class BrandAdapter(private var brandList: List<SmartCollection>, val context: Co
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentBrand = brandList[position]
         holder.binding.brandTitleTextView.text = currentBrand.title
-        holder.binding.brandCardView.startAnimation(
-            AnimationUtils.loadAnimation(
-                holder.itemView.context,
-                R.anim.anim_recyclerview
-            )
-        )
+//        holder.binding.brandCardView.startAnimation(
+//            AnimationUtils.loadAnimation(
+//                holder.itemView.context,
+//                R.anim.anim_recyclerview
+//            )
+//        )
         Glide.with(context)
             .load(currentBrand.image?.src)
             .into(holder.binding.brandImageView)

@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.ui.HomeFragmentDirections
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import kotlinx.coroutines.flow.collectLatest
 
 class ProfileFragment : Fragment(), OnClickOrder {
 
@@ -54,14 +55,15 @@ class ProfileFragment : Fragment(), OnClickOrder {
         binding.ordersRecyclerView.layoutManager = layoutManager
 
         lifecycleScope.launch {
-            viewModel.orderState.collect {
+            viewModel.orderState.collectLatest {
                 when (it) {
                     is OrderState.Loading -> {
                     }
                     is OrderState.Success -> {
-                        orderList = if (it.orderList.size >= 2) {
+                        orderList = if (it.orderList.size > 2) {
                             it.orderList.take(2)
                         } else {
+                            binding.txtMoreOrders.visibility = View.GONE
                             it.orderList
                         }
                         orderAdapter.setOrderList(orderList)

@@ -18,6 +18,7 @@ import eg.gov.iti.jets.shopifyapp_user.profile.data.repo.ProfileRepoImp
 import eg.gov.iti.jets.shopifyapp_user.profile.presentation.viewmodel.ProfileFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.profile.presentation.viewmodel.ProfileViewModel
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class AllOrdersFragment : Fragment(), OnClickOrder {
@@ -55,7 +56,7 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
         binding.ordersRecyclerView.layoutManager = layoutManager
 
         lifecycleScope.launch {
-            viewModel.orderState.collect {
+            viewModel.orderState.collectLatest {
                 when (it) {
                     is OrderState.Loading -> {
                     }
