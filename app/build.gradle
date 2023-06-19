@@ -159,13 +159,19 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    // PayPal Checkout SDK Libraries
-   // implementation 'com.paypal.checkout:android-sdk:0.112.0'
-
-    // Other Dependencies Related To Sample App
-   // implementation fileTree(dir: "libs", include: ["*.jar"])
-    //location
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation "com.google.android.gms:play-services-places:17.0.0"
     implementation 'com.google.android.libraries.places:places:3.0.0'
+    //paypal
+    // to offer card payments
+    implementation 'com.braintreepayments.api:card:4.29.0'
+
+    // to collect device data
+    implementation 'com.braintreepayments.api:data-collector:4.29.0'
+
+    // to offer PayPal
+    implementation 'com.braintreepayments.api:paypal:4.29.0'
+
+    // to offer Google Pay
+    implementation 'com.braintreepayments.api:google-pay:4.29.0'
 }

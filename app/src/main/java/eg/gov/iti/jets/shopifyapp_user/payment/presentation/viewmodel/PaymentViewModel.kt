@@ -24,4 +24,12 @@ class PaymentViewModel(private val cartRepo:CartRepository,private val repo: Pay
             }
         }
     }
+
+    fun validateCoupon(code: String) {
+
+    }
+
+    fun confirmOrder() {
+
+    }
 }

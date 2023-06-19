@@ -79,6 +79,7 @@
     <string name="tax_price">Tax Price:</string>
     <string name="title">Title</string>
     <string name="quantity">Quantity</string>
+    <string name="place_order">Place Order</string>
 
     /** nada **/
 
