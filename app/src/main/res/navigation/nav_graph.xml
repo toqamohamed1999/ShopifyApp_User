@@ -179,6 +179,9 @@
         <action
             android:id="@+id/action_profileFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

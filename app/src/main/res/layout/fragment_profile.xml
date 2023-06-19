@@ -2,123 +2,196 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".profile.presentation.ui.ProfileFragment">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtWelcomeMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/welcome"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtongotToSetting"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txt_order"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/orders"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/txtMoreOrders"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/txtWelcomeMessage"
-        app:layout_constraintTop_toBottomOf="@+id/txtWelcomeMessage" />
-
-    <TextView
-        android:id="@+id/txtMoreOrders"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:maxLines="2"
-        android:text="@string/more"
-        android:textAlignment="viewStart"
-        android:textColor="@color/purple_700"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_order"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txt_order"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/orders_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txt_order"
-        app:layout_constraintTop_toBottomOf="@+id/txt_order"
-        tools:itemCount="2" />
+        android:layout_height="match_parent"
 
-    <TextView
-        android:id="@+id/txt_wishList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="224dp"
-        android:layout_marginStart="15dp"
-        android:text="@string/wishlist"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/txtMoreWishList"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orders_recycler_view" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtMoreWishList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:text="@string/more"
-        android:textAlignment="viewStart"
-        android:textColor="@color/purple_700"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_wishList"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txt_wishList"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:id="@+id/loggedOutContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wishList_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/txt_wishList"
-        tools:itemCount="4"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        tools:layout_editor_absoluteX="14dp"
-        tools:listitem="@layout/wishlist_item" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/login" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/you_aren_t_logged_in"
+                android:textAlignment="viewStart"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnlogin"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_color"
+                android:layout_margin="10dp"
+                android:text="@string/login"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/noInternetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/imageButtongotToSetting"
-        android:layout_width="37dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/back_transparent"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/txtWelcomeMessage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtWelcomeMessage"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/baseline_settings_24" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/noInternetAnimation"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/no_internet" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/noInternetConnection"
+                android:textAlignment="viewStart"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".profile.presentation.ui.ProfileFragment">
+            <TextView
+                android:id="@+id/txtWelcomeMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtongotToSetting"
+                app:layout_constraintHorizontal_bias="0.049"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txt_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/orders"
+                android:textAlignment="viewStart"
+                android:textColor="#0F4471"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/txtWelcomeMessage"
+                app:layout_constraintTop_toBottomOf="@+id/txtWelcomeMessage" />
+
+            <TextView
+                android:id="@+id/txtMoreOrders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:maxLines="2"
+                android:text="@string/more"
+                android:textAlignment="viewStart"
+                android:textColor="@color/primary_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_order"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txt_order" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/orders_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/txt_order"
+                app:layout_constraintTop_toBottomOf="@+id/txt_order"
+                tools:itemCount="2" />
+
+            <TextView
+                android:id="@+id/txt_wishList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/wishlist"
+                android:textAlignment="viewStart"
+                android:textColor="#0F4471"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/txt_order"
+                app:layout_constraintTop_toBottomOf="@+id/orders_recycler_view" />
+
+            <TextView
+                android:id="@+id/txtMoreWishList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:text="@string/more"
+                android:textAlignment="viewStart"
+                android:textColor="@color/primary_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_wishList"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txt_wishList"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/wishList_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/txt_wishList"
+                tools:itemCount="4"
+                tools:layout_editor_absoluteX="14dp"
+                tools:listitem="@layout/wishlist_item" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationEmptyWish"
+                android:layout_width="372dp"
+                android:layout_height="194dp"
+                app:layout_constraintStart_toStartOf="@+id/txt_wishList"
+                app:layout_constraintTop_toBottomOf="@+id/txt_wishList"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/empty_wishlist" />
+
+
+
+            <ImageButton
+                android:id="@+id/imageButtongotToSetting"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/back_transparent"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="@+id/txtWelcomeMessage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtWelcomeMessage"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/baseline_settings_24" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>
