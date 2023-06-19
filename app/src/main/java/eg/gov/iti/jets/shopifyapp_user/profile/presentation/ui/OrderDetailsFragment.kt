@@ -7,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentOrderDetailsBinding
 import eg.gov.iti.jets.shopifyapp_user.util.convertDateTimeFormat
 
-class OrderDetailsFragment : Fragment() {
+class OrderDetailsFragment : Fragment(), OnClickItemOrder {
 
     private lateinit var binding: FragmentOrderDetailsBinding
     private lateinit var itemOrderAdapter: ItemOrderAdapter
@@ -40,15 +41,19 @@ class OrderDetailsFragment : Fragment() {
         binding.orderNumValue.text = order.order_number.toString()
         binding.dateValue.text = convertDateTimeFormat(order.processed_at!!)
         binding.priceValue.text = order.current_subtotal_price
-        binding.taxPriceValue.text = order.total_tax
 
-        itemOrderAdapter = ItemOrderAdapter(ArrayList(), requireActivity())
+        itemOrderAdapter = ItemOrderAdapter(ArrayList(), requireActivity(), this)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.itemsRecyclerView.layoutManager = layoutManager
 
         itemOrderAdapter.setOrderList(order.line_items)
         binding.itemsRecyclerView.adapter = itemOrderAdapter
+    }
+
+    override fun onClickItemOrder(id: Long) {
+        val action = OrderDetailsFragmentDirections.actionOrderDetailsFragmentToProductDetailsFragment(id)
+        binding.root.findNavController().navigate(action)
     }
 
 }

@@ -82,6 +82,8 @@
     <string name="place_order">Place Order</string>
     <string name="no_products_in_wishlist">no products in wishList</string>
     <string name="you_aren_t_logged_in">You aren\'t logged in</string>
+    <string name="total_price">Total Price:</string>
+    <string name="items">Items</string>
 
     /** nada **/
 

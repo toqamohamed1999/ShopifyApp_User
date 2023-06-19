@@ -26,8 +26,8 @@ import eg.gov.iti.jets.shopifyapp_user.profile.presentation.viewmodel.ProfileFac
 import eg.gov.iti.jets.shopifyapp_user.profile.presentation.viewmodel.ProfileViewModel
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
 
@@ -106,34 +106,35 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                 layoutManager.orientation = LinearLayoutManager.VERTICAL
                 binding.ordersRecyclerView.layoutManager = layoutManager
 
-                lifecycleScope.launch {
-                    viewModel.orderState.collect {
-                        when (it) {
-                            is OrderState.Loading -> {
-                            }
-                            is OrderState.Success -> {
-                                orderList = if (it.orderList.size >= 2) {
-                                    it.orderList.take(2)
-                                } else {
-                                    it.orderList
-                                }
-                                orderAdapter.setOrderList(orderList)
-                                binding.ordersRecyclerView.adapter = orderAdapter
-                            }
-                            else -> {
-                                Log.i("TAG", "Errrrorrrr: $it")
-                            }
+        lifecycleScope.launch {
+            viewModel.orderState.collectLatest {
+                when (it) {
+                    is OrderState.Loading -> {
+                    }
+                    is OrderState.Success -> {
+                        orderList = if (it.orderList.size > 2) {
+                            it.orderList.take(2)
+                        } else {
+                            binding.txtMoreOrders.visibility = View.GONE
+                            it.orderList
                         }
+                        orderAdapter.setOrderList(orderList)
+                        binding.ordersRecyclerView.adapter = orderAdapter
+                    }
+                    else -> {
+                        Log.i("TAG", "Errrrorrrr: $it")
                     }
                 }
-                binding.txtMoreOrders.setOnClickListener {
-                    binding.root.findNavController()
-                        .navigate(R.id.action_profileFragment_to_allOrdersFragment)
-                }
-                binding.imageButtongotToSetting.setOnClickListener {
-                    binding.root.findNavController().navigate(R.id.settingsFragment)
-                }
             }
+        }
+
+        binding.txtMoreOrders.setOnClickListener {
+            binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
+        }
+        binding.imageButtongotToSetting.setOnClickListener {
+            binding.root.findNavController().navigate(R.id.settingsFragment)
+        }
+    }
         } else {
             binding.noInternetContainer.visibility = View.VISIBLE
             binding.fragmentContainer.visibility = View.GONE
