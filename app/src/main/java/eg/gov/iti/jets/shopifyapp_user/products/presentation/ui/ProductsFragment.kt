@@ -71,12 +71,19 @@ class ProductsFragment : Fragment(), OnClickProduct {
             viewModel.productState.collect {
                 when (it) {
                     is ProductBrandState.Loading -> {
+                        binding.productsRecyclerView.visibility = View.GONE
+                        binding.noItemsTextView.visibility = View.GONE
                     }
                     is ProductBrandState.Success -> {
-                        productsList = it.productsList
-                        productsAdapter.setProductList(it.productsList)
-                        Log.i("Counttttt22", "count =  ${it.productsList.size}")
-                        binding.productsRecyclerView.adapter = productsAdapter
+                        if(it.productsList.isEmpty()){
+                            binding.productsRecyclerView.visibility = View.GONE
+                            binding.noItemsTextView.visibility = View.VISIBLE
+                        }else{
+                            binding.noItemsTextView.visibility = View.GONE
+                            binding.productsRecyclerView.visibility = View.VISIBLE
+                            productsAdapter.setProductList(it.productsList)
+                            binding.productsRecyclerView.adapter = productsAdapter
+                        }
                     }
                     else -> {
                         Log.i("TAG", "Errrrorrrr: $it")

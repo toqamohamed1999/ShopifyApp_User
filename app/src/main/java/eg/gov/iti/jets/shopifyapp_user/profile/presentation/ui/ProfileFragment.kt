@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProfileBinding
@@ -19,12 +19,14 @@ import eg.gov.iti.jets.shopifyapp_user.profile.presentation.viewmodel.ProfileFac
 import eg.gov.iti.jets.shopifyapp_user.profile.presentation.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.home.presentation.ui.HomeFragmentDirections
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), OnClickOrder {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var orderAdapter: OrderAdapter
-    private var orderList:List<Order> = emptyList()
+    private var orderList: List<Order> = emptyList()
 
     private val viewModel: ProfileViewModel by lazy {
         val factory = ProfileFactoryViewModel(
@@ -32,6 +34,7 @@ class ProfileFragment : Fragment() {
         )
         ViewModelProvider(this, factory)[ProfileViewModel::class.java]
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,8 +47,8 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //OrderAdapter and recyclerview
-        viewModel.getOrders(7098003489049)
-        orderAdapter = OrderAdapter(ArrayList(), requireActivity())
+        viewModel.getOrders(UserSettings.userAPI_Id.toLong())
+        orderAdapter = OrderAdapter(ArrayList(), requireActivity(), this)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.ordersRecyclerView.layoutManager = layoutManager
@@ -56,7 +59,11 @@ class ProfileFragment : Fragment() {
                     is OrderState.Loading -> {
                     }
                     is OrderState.Success -> {
-                        orderList = it.orderList.take(3)
+                        orderList = if (it.orderList.size >= 2) {
+                            it.orderList.take(2)
+                        } else {
+                            it.orderList
+                        }
                         orderAdapter.setOrderList(orderList)
                         binding.ordersRecyclerView.adapter = orderAdapter
                     }
@@ -68,11 +75,17 @@ class ProfileFragment : Fragment() {
         }
 
         binding.txtMoreOrders.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
+            binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
         }
         binding.imageButtongotToSetting.setOnClickListener {
             findNavController().navigate(R.id.settingsFragment)
         }
+    }
+
+    override fun onClickOrder(order: Order) {
+        Log.i("orrrrder", "${order.order_number}")
+        val action = ProfileFragmentDirections.actionProfileFragmentToOrderDetailsFragment(order)
+        binding.root.findNavController().navigate(action)
     }
 
 }
