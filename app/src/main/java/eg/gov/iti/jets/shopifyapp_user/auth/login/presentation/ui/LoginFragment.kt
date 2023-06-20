@@ -50,6 +50,9 @@ class LoginFragment : Fragment() {
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_loginFragment_to_signUpFragment)
         }
+        binding.txtSkip.setOnClickListener {
+            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
+        }
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding.btnLogIn.setOnClickListener {
             if (isConnected(requireContext().applicationContext)) {
