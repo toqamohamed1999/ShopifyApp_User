@@ -1,5 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.ui
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Patterns
@@ -45,7 +47,7 @@ class SignUpFragment : Fragment() {
     }
     private var dummyLineItemList: ArrayList<LineItems> = arrayListOf()
     private var favDraftOrderId: String = ""
-    private var orderDraftOrderId: String = ""
+    private var cartDraftOrderId: String = ""
     lateinit var binding: FragmentSignUpBinding
     var uid: String = ""
     private var email = ""
@@ -130,7 +132,7 @@ class SignUpFragment : Fragment() {
             }
 
         }
-        val firebaseSignUp = lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenStarted {
             viewModel.signUpResult.collect { result ->
                 when (result) {
                     is ResponseState.Loading -> {
@@ -190,16 +192,15 @@ class SignUpFragment : Fragment() {
                         if (favDraftOrderId.isEmpty()) {
                             favDraftOrderId = it.data?.draft_order?.id.toString()!!
                         } else {
-                            orderDraftOrderId = it.data?.draft_order?.id.toString()!!
+                            cartDraftOrderId = it.data?.draft_order?.id.toString()!!
                         }
-                        if (favDraftOrderId.isNotEmpty() && orderDraftOrderId.isNotEmpty()) {
+                        if (favDraftOrderId.isNotEmpty() && cartDraftOrderId.isNotEmpty()) {
                             val customer = Customer(
                                 email = email,
                                 first_name = fName,
                                 last_name = lName,
-                                tags = "${pass},${uid}",
-                                note = "${favDraftOrderId},${orderDraftOrderId}",
-                                verified_email = false
+                                tags = "${pass},${uid},0",
+                                note = "${favDraftOrderId},${cartDraftOrderId}"
                             )
                             viewModel.createCustomerAccount(SignupRequest(customer))
                         }
@@ -215,10 +216,21 @@ class SignUpFragment : Fragment() {
             viewModel.apisignUpResult.collect {
                 when (it) {
                     is ResponseState.Loading -> {
-                        binding.progressBar.visibility=View.VISIBLE
+
                     }
                     is ResponseState.Success -> {
                        binding.progressBar.visibility=View.GONE
+                        val alertDialog = AlertDialog.Builder(context)
+
+                        alertDialog.apply {
+                            setIcon(R.drawable.baseline_delete_24)
+                            setTitle("Info")
+                            setMessage("Your Registration completed Successfully \ncheck your email for verification \nthen log in")
+                            setPositiveButton("OK") { _: DialogInterface?, _: Int ->
+                            }
+                        }.create().show()
+
+
                     }
                     is ResponseState.Error -> {
                         println("/////////////Error ${it.exception.toString()}//////////////////////")

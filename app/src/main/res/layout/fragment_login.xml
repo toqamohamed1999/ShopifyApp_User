@@ -60,7 +60,7 @@
             app:boxStrokeColor="@color/teal_700"
             app:endIconMode="password_toggle"
             app:errorEnabled="true"
-            app:hintTextColor="@color/purple_700"
+            app:hintTextColor="@color/primary_color"
             app:startIconDrawable="@drawable/lock">
 
             <com.google.android.material.textfield.TextInputEditText
