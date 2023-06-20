@@ -51,68 +51,73 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
 
     private fun setUpNavBottom(navController: NavController) {
         navController.addOnDestinationChangedListener { _, navDestination, _ ->
-            if (navDestination.id == R.id.productsFragment
-            ) {
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.titleTextView.text = "Products"
-                binding.settingIcon.visibility = View.GONE
-            } else if (navDestination.id == R.id.cartFragment
-            ) {
-                bottomNav.visibility = View.GONE
-                binding.shoppingCartIcon.visibility=View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.titleTextView.text = "Cart"
-                binding.settingIcon.visibility = View.VISIBLE
-            } else if (navDestination.id == R.id.subCategoryFragment
-            ) {
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.titleTextView.text = "Category"
-                binding.settingIcon.visibility = View.GONE
-            } else if (navDestination.id == R.id.fragmentPaymentInfo
-            ) {
-                binding.titleTextView.text = "Order Information"
-                binding.shoppingCartIcon.visibility=View.INVISIBLE
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.settingIcon.visibility = View.GONE
+            when (navDestination.id) {
+                R.id.productsFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.products)
+                    binding.settingIcon.visibility = View.GONE
+                }
+                R.id.cartFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility=View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.cart)
+                    binding.settingIcon.visibility = View.VISIBLE
+                }
+                R.id.subCategoryFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.category_header)
+                    binding.settingIcon.visibility = View.GONE
+                }
+                R.id.fragmentPaymentInfo -> {
+                     binding.titleTextView.text = getString(R.string.orderInfo)
+                    binding.shoppingCartIcon.visibility=View.INVISIBLE
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.settingIcon.visibility = View.GONE
 
-            } else if (navDestination.id == R.id.settingsFragment) {
-                binding.titleTextView.text = "Setting"
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.settingIcon.visibility = View.GONE
-                binding.shoppingCartIcon.visibility = View.VISIBLE
-            } else if (navDestination.id == R.id.allOrdersFragment) {
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.titleTextView.text = "All Orders"
-                binding.settingIcon.visibility = View.GONE
-            } else if (navDestination.id == R.id.orderDetailsFragment
-            ) {
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.titleTextView.text = "Order Details"
-                binding.settingIcon.visibility = View.GONE
-            } else if (navDestination.id == R.id.productDetailsFragment) {
-                bottomNav.visibility = View.GONE
-                binding.backButton.visibility = View.VISIBLE
-                binding.titleTextView.text = "Product Details"
-                binding.settingIcon.visibility = View.GONE
-            } else {
-                bottomNav.visibility = View.VISIBLE
-                binding.toolbar.visibility = View.VISIBLE
-                backButton.visibility = View.GONE
-                binding.settingIcon.visibility = View.GONE
-                binding.shoppingCartIcon.visibility = View.VISIBLE
-                when (navDestination.id) {
-                    R.id.homeFragment -> binding.titleTextView.text = "Home"
-                    R.id.categoryFragment -> binding.titleTextView.text = "Category"
-                    R.id.favoriteFragment -> binding.titleTextView.text = "Favorite"
-                    R.id.profileFragment -> {
-                        binding.titleTextView.text = "Profile"
-                        binding.settingIcon.visibility = View.VISIBLE
+                }
+                R.id.settingsFragment -> {
+                    binding.titleTextView.text = getString(R.string.settings)
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
+                }
+                R.id.allOrdersFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.all_orders)
+                    binding.settingIcon.visibility = View.GONE
+                }
+                R.id.orderDetailsFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.order_details)
+                    binding.settingIcon.visibility = View.GONE
+                }
+                R.id.productDetailsFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.product_details)
+                    binding.settingIcon.visibility = View.GONE
+                }
+                else -> {
+                    bottomNav.visibility = View.VISIBLE
+                    binding.toolbar.visibility = View.VISIBLE
+                    backButton.visibility = View.GONE
+                    binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
+                    when (navDestination.id) {
+                        R.id.homeFragment -> binding.titleTextView.text = getString(R.string.home_header)
+                        R.id.categoryFragment -> binding.titleTextView.text = getString(R.string.category_header)
+                        R.id.favoriteFragment -> binding.titleTextView.text = getString(R.string.favorite_header)
+                        R.id.profileFragment -> {
+                            binding.titleTextView.text = getString(R.string.profile_header)
+                            binding.settingIcon.visibility = View.VISIBLE
+                        }
                     }
                 }
             }

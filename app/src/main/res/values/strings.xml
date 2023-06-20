@@ -88,6 +88,13 @@
     <string name="addesses">Addesses</string>
     <string name="currncy">Currncy</string>
     <string name="about_us">About Us</string>
+    <string name="products">Products</string>
+    <string name="cart">Cart</string>
+    <string name="category">Category</string>
+    <string name="orderInfo">Order Information</string>
+    <string name="all_orders">All Orders</string>
+    <string name="order_details">Order Details</string>
+    <string name="product_details">Product Details</string>
 
     /** nada **/
 
