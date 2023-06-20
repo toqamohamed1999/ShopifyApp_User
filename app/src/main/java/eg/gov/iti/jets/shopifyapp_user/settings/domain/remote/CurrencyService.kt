@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface CurrencyService {
     @GET("codes")
    suspend fun getAllCurrencies():CurrenciesResponse
-    @GET("pair/{fromCode}/{toCode}")
-   suspend fun changeCurrency(@Path (value = "fromCode")fromCode:String,@Path (value = "toCode")toCode:String): ExchangerResponse
+    @GET("pair/EGP/{toCode}")
+   suspend fun changeCurrency(@Path (value = "toCode")toCode:String): ExchangerResponse
 }

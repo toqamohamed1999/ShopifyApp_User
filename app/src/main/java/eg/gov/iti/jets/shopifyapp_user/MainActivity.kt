@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
         binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
             navController.navigate(R.id.cartFragment)
         }
+        binding.toolbar.findViewById<ImageView>(R.id.setting_icon).setOnClickListener {
+            navController.navigate(R.id.settingsFragment)
+        }
         binding.backButton.setOnClickListener {
             navController.popBackStack()
         }

@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Property(
     val name: String = "",
-    val value: String = ""
+    val value: String? = ""
 ): Parcelable

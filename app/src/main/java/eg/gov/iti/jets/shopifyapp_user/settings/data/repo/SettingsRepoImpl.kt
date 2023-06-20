@@ -26,10 +26,9 @@ class SettingsRepoImpl(private val settingsRemoteSource: SettingsRemoteSource):S
     }
 
     override suspend fun changeCurrency(
-        fromCode: String,
         toCode: String
     ): MutableStateFlow<ExchangerResponse?> {
-        return  settingsRemoteSource.changeCurrency(fromCode,toCode)
+        return  settingsRemoteSource.changeCurrency(toCode)
     }
 
 }

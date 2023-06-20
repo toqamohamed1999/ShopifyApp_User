@@ -10,5 +10,5 @@ interface SettingsRepo {
 
    suspend fun removeAddress(address_id:String,userId:String)
    suspend fun getAllCurrencies(): MutableStateFlow<CurrenciesResponse?>
-   suspend fun changeCurrency(fromCode:String,toCode:String):MutableStateFlow<ExchangerResponse?>
+   suspend fun changeCurrency(toCode:String):MutableStateFlow<ExchangerResponse?>
 }
