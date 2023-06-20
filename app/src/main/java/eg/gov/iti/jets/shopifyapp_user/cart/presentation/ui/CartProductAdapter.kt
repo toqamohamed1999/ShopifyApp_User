@@ -15,6 +15,7 @@ import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.CartItemBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
+import kotlin.math.roundToInt
 
 class CartProductAdapter(private val listener: CartItemListener): ListAdapter<LineItem,CartProductAdapter.CartItemViewHolder>(CartDiffUtil()) {
 
@@ -64,10 +65,11 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
         holder.binding.cartTextViewAmount.text = product?.quantity?.toString()
         if(product!=null) {
             holder.binding.cartItemPrice.text =
-                "Price : " + UserSettings.getPrice(product.price.toDouble())
-                    .toString() + UserSettings.getPriceSymbol()
+                "Price : " +(((product.price.toDouble()*UserSettings.currentCurrencyValue)*100.0).roundToInt()/100.0)
+                    .toString() +" "+ UserSettings.currencyCode
             holder.binding.cartItemTotalPrice.text =
-                "Total  : " + (UserSettings.getPrice(product.price.toDouble()) * product.quantity).toString()
+                "Total  : " +(((product.price.toDouble()*UserSettings.currentCurrencyValue)*100*product.quantity).roundToInt()/100.0)
+                    .toString()+" "+ UserSettings.currencyCode
         }
     }
 }

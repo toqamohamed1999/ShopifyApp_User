@@ -40,12 +40,7 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     private lateinit var handler: Handler
-    private  var adsImages: ArrayList<DiscountCode> = arrayListOf(
-        DiscountCode("SS12223#1","-12",12223541,111245553,"",1)
-       ,DiscountCode("101FFA","-13",12223541,111245553,"",1)
-       ,DiscountCode("md4a3","-10",12223541,111245553,"",1)
-
-    )
+    private  var adsImages: ArrayList<DiscountCode> = arrayListOf()
     private lateinit var adsAdapter: CouponAdapter
     private lateinit var viewPager2: ViewPager2
     private val runnable = Runnable {
@@ -57,7 +52,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     private val viewModel: HomeViewModel by lazy {
         val factory = HomeFactoryViewModel(
             BrandRepoImp.getInstance(BrandRemoteSource())!!,
-            AddsRepoImpl(AddsRemoteSourceImpl(AppRetrofit.retrofit.create(AddsAPIServices::class.java)))
+            AddsRepoImpl(AddsRemoteSourceImpl())
         )
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
     }
@@ -100,6 +95,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                 adsImages.clear()
                 adsImages.addAll(it)
                 adsAdapter.discounts = adsImages
+                adsAdapter.notifyItemRangeChanged(0,it.size)
                 createDots(it.size)
                 updateDots(0)
             }

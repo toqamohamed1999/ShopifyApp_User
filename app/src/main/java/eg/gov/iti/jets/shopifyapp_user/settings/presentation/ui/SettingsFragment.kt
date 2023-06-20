@@ -43,7 +43,7 @@ class SettingsFragment:Fragment(),SettingListener{
     private fun setUpActions() {
         setUpDialogs()
 
-        binding?.textView?.setOnClickListener {
+        binding?.imageView?.setOnClickListener {
             childFragmentManager.beginTransaction().add(addressesDialog,null).commit()
 
         }

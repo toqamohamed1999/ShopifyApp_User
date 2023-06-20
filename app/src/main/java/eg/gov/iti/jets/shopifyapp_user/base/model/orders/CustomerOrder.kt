@@ -10,7 +10,7 @@ data class CustomerOrder(
     val admin_graphql_api_id: String = "",
     val created_at: String = "",
     val currency: String = "",
-    val default_address: ShippingAddress,
+    var default_address: ShippingAddress,
     val email: String = "",
     val first_name: String = "",
     val id: Long = 0,
