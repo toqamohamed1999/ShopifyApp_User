@@ -90,7 +90,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:hint="Enter Phone"
+                android:hint="@string/enter_phone"
                 android:inputType="number"
                 android:textColor="@color/black"
                 android:textSize="16sp"

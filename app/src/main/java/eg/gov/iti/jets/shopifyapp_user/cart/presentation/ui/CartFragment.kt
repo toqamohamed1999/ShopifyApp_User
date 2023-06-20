@@ -36,6 +36,7 @@ import kotlin.math.roundToInt
 
 class CartFragment : Fragment(),CartItemListener {
     private  var binding: FragmentCartBinding? = null
+    private var totalPrice=0.0
     private val viewModel: CartViewModel by lazy {
         val factory = CartViewModelFactory(CartRepositoryImpl(DraftOrderRemoteSourceImpl(AppRetrofit.retrofit.create(DraftOrderNetworkServices::class.java))
         ))
@@ -111,7 +112,7 @@ class CartFragment : Fragment(),CartItemListener {
             total += it.price.toDouble()*it.quantity
             UserSettings.cartQuantity+=it.quantity
         }
-        viewModel.setPrices((total+30).toString(),total.toString())
+        totalPrice =(total*UserSettings.currentCurrencyValue*100)/100.0
         UserSettings.saveSettings()
         (requireActivity() as BadgeChanger).changeBadgeCartCount(UserSettings.cartQuantity)
         binding?.cartTotalPrice?.text = "Total Price : ${((total*UserSettings.currentCurrencyValue*100).roundToInt()/100.0)} ${UserSettings.currencyCode}"
@@ -121,7 +122,8 @@ class CartFragment : Fragment(),CartItemListener {
         binding?.cartCheckoutBtn?.setOnClickListener {
             if(UserStates.checkConnectionState(requireContext())) {
                     if(productsIncCard.size>0) {
-                        binding?.root?.findNavController()?.navigate(R.id.action_cartFragment_to_fragmentPaymentInfo)
+                        val action = CartFragmentDirections.actionCartFragmentToFragmentPaymentInfo(totalPrice.toString())
+                        binding?.root?.findNavController()?.navigate(action)
                     }else{
                        Dialogs.SnakeToast(requireView(),"Cart Empty !!")
                     }

@@ -1,7 +1,5 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel
 
-import android.util.Log
-
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +8,7 @@ import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
+import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.repo.PaymentRepo
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
@@ -37,15 +36,15 @@ class PaymentViewModel(private val cartRepo:CartRepository,
             cartRepo.getCartProducts(UserSettings.cartDraftOrderId).collectLatest {
                 if( it is DraftOrderAPIState.Success){
                  draftOrder = it.order
-                    Log.e("",draftOrder?.draft_order?.total_price.toString())
                 }
             }
         }
     }
- fun setDiscount()
+ fun setDiscount(discountCode: DiscountCode?,totalPrice:Double)
  {
      order?.total_discounts =userCurrentDiscountCopy?.created_at.toString()
-
+     UserSettings.userCurrentDiscountCopy =discountCode
+     order?.total_price = totalPrice.toString()
  }
 fun setAddress(){
     order?.shipping_address = UserSettings.shippingAddress
@@ -75,7 +74,6 @@ fun setAddress(){
            UserSettings.cartQuantity = 0
            UserSettings.saveSettings()
         }
-
         //here to save the order
     }
     fun validateDiscount(discountCode:String){
@@ -85,10 +83,9 @@ fun setAddress(){
                    it?.price_rules?.forEach { priceRule ->
                        addsRepo.getAllDiscountsForPriceRule(priceRule.id.toString())
                            .collectLatest { disounts ->
-                               disounts?.discount_codes?.forEach {
-                                   if (it.code == discountCode) {
+                               disounts?.discount_codes?.forEach {code->
+                                   if (code.code == discountCode) {
                                        validatorFlag = 1
-                                       setDiscount()
                                    }
                                }
 
