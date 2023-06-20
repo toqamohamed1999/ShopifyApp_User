@@ -72,7 +72,7 @@ data class Order(
     var updated_at: String ?= null,
     var user_id: String ?= null
 ) : Parcelable{
-
+data class OrderBody(var order: Order? = Order(line_items = listOf()))
     override fun hashCode(): Int {
         var result = id.hashCode()
             result *= 31

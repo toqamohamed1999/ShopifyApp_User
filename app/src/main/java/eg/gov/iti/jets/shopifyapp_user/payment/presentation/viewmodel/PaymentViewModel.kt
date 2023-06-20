@@ -1,11 +1,11 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
-import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
@@ -24,7 +24,6 @@ class PaymentViewModel(private val cartRepo:CartRepository,
                        ):ViewModel() {
     private var _mode:MutableStateFlow<Int> = MutableStateFlow(0)
     var mode: StateFlow<Int> = _mode
-    private var validatorFlag=0
     private var order: Order?= Order(line_items = listOf<LineItemsOrder>())
     private var draftOrder:DraftOrderResponse?=null
 
@@ -58,50 +57,33 @@ fun setAddress(){
     order?.client_details = UserSettings.userName + ", " +  UserSettings.userEmail + ", " + UserSettings.phoneNumber
     order?.merchant_of_record_app_id = "Shopify App Merchants"
     order?.current_subtotal_price = draftOrder?.draft_order?.subtotal_price
-
+    order?.customer = CustomerOrder(id=UserSettings.userAPI_Id.toLong(),
+        default_address = ShippingAddress(), email = UserSettings.userEmail,
+        first_name = UserSettings.userName,
+        currency = UserSettings.currencyCode, accepts_marketing = true, verified_email = true
+    )
     order?.current_total_price =draftOrder?.draft_order?.total_price
     order?.total_price = draftOrder?.draft_order?.total_price
     order?.confirmed = true
 
 }
     fun confirmOrder() {
-        order?.line_items = draftOrder?.draft_order?.line_items?.map {
+        order?.line_items = draftOrder?.draft_order?.line_items?.takeLast((draftOrder?.draft_order?.line_items?.size?:1)-1)?.map {
             it.toLineItemOrder()
         }
        viewModelScope.launch {
-           draftOrder?.draft_order?.line_items = listOf(LineItem())
-           cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(),draftOrder!!)
-           UserSettings.cartQuantity = 0
-           UserSettings.saveSettings()
+           launch {
+               draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
+               cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
+               UserSettings.cartQuantity = 0
+               UserSettings.saveSettings()
+           }.join()
+           launch {
+               repo.postOrder(Order.OrderBody(order))
+           }
         }
-        //here to save the order
-        viewModelScope.launch {
-            repo.postOrder(order)
-        }
-
     }
-    fun validateDiscount(discountCode:String){
-       viewModelScope.launch {
-           launch {
-               addsRepo.getAllPriceRules().collectLatest {
-                   it?.price_rules?.forEach { priceRule ->
-                       addsRepo.getAllDiscountsForPriceRule(priceRule.id.toString())
-                           .collectLatest { disounts ->
-                               disounts?.discount_codes?.forEach {code->
-                                   if (code.code == discountCode) {
-                                       validatorFlag = 1
-                                   }
-                               }
-
-                           }
-                   }
-               }
-           }.join()
-           launch {
-               if(validatorFlag!=1&&validatorFlag!=0)validatorFlag = -1
-               _mode.value = validatorFlag
-               validatorFlag = 0
-           }.join()
-       }
+    fun validateDiscount() {
+        var flag = false
     }
 }

@@ -7,7 +7,7 @@ data class PriceRule(
     val created_at: String,
     val customer_segment_prerequisite_ids: List<Any>,
     val customer_selection: String,
-    val ends_at: Any,
+    val ends_at: String,
     val entitled_collection_ids: List<Any>,
     val entitled_country_ids: List<Any>,
     val entitled_product_ids: List<Any>,

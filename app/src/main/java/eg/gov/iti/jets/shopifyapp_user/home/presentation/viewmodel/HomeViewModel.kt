@@ -1,5 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel
 
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRepo) : ViewModel() {
 
     private var _brandState: MutableStateFlow<BrandResultState> = MutableStateFlow(BrandResultState.Loading())
-    private val discounts = mutableListOf<DiscountCode>()
+    private var discounts = mutableListOf<DiscountCode>()
     var brandState: StateFlow<BrandResultState> = _brandState
     private var _adds:MutableLiveData<List<DiscountCode>> = MutableLiveData(discounts)
     var adds:LiveData<List<DiscountCode>> = _adds
@@ -31,24 +33,38 @@ class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRe
         }
     }
     fun getAdds(){
-        if(discounts.isEmpty()){
+        discounts = mutableListOf()
         viewModelScope.launch {
             addsRepo.getAllPriceRules().collect {
                 it?.price_rules?.forEach { item ->
-                    getDiscounts(item.id.toString(), item.value)
+                    if(!item.ends_at.isNullOrEmpty()){
+                       try {
+                           val dateFormat = SimpleDateFormat("YYYY-MM-ddTHH:mm:ss")
+                           val  currentDate = System.currentTimeMillis()
+                           val ts = dateFormat.parse(item.ends_at).time / 1000
+                           if(currentDate<ts)
+                           {
+                               getDiscounts(item.id.toString(), item.value,item.value_type)
+                           }
+                       }catch (e:java.lang.Exception){
+                           Log.e("","Wong Date")
+                           getDiscounts(item.id.toString(), item.value, item.value_type)
+                       }
+                    }else{
+                        getDiscounts(item.id.toString(), item.value, item.value_type)
+                    }
                 }
             }
           }
-        }else{
-            _adds.value = discounts
-        }
     }
-    private fun getDiscounts(ruleId:String,value:String){
+    private fun getDiscounts(ruleId: String, value: String, valueType: String){
         viewModelScope.launch {
         addsRepo.getAllDiscountsForPriceRule(ruleId).collect { d ->
             d?.discount_codes?.forEach {discount->
-                discount.created_at = value
+                discount.created_at = (value.toDouble()*-1).toString()
+                discount.updated_at =valueType
                 discounts.add(discount)
+                _adds.value = discounts
             }
         }
         }
