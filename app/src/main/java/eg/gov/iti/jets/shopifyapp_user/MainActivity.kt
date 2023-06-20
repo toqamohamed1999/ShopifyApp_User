@@ -53,47 +53,62 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Products"
+                binding.settingIcon.visibility = View.GONE
             } else if (navDestination.id == R.id.cartFragment
             ) {
                 bottomNav.visibility = View.GONE
                 binding.toolbar.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Cart"
+                binding.settingIcon.visibility = View.GONE
             } else if (navDestination.id == R.id.subCategoryFragment
             ) {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Category"
-            }else if (navDestination.id == R.id.fragmentPaymentInfo
+                binding.settingIcon.visibility = View.GONE
+            } else if (navDestination.id == R.id.fragmentPaymentInfo
             ) {
                 binding.toolbar.visibility = View.GONE
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
+                binding.settingIcon.visibility = View.GONE
 
-            }else if (navDestination.id == R.id.settingsFragment||navDestination.id == R.id.fragmentLocationDetector||navDestination.id==R.id.settingsFragment)
-             {
+            } else if (navDestination.id == R.id.settingsFragment || navDestination.id == R.id.fragmentLocationDetector || navDestination.id == R.id.settingsFragment) {
                 binding.toolbar.visibility = View.GONE
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
+                binding.settingIcon.visibility = View.GONE
 
             } else if (navDestination.id == R.id.allOrdersFragment) {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "All Orders"
-            }
-            else if (navDestination.id == R.id.productDetailsFragment) {
+                binding.settingIcon.visibility = View.GONE
+            } else if (navDestination.id == R.id.orderDetailsFragment
+            ) {
+                bottomNav.visibility = View.GONE
+                binding.backButton.visibility = View.VISIBLE
+                binding.titleTextView.text = "Order Details"
+                binding.settingIcon.visibility = View.GONE
+            } else if (navDestination.id == R.id.productDetailsFragment) {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Product Details"
+                binding.settingIcon.visibility = View.GONE
             } else {
                 bottomNav.visibility = View.VISIBLE
                 binding.toolbar.visibility = View.VISIBLE
                 backButton.visibility = View.GONE
+                binding.settingIcon.visibility = View.GONE
                 when (navDestination.id) {
                     R.id.homeFragment -> binding.titleTextView.text = "Home"
                     R.id.categoryFragment -> binding.titleTextView.text = "Category"
                     R.id.favoriteFragment -> binding.titleTextView.text = "Favorite"
-                    R.id.profileFragment -> binding.titleTextView.text = "Profile"
+                    R.id.profileFragment -> {
+                        binding.titleTextView.text = "Profile"
+                        binding.settingIcon.visibility = View.VISIBLE
+                    }
                 }
             }
         }

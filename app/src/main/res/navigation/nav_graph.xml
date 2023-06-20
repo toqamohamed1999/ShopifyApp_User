@@ -93,6 +93,9 @@
         <argument
             android:name="product_Id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
@@ -288,5 +291,8 @@
         <action
             android:id="@+id/action_orderDetailsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>
