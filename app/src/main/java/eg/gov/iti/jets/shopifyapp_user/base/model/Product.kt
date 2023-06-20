@@ -88,7 +88,7 @@ fun Product.toLineItems(): LineItems {
         grams = 0,
         taxLines = arrayListOf(),
         appliedDiscount = eg.gov.iti.jets.shopifyapp_user.base.model.AppliedDiscount(
-            description = "$id)${image.src}",//line item /  image
+            description = image.src,//line item /  image
             value = "10.0",
             title = "Custom",
             amount = "20.00",

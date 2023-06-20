@@ -52,6 +52,7 @@ class SettingsFragment:Fragment(),SettingListener{
         }
         binding?.btnLogout?.setOnClickListener {
             UserSettings.clearSettings()
+            viewModel.deleteFavFromRoom()
             binding?.root?.findNavController()?.navigate(R.id.loginFragment)
         }
 

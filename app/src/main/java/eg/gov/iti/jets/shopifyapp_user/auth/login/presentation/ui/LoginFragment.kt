@@ -98,15 +98,16 @@ class LoginFragment : Fragment() {
 
                     }
                     is ResponseState.Success -> {
-                        binding.progressBar.visibility = View.GONE
                          if (it.data?.customers?.size == 0) {
                             binding.emailLayoutLogin.error = "email is not found"
                             binding.passwordLayoutLogin.error=null
+                             viewModel.resetFlow()
 
                          } else if (it.data?.customers?.get(0)?.tags!!.split("#")[0] != pass) {
                             println("///////////////////////pass${(it.data?.customers?.get(0)?.tags!!.split("#")[0])}//////")
                             binding.passwordLayoutLogin.error = "wrong password"
                             binding.emailLayoutLogin.error=null
+                             viewModel.resetFlow()
                         }
                         else if (it.data?.customers?.get(0)?.tags!!.split("#")[2] =="true") {
                              println("///////////////////////verification ${(it.data?.customers?.get(0)?.tags!!.split("#")[2])}")
@@ -134,12 +135,14 @@ class LoginFragment : Fragment() {
                             setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                             }
                         }.create().show()
-
+                             viewModel.resetFlow()
                         }
+                        binding.progressBar.visibility = View.GONE
                     }
                     is ResponseState.Error -> {
                         binding.progressBar.visibility = View.GONE
                         println("/////////////Error ${it.exception.toString()}//////////////////////")
+                        viewModel.resetFlow()
                     }
                 }
             }
