@@ -180,7 +180,7 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_addres" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewAddresses"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
@@ -206,7 +206,7 @@
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="395dp" />
+        app:layout_constraintGuide_end="16dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -297,7 +297,7 @@
         android:id="@+id/textViewSubTotalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="0.0"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
@@ -309,7 +309,7 @@
         android:id="@+id/textViewShippingFees"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="0.0"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView6"
