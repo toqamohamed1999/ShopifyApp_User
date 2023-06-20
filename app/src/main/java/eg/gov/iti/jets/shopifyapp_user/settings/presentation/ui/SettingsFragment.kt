@@ -52,7 +52,7 @@ class SettingsFragment:Fragment(),SettingListener{
         }
         binding?.btnLogout?.setOnClickListener {
             UserSettings.clearSettings()
-            binding?.root?.findNavController()?.navigate(R.id.homeFragment)
+            binding?.root?.findNavController()?.navigate(R.id.loginFragment)
         }
 
         binding?.btnChangeAddress?.setOnClickListener {

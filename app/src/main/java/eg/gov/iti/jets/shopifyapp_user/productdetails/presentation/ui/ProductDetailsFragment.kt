@@ -199,7 +199,6 @@ class ProductDetailsFragment : Fragment() {
                         setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                             isFav = false
                             viewModel.deleteFavProductWithId(product_Id!!)
-
                             favDraftOrderResponse.draft_order?.lineItems?.removeIf {e->e.productId==receivedProduct?.id }
                             viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
                             binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_border_icon)
