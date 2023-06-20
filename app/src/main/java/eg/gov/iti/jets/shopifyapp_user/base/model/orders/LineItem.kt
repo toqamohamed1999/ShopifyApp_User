@@ -13,5 +13,13 @@ data class LineItemsOrder(
     val properties: List<Property>
 ): Parcelable
 fun LineItem.toLineItemOrder():LineItemsOrder{
-    return LineItemsOrder(price,quantity,title)
-}
+    val arr = applied_discount.description?.split(")")
+    var url:String? = ""
+    if((arr?.size?:0)>1)
+    {
+        url = arr?.get(1)
+    }
+   return LineItemsOrder(price,quantity, title ="${title})${arr?.get(0)}", listOf(
+        Property("image_url", value = url)
+    ))
+  }

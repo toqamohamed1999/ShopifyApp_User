@@ -1,20 +1,18 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel
 
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
-
+import android.util.Log
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.LineItemsOrder
-import eg.gov.iti.jets.shopifyapp_user.base.model.orders.ShippingAddress
+import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.repo.PaymentRepo
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
-import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.toAddressBody
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userCurrentDiscountCopy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +37,7 @@ class PaymentViewModel(private val cartRepo:CartRepository,
             cartRepo.getCartProducts(UserSettings.cartDraftOrderId).collectLatest {
                 if( it is DraftOrderAPIState.Success){
                  draftOrder = it.order
+                    Log.e("",draftOrder?.draft_order?.total_price.toString())
                 }
             }
         }
@@ -68,22 +67,15 @@ fun setAddress(){
 }
     fun confirmOrder() {
         order?.line_items = draftOrder?.draft_order?.line_items?.map {
-            val arr = it.applied_discount.description?.split(")")
-            var url:String? = ""
-            if((arr?.size?:0)>1)
-            {
-                url = arr?.get(1)
-            }
-            LineItemsOrder(it.price,it.quantity, title ="${it.title})${arr?.get(0)}" )
+            it.toLineItemOrder()
+        }
+       viewModelScope.launch {
+           draftOrder?.draft_order?.line_items = listOf(LineItem())
+           cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(),draftOrder!!)
+           UserSettings.cartQuantity = 0
+           UserSettings.saveSettings()
+        }
 
-        }
-        viewModelScope.launch {
-            cartRepo.removeDraftOrder(draftOrder?.draft_order?.id.toString()).collectLatest {
-                if(it is DraftOrderAPIState.Success){
-                    _mode.value = 2
-                }
-            }
-        }
         //here to save the order
     }
     fun validateDiscount(discountCode:String){

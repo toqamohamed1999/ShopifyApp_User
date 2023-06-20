@@ -34,14 +34,16 @@
                 android:textAlignment="viewStart"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnlogin"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/primary_color"
                 android:layout_margin="10dp"
+                android:backgroundTint="@color/primary_color"
                 android:text="@string/login"
                 android:textAllCaps="false"
+                android:visibility="visible"
                 app:cornerRadius="10dp" />
         </LinearLayout>
         <LinearLayout
@@ -76,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".profile.presentation.ui.ProfileFragment">
+
             <TextView
                 android:id="@+id/txtWelcomeMessage"
                 android:layout_width="wrap_content"
@@ -85,8 +88,6 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/imageButtongotToSetting"
-                app:layout_constraintHorizontal_bias="0.049"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -175,21 +176,6 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/empty_wishlist" />
-
-
-
-            <ImageButton
-                android:id="@+id/imageButtongotToSetting"
-                android:layout_width="37dp"
-                android:layout_height="37dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/back_transparent"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="@+id/txtWelcomeMessage"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/txtWelcomeMessage"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/baseline_settings_24" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

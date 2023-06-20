@@ -15,7 +15,7 @@ object UserSettings {
     var shippingAddress:String = ""
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = "1118696472857"
-    var cartDraftOrderId:String = "1118663508249"
+    var cartDraftOrderId:String = "1119703400729"
     var userAPI_Id = "7098003489049"
     var userCurrentDiscountCopy:DiscountCode? = null
     var selectedAddress: Address?=null
@@ -73,6 +73,7 @@ object UserSettings {
          favoriteDraftOrderId =instance.getString("favoriteDraftOrderId","")!!
          cartDraftOrderId = instance.getString("cartDraftOrderId","")!!
          cartQuantity = instance.getInt("cartQuantity",0)
+        cartDraftOrderId = "1119703400729"
     }
     fun clearSettings(){
          userName = ""

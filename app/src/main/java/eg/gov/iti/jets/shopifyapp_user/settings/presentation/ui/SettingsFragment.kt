@@ -91,7 +91,7 @@ class SettingsFragment:Fragment(),SettingListener{
         Dialogs.SnakeToast(requireView(),"Done Selecting Default Address ")
     }
     override fun selectCurrency(currency: String) {
-        viewModel.changeCurrency(UserSettings.currencyCode,currency)
+        viewModel.changeCurrency(currency)
         UserSettings.currencyCode = currency
         UserSettings.saveSettings()
         currenciesDialog.dismiss()
