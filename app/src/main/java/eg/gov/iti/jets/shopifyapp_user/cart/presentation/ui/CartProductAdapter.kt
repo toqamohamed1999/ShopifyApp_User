@@ -49,6 +49,9 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
                     i?.dismiss()
                 }.create().show()
         }
+        holder.binding.cartItemId.setOnClickListener {
+            listener.gotoDetails(getItem(holder.adapterPosition)?.applied_discount?.description?.split(")")?.get(0)?:"")
+        }
         var imageUrl=""
         try{
            imageUrl= product?.applied_discount?.description?.split(")")?.get(1) ?: ""

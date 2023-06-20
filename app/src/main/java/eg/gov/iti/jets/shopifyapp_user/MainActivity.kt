@@ -13,6 +13,8 @@ import eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui.BadgeDrawable
 import eg.gov.iti.jets.shopifyapp_user.databinding.ActivityMainBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
+import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
+import eg.gov.iti.jets.shopifyapp_user.util.UserStates
 
 class MainActivity : AppCompatActivity(), BadgeChanger {
 
@@ -29,10 +31,30 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
 
         backButton = binding.backButton
         binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
-            navController.navigate(R.id.cartFragment)
+
+            if(UserStates.checkConnectionState(this))
+            {
+                if(UserSettings.userAPI_Id.isNotEmpty()){
+                    navController.navigate(R.id.cartFragment)
+                }else{
+                    navController.navigate(R.id.loginFragment)
+                }
+            }else{
+                Dialogs.SnakeToast(binding.root,getString(R.string.noInternetConnection))
+            }
         }
         binding.toolbar.findViewById<ImageView>(R.id.setting_icon).setOnClickListener {
-            navController.navigate(R.id.settingsFragment)
+            if(UserStates.checkConnectionState(this))
+            {
+                if(UserSettings.userAPI_Id.isNotEmpty()){
+                    navController.navigate(R.id.settingsFragment)
+                }else{
+                    navController.navigate(R.id.loginFragment)
+                }
+            }else{
+                Dialogs.SnakeToast(binding.root,getString(R.string.noInternetConnection))
+            }
+
         }
         binding.backButton.setOnClickListener {
             navController.popBackStack()
