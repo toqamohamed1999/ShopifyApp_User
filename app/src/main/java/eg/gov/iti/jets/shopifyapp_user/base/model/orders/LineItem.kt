@@ -8,7 +8,9 @@ import kotlinx.android.parcel.Parcelize
 data class LineItemsOrder(
     val price: String?="",
     val quantity: Int?=0,
-    val title: String?=""
+
+    val title: String?="",
+    val properties: List<Property>
 ): Parcelable
 fun LineItem.toLineItemOrder():LineItemsOrder{
     return LineItemsOrder(price,quantity,title)

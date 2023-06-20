@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
@@ -32,15 +33,15 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var viewModel: FavViewModel
-    private lateinit var favAdapter:FavProductAdapter
-    private var favList:List<FavRoomPojo> = emptyList()
+    private lateinit var favAdapter: FavProductAdapter
+    private var favList: List<FavRoomPojo> = emptyList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[FavViewModel::class.java]
-         favAdapter = FavProductAdapter(ArrayList(), requireActivity() , this)
+        favAdapter = FavProductAdapter(ArrayList(), requireActivity(), this)
         return binding.root
     }
 
@@ -49,13 +50,23 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
 
         if (!UserSettings.userAPI_Id.isNullOrEmpty()) {
-
-            binding.favRecycler.adapter=favAdapter
+            binding.loggedOutContainer.visibility = View.GONE
+            binding.favRecycler.visibility = View.VISIBLE
+            binding.txtSearch.visibility=View.VISIBLE
+            binding.favRecycler.adapter = favAdapter
+            binding.animationEmptyWish.visibility = View.GONE
+            binding.txtnowishlist.visibility = View.GONE
 
             val textWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
                     // This method is called before the text is changed.
                 }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val filteredList = filteredMyListWithSequence(s.toString())
                     showNoMatchingResultIfFilteredListIsEmpty(filteredList)
@@ -72,31 +83,47 @@ class FavoriteFragment : Fragment(), OnClickProduct {
             binding.searchEditText.addTextChangedListener(textWatcher)
 
             lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.favorites.collectLatest {
+
+                    viewModel.favorites.collect {
                         viewModel.list = it
-                        favList=it
+                        favList = it
                         if (it.isEmpty()) {
-                            binding.txtNoResults.visibility = View.VISIBLE
+                            binding.animationEmptyWish.visibility = View.VISIBLE
+                            binding.txtnowishlist.visibility = View.VISIBLE
                             binding.favRecycler.visibility = View.GONE
+                            binding.txtSearch.visibility = View.GONE
 
                         } else {
-                            binding.txtNoResults.visibility = View.GONE
+                            binding.animationEmptyWish.visibility = View.GONE
+                            binding.txtnowishlist.visibility = View.GONE
                             binding.favRecycler.visibility = View.VISIBLE
+                            binding.txtSearch.visibility = View.VISIBLE
 
                         }
                         favAdapter.setProductList(it)
                     }
-                }
+
             }
 
         }
+        else{
+            binding.loggedOutContainer.visibility = View.VISIBLE
+            binding.favRecycler.visibility = View.GONE
+            binding.txtSearch.visibility=View.GONE
+            binding.animationView.visibility=View.GONE
+            binding.txtnowishlist.visibility=View.GONE
+            binding.btnlogin.setOnClickListener {
+               Navigation.findNavController(requireView()).navigate(R.id.action_favoriteFragment_to_loginFragment)
+            }
+        }
 
     }
+
     private fun filteredMyListWithSequence(s: String): List<FavRoomPojo>? {
 
         return favList?.filter { it.title!!.lowercase().contains(s.lowercase()) }
     }
+
     private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<FavRoomPojo>?) {
         if (filteredList.isNullOrEmpty()) {
             binding.txtNoResults.visibility = View.VISIBLE
@@ -108,7 +135,7 @@ class FavoriteFragment : Fragment(), OnClickProduct {
         }
     }
 
-    override fun onClickFavIcon(product_Id : Long) {
+    override fun onClickFavIcon(product_Id: Long) {
         if (isConnected(requireContext())) {
 
             val alertDialog = AlertDialog.Builder(context)
@@ -131,7 +158,7 @@ class FavoriteFragment : Fragment(), OnClickProduct {
             }.create().show()
 
 
-            }else{
+        } else {
             Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
                 .show()
         }
@@ -142,5 +169,10 @@ class FavoriteFragment : Fragment(), OnClickProduct {
         val action =
             FavoriteFragmentDirections.actionFavoriteFragmentToProductDetailsFragment(product_Id)
         binding.root.findNavController().navigate(action)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.txtNoResults.visibility=View.GONE
     }
 }

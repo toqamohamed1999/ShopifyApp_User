@@ -8,7 +8,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.Addresse
 
 object UserSettings {
     var currentCurrencyValue: Double = 1.0
-    var userName:String = ""
+    var userName:String = "Yasmeen"
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
     var currencyCode:String = "EGP"

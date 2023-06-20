@@ -4,119 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".profile.presentation.ui.OrderDetailsFragment">
 
-    <TextView
-        android:id="@+id/taxPrice_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/price_textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/taxPrice_textView"
-        app:layout_constraintTop_toTopOf="@+id/price_textView"
-        app:layout_constraintVertical_bias="1.0"
-        tools:text="\sdsdasdasd" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".profile.presentation.ui.OrderDetailsFragment">
 
-    <TextView
-        android:id="@+id/taxPrice_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tax_price"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/price_value"
-        app:layout_constraintEnd_toStartOf="@+id/taxPrice_value"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/price_value"
-        app:layout_constraintTop_toTopOf="@+id/price_value" />
+        <TextView
+            android:id="@+id/orderNum_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/orderNumber"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/orderNum_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/orderNumber"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/orderNum_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderNum_textView"
+            app:layout_constraintStart_toEndOf="@+id/orderNum_textView"
+            app:layout_constraintTop_toTopOf="@+id/orderNum_textView" />
 
-    <TextView
-        android:id="@+id/orderNum_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/orderNum_textView"
-        app:layout_constraintStart_toEndOf="@+id/orderNum_textView"
-        app:layout_constraintTop_toTopOf="@+id/orderNum_textView" />
+        <TextView
+            android:id="@+id/date_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/date_header"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/orderNum_textView"
+            app:layout_constraintTop_toBottomOf="@+id/orderNum_textView" />
 
-    <TextView
-        android:id="@+id/date_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/date_header"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/orderNum_textView"
-        app:layout_constraintTop_toBottomOf="@+id/orderNum_textView" />
+        <TextView
+            android:id="@+id/date_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/date_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/date_textView"
+            app:layout_constraintTop_toTopOf="@+id/date_textView" />
 
-    <TextView
-        android:id="@+id/date_value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/date_textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/date_textView"
-        app:layout_constraintTop_toTopOf="@+id/date_textView" />
+        <TextView
+            android:id="@+id/price_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/total_price"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/price_value"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@+id/date_textView"
+            app:layout_constraintTop_toBottomOf="@+id/date_textView" />
 
-    <TextView
-        android:id="@+id/price_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/price_products"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/price_value"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/date_textView"
-        app:layout_constraintTop_toBottomOf="@+id/date_textView" />
+        <TextView
+            android:id="@+id/price_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/price_textView"
+            app:layout_constraintStart_toEndOf="@+id/price_textView"
+            app:layout_constraintTop_toTopOf="@+id/price_textView"
+            tools:text="\sdsdasdasd" />
 
-    <TextView
-        android:id="@+id/price_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/price_textView"
-        app:layout_constraintEnd_toStartOf="@+id/taxPrice_textView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/price_textView"
-        app:layout_constraintTop_toTopOf="@+id/price_textView"
-        tools:text="\sdsdasdasd" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/itemsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/items_textView"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemsRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/price_textView"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/items_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/acme"
+            android:text="@string/items"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/price_textView"
+            app:layout_constraintTop_toBottomOf="@+id/price_textView" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

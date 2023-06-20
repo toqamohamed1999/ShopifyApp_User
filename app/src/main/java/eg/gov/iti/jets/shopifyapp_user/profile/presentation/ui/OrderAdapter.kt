@@ -38,12 +38,12 @@ class OrderAdapter(
         holder.binding.orderNumValue.text = currentOrder.order_number.toString()
         holder.binding.dateValue.text = convertDateTimeFormat(currentOrder.processed_at!!)
         holder.binding.priceValue.text = currentOrder.total_price
-        holder.binding.orderCardView.startAnimation(
-            AnimationUtils.loadAnimation(
-                holder.itemView.context,
-                R.anim.anim_recyclerview
-            )
-        )
+//        holder.binding.orderCardView.startAnimation(
+//            AnimationUtils.loadAnimation(
+//                holder.itemView.context,
+//                R.anim.anim_recyclerview
+//            )
+//        )
         holder.binding.orderCardView.setOnClickListener {
             myListener.onClickOrder(currentOrder)
         }

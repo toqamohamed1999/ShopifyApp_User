@@ -28,3 +28,10 @@ fun convertDateTimeFormat(dateTimeString: String): String {
     val dateTime = LocalDateTime.parse(dateTimeString, inputFormat)
     return dateTime.format(outputFormat)
 }
+
+fun splitItemOrder(string: String): Pair<String, String> {
+    val parts = string.split("?")
+    val title = parts[0].trim()
+    val id = parts[1].trim()
+    return Pair(title, id)
+}
