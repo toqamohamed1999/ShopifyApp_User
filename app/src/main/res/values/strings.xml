@@ -18,9 +18,8 @@
     <string name="last_name">Last Name</string>
     <string name="noInternetConnection">No Internet Connection ! </string>
     <string name="delete_MSG_from_favorites">This Product Deleted Successfully From Favorites</string>
-    <string name="registration_completed">Your Registration completed Successfully
-check your email for verification
-then log in</string>
+    <string name="registration_completed">Your Registration completed Successfully check your email for verification then log in</string>
+    <string name="go_to_verify_email_from_login">You have to check email verification then try to log in again </string>
 
     /** nada **/
     <string name="home_header">Home</string>

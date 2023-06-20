@@ -2,16 +2,15 @@ package eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.ui
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
@@ -21,7 +20,6 @@ import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.AuthRemoteSourceImp
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
-import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupModel
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupRequest
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.FirebaseRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
@@ -33,8 +31,10 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.LineItems
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSignUpBinding
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import eg.gov.iti.jets.shopifyapp_user.util.isValidEmail
+import eg.gov.iti.jets.shopifyapp_user.util.isValidPassword
 import kotlinx.coroutines.delay
-import kotlin.io.path.createTempDirectory
+import kotlinx.coroutines.launch
 
 
 class SignUpFragment : Fragment() {
@@ -49,7 +49,7 @@ class SignUpFragment : Fragment() {
     private var favDraftOrderId: String = ""
     private var cartDraftOrderId: String = ""
     lateinit var binding: FragmentSignUpBinding
-    var uid: String = ""
+    private var uid: String = ""
     private var email = ""
     private var pass = ""
     private var confirmPass = ""
@@ -68,6 +68,9 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).findViewById<AppBarLayout>(R.id.custom_toolBar)?.visibility =
             View.GONE
+        binding.textViewHaveAcount.setOnClickListener {
+            Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_loginFragment)
+        }
         binding.btnSignUp.setOnClickListener {
             if (isConnected(requireContext().applicationContext)) {
                 email = binding.editEmailSignup.text.toString().trim()
@@ -140,7 +143,7 @@ class SignUpFragment : Fragment() {
                     }
                     is ResponseState.Success -> {
                         uid = result.data.toString()
-                        dummyLineItemList?.add(
+                        dummyLineItemList.add(
                             LineItems(
                                 title = "dummy",
                                 quantity = 1,
@@ -151,13 +154,13 @@ class SignUpFragment : Fragment() {
                             FavDraftOrderResponse(
                                 DraftOrderFav(
                                     note = "fav_draftOrder",
-                                    lineItems = dummyLineItemList!!
+                                    lineItems = dummyLineItemList
 
                                 )
                             )
                         )
                         delay(3000)
-                        dummyLineItemList?.add(
+                        dummyLineItemList.add(
                             LineItems(
                                 title = "dummy",
                                 quantity = 1,
@@ -168,7 +171,7 @@ class SignUpFragment : Fragment() {
                             FavDraftOrderResponse(
                                 DraftOrderFav(
                                     note = "cart_draftOrder",
-                                    lineItems = dummyLineItemList!!
+                                    lineItems = dummyLineItemList
 
                                 )
                             )
@@ -190,29 +193,29 @@ class SignUpFragment : Fragment() {
                     }
                     is ResponseState.Success -> {
                         if (favDraftOrderId.isEmpty()) {
-                            favDraftOrderId = it.data?.draft_order?.id.toString()!!
+                            favDraftOrderId = it.data?.draft_order?.id.toString()
                         } else {
-                            cartDraftOrderId = it.data?.draft_order?.id.toString()!!
+                            cartDraftOrderId = it.data?.draft_order?.id.toString()
                         }
                         if (favDraftOrderId.isNotEmpty() && cartDraftOrderId.isNotEmpty()) {
                             val customer = Customer(
                                 email = email,
                                 first_name = fName,
                                 last_name = lName,
-                                tags = "${pass},${uid},0",
-                                note = "${favDraftOrderId},${cartDraftOrderId}"
+                                tags = "${pass}#${uid}#true",//password,fireBaserUserId,emailVerification
+                                note = "${favDraftOrderId}#${cartDraftOrderId}"
                             )
                             viewModel.createCustomerAccount(SignupRequest(customer))
                         }
                     }
                     is ResponseState.Error -> {
-                        println("/////////////Error ${it.exception.toString()}//////////////////////")
+                        println("/////////////Error ${it.exception}//////////////////////")
                     }
 
                 }
             }
         }
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch{
             viewModel.apisignUpResult.collect {
                 when (it) {
                     is ResponseState.Loading -> {
@@ -223,9 +226,9 @@ class SignUpFragment : Fragment() {
                         val alertDialog = AlertDialog.Builder(context)
 
                         alertDialog.apply {
-                            setIcon(R.drawable.baseline_delete_24)
+                            setIcon(R.drawable.baseline_info_24)
                             setTitle("Info")
-                            setMessage("Your Registration completed Successfully \ncheck your email for verification \nthen log in")
+                            setMessage(resources.getString(R.string.registration_completed))
                             setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                             }
                         }.create().show()
@@ -233,7 +236,7 @@ class SignUpFragment : Fragment() {
 
                     }
                     is ResponseState.Error -> {
-                        println("/////////////Error ${it.exception.toString()}//////////////////////")
+                        println("/////////////Error ${it.exception}//////////////////////")
                     }
                 }
             }
@@ -252,13 +255,4 @@ class SignUpFragment : Fragment() {
     }
 }
 
-fun String.isValidPassword(): Boolean {
-    // Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.
-    val passwordRegex =
-        Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}$")
-    return passwordRegex.matches(this)
-}
 
-fun String.isValidEmail(): Boolean {
-    return Patterns.EMAIL_ADDRESS.matcher(this).matches()
-}

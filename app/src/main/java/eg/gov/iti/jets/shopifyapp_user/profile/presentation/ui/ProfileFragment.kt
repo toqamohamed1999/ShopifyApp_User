@@ -59,15 +59,17 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (isConnected(requireContext())) {
-            if (UserSettings.userAPI_Id.isNullOrEmpty()) {
+            println("//////////////////////////////${UserSettings.userAPI_Id}")
+            if (UserSettings.userAPI_Id.isEmpty()) {
                 binding.noInternetContainer.visibility = View.GONE
                 binding.fragmentContainer.visibility = View.GONE
                 binding.loggedOutContainer.visibility = View.VISIBLE
                 binding.btnlogin.setOnClickListener {
-                    Navigation.findNavController(requireView())
+                    binding.root.findNavController()
                         .navigate(R.id.action_profileFragment_to_loginFragment)
                 }
-            } else {
+            }
+            else {
                 binding.noInternetContainer.visibility = View.GONE
                 binding.fragmentContainer.visibility = View.VISIBLE
                 binding.loggedOutContainer.visibility = View.GONE

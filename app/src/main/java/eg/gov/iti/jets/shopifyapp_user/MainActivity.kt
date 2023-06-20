@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import eg.gov.iti.jets.shopifyapp_user.base.local.database.ShopifyDatabase
 import eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui.BadgeDrawable
 import eg.gov.iti.jets.shopifyapp_user.databinding.ActivityMainBinding
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 
 class MainActivity : AppCompatActivity(), BadgeChanger {
@@ -40,7 +41,9 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupWithNavController(bottomNav, navController)
         setUpNavBottom(navController)
-
+        if(UserSettings.userAPI_Id.isEmpty()){
+            navController.navigate(R.id.loginFragment)
+        }
     }
 
     override fun changeBadgeCartCount(count: Int) {
@@ -103,6 +106,15 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.backButton.visibility = View.VISIBLE
                     binding.titleTextView.text = getString(R.string.product_details)
                     binding.settingIcon.visibility = View.GONE
+                }
+                R.id.loginFragment->{
+                    bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
+
+                }
+                R.id.signUpFragment->{
+                    bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
                 }
                 else -> {
                     bottomNav.visibility = View.VISIBLE

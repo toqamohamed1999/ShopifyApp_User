@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class CustomerResponse(var customer: Customer)
-
+data class CustomersResponse(var customers:List<Customer>)
 
 data class Customer(
     var id: Long?=null,
