@@ -84,6 +84,10 @@
     <string name="you_aren_t_logged_in">You aren\'t logged in</string>
     <string name="total_price">Total Price:</string>
     <string name="items">Items</string>
+    <string name="currencies">Currencies</string>
+    <string name="addesses">Addesses</string>
+    <string name="currncy">Currncy</string>
+    <string name="about_us">About Us</string>
 
     /** nada **/
 

@@ -60,10 +60,10 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
             } else if (navDestination.id == R.id.cartFragment
             ) {
                 bottomNav.visibility = View.GONE
-                binding.toolbar.visibility = View.GONE
+                binding.shoppingCartIcon.visibility=View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.titleTextView.text = "Cart"
-                binding.settingIcon.visibility = View.GONE
+                binding.settingIcon.visibility = View.VISIBLE
             } else if (navDestination.id == R.id.subCategoryFragment
             ) {
                 bottomNav.visibility = View.GONE
@@ -72,17 +72,18 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 binding.settingIcon.visibility = View.GONE
             } else if (navDestination.id == R.id.fragmentPaymentInfo
             ) {
-                binding.toolbar.visibility = View.GONE
+                binding.titleTextView.text = "Order Information"
+                binding.shoppingCartIcon.visibility=View.INVISIBLE
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.settingIcon.visibility = View.GONE
 
-            } else if (navDestination.id == R.id.settingsFragment || navDestination.id == R.id.fragmentLocationDetector || navDestination.id == R.id.settingsFragment) {
-                binding.toolbar.visibility = View.GONE
+            } else if (navDestination.id == R.id.settingsFragment) {
+                binding.titleTextView.text = "Setting"
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
                 binding.settingIcon.visibility = View.GONE
-
+                binding.shoppingCartIcon.visibility = View.VISIBLE
             } else if (navDestination.id == R.id.allOrdersFragment) {
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
@@ -104,6 +105,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 binding.toolbar.visibility = View.VISIBLE
                 backButton.visibility = View.GONE
                 binding.settingIcon.visibility = View.GONE
+                binding.shoppingCartIcon.visibility = View.VISIBLE
                 when (navDestination.id) {
                     R.id.homeFragment -> binding.titleTextView.text = "Home"
                     R.id.categoryFragment -> binding.titleTextView.text = "Category"

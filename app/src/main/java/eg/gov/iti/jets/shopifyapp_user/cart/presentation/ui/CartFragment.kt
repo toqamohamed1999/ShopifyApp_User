@@ -129,9 +129,6 @@ class CartFragment : Fragment(),CartItemListener {
                 Dialogs.SnakeToast(requireView(),getString(R.string.networkNotAvilable))
             }
         }
-        binding?.imageButtonbackButton3?.setOnClickListener {
-            binding?.root?.findNavController()?.popBackStack()
-        }
     }
 
     private fun setUpArticleRecyclerView() {

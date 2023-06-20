@@ -46,6 +46,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private lateinit var googlePayClient:GooglePayClient
     private lateinit var methodDialog:AlertDialog
     private var isReadyButton = false
+    private var totalPrice = 0
     private val viewModel by viewModels<PaymentViewModel> {
         PaymentViewModelFactory(
             CartRepositoryImpl(DraftOrderRemoteSourceImpl(
@@ -137,10 +138,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     }
 
     private fun setUpActions() {
-        //back
-        binding?.imageButtonbackButton?.setOnClickListener {
-            binding?.root?.findNavController()?.popBackStack()
-        }
         //address
         binding?.btnChangeAddress?.setOnClickListener{
             binding?.root?.findNavController()?.navigate(R.id.action_fragmentPaymentInfo_to_fragmentLocationDetector)
@@ -208,6 +205,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
 
     override fun selectAddress(address: String) {
         binding?.tvAddres?.text = address
+        addressesDialog.dismiss()
     }
 
 }
