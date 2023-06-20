@@ -16,7 +16,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="second_name">Second Name</string>
     <string name="last_name">Last Name</string>
-    <string name="noInternetConnection">No Internet!,check your connection</string>
+    <string name="noInternetConnection">No Internet Connection ! </string>
     <string name="delete_MSG_from_favorites">This Product Deleted Successfully From Favorites</string>
 
     /** nada **/
@@ -80,6 +80,10 @@
     <string name="title">Title</string>
     <string name="quantity">Quantity</string>
     <string name="place_order">Place Order</string>
+    <string name="no_products_in_wishlist">no products in wishList</string>
+    <string name="you_aren_t_logged_in">You aren\'t logged in</string>
+    <string name="total_price">Total Price:</string>
+    <string name="items">Items</string>
 
     /** nada **/
 

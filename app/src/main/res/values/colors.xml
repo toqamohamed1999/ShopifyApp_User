@@ -12,4 +12,6 @@
     <color name="lightGray">#EBEAEA</color>
     <color name="blue_app_color">#4CAF50</color>
     /** nada **/
+    <color name="primary_color">#3490dc</color>
+    <color name="secondary_color">#0F4471</color>
 </resources>
