@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.data.remote
 
+import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.PriceRule
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.remote.PaymentAPIServices
@@ -16,4 +17,8 @@ class PaymentRemoteSourceImpl():PaymentRemoteSource {
             MutableStateFlow(null)
         }
     }
+    override suspend fun postOrder(order: Order?): Order {
+        return services.postOrder(order)
+    }
+
 }

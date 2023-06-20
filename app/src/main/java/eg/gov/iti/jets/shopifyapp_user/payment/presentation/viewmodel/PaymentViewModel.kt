@@ -79,6 +79,10 @@ fun setAddress(){
            UserSettings.saveSettings()
         }
         //here to save the order
+        viewModelScope.launch {
+            repo.postOrder(order)
+        }
+
     }
     fun validateDiscount(discountCode:String){
        viewModelScope.launch {

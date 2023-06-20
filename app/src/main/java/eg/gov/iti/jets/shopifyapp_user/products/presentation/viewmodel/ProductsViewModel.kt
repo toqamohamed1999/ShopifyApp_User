@@ -33,8 +33,6 @@ class ProductsViewModel(
     var productState: StateFlow<ProductBrandState> = _productsState
 
     private val _filterProduct: MutableStateFlow<List<Product>> = MutableStateFlow(listOf())
-    val filterProduct: StateFlow<List<Product>> = _filterProduct
-    private val productsList: MutableList<Product> = mutableListOf()
 
     fun getProductsBrand(vendor: String) {
         viewModelScope.launch {
@@ -48,21 +46,10 @@ class ProductsViewModel(
         }
     }
 
-    fun filterProducts(productPrice: Float) {
+    var favProduct = MutableStateFlow<ResponseState<List<FavRoomPojo>>>(ResponseState.Loading)
+    fun getAllFavProduct() {
         viewModelScope.launch {
-            _filterProduct.value = withContext(Dispatchers.Default) {
-                productsList.filter { product ->
-                    val price: Float? = product.variants[0].price?.toFloat()
-                    price!! >= productPrice
-                }
-            }
-        }
-    }
-
-    var favProduct = MutableStateFlow<ResponseState<FavRoomPojo>>(ResponseState.Loading)
-    fun getFavProductWithId(productId: Long) {
-        viewModelScope.launch {
-            favRepo.getFavProductWithId(productId).catch { error ->
+            favRepo.getAllFavProducts().catch { error ->
                 favProduct.value = ResponseState.Error(Exception(error))
             }.collectLatest { data ->
                 favProduct.value = ResponseState.Success(data)
