@@ -109,7 +109,8 @@ class ProductsFragment : Fragment(), OnClickProduct {
                 }
             }
         }
-        viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+        if(UserSettings.userAPI_Id.isNotEmpty()){
+        viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())}
         lifecycleScope.launch {
 
             viewModel.favProducts.collectLatest {

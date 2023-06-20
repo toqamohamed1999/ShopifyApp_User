@@ -61,7 +61,9 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+        if (UserSettings.userAPI_Id.isNotEmpty()) {
+            viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+        }
         val categoryID = args.categoryID?.toLong()
         var productType = "SHOES"
         if (categoryID != null) {
