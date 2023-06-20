@@ -199,7 +199,7 @@ class SignUpFragment : Fragment() {
                                 email = email,
                                 first_name = fName,
                                 last_name = lName,
-                                tags = "${pass},${uid},0",
+                                tags = "${pass},${uid},0",//password,fireBaserUserId,emailVerification
                                 note = "${favDraftOrderId},${cartDraftOrderId}"
                             )
                             viewModel.createCustomerAccount(SignupRequest(customer))
@@ -225,7 +225,7 @@ class SignUpFragment : Fragment() {
                         alertDialog.apply {
                             setIcon(R.drawable.baseline_delete_24)
                             setTitle("Info")
-                            setMessage("Your Registration completed Successfully \ncheck your email for verification \nthen log in")
+                            setMessage(resources.getResourceName(R.string.registration_completed))
                             setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                             }
                         }.create().show()
