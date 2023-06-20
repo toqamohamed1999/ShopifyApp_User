@@ -1,6 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
@@ -17,6 +18,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.logging.SimpleFormatter
 
 class PaymentViewModel(private val cartRepo:CartRepository,
                        private val repo: PaymentRepo,
@@ -24,7 +29,6 @@ class PaymentViewModel(private val cartRepo:CartRepository,
                        ):ViewModel() {
     private var _mode:MutableStateFlow<Int> = MutableStateFlow(0)
     var mode: StateFlow<Int> = _mode
-    private var validatorFlag=0
     private var order: Order?= Order(line_items = listOf<LineItemsOrder>())
     private var draftOrder:DraftOrderResponse?=null
 
@@ -79,26 +83,33 @@ fun setAddress(){
     fun validateDiscount(discountCode:String){
        viewModelScope.launch {
            launch {
-               addsRepo.getAllPriceRules().collectLatest {
-                   it?.price_rules?.forEach { priceRule ->
-                       addsRepo.getAllDiscountsForPriceRule(priceRule.id.toString())
-                           .collectLatest { disounts ->
-                               disounts?.discount_codes?.forEach {code->
-                                   if (code.code == discountCode) {
-                                       validatorFlag = 1
+               addsRepo.getAllDiscountsForPriceRule(UserSettings.userCurrentDiscountCopy?.price_rule_id.toString())
+                   .collect { disounts ->
+                       disounts?.discount_codes?.forEach {code->
+                           Log.e("","Discount : ${code.code}")
+                           if (code.code == discountCode) {
+                               launch {
+                                   repo.getSinglePriceRule(code.price_rule_id.toString()).collectLatest {
+                                       if(it!=null)
+                                       {
+                                           if(!it.ends_at.equals(null)){
+                                               //val  endDate=
+                                               //var currentDate=""
+
+                                           }else{
+                                               _mode.value = 1
+                                           }
+                                       }else{
+                                           _mode.value=-1
+                                       }
                                    }
                                }
-
+                           }else{
+                               _mode.value=-1
                            }
-                   }
+                       }
                }
-           }.join()
-           launch {
-               if(validatorFlag!=1&&validatorFlag!=0)validatorFlag = -1
-               _mode.value = validatorFlag
-               validatorFlag = 0
-           }.join()
+           }
        }
     }
-
 }

@@ -2,6 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.payment.presentation.ui
 
 import android.os.Bundle
 import android.text.style.TtsSpan.DateBuilder
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -103,19 +104,13 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
             viewModel.mode.collectLatest {
                 when(it){
                     1->{
-                        if(userCurrentDiscountCopy!=null) {
-                           if((userCurrentDiscountCopy?.usage_count?:40) <30) {
-                               viewModel.setDiscount(userCurrentDiscountCopy,
-                                   ((draftOrder.draft_order?.total_price?.toDouble()?:0.0)
-                                           -
-                                           (userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)
-                                           ))
-                               binding?.editTextCoupon?.setText("")
-                               Dialogs.SnakeToast(requireView(),"Valid Discount")
-                               binding?.placeOrderBtn?.visibility = View.VISIBLE
-                               viewModel.resetMode()
-                           }
-                        }
+                       viewModel.setDiscount(userCurrentDiscountCopy,
+                           (totalPrice- (userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)))
+                       binding?.editTextCoupon?.setText("")
+                       Dialogs.SnakeToast(requireView(),"Accepted userCurrentDiscountCopy?.created_at Discount has been deducted from the price")
+                       binding?.placeOrderBtn?.visibility = View.VISIBLE
+                       viewModel.resetMode()
+
                     }
                     -1->{
                         Toast.makeText(requireContext(),"UnValid Discount Code",Toast.LENGTH_SHORT).show()
@@ -188,6 +183,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         //coupon
         binding?.buttonValidateCoupon?.setOnClickListener {
             viewModel.validateDiscount(binding?.editTextCoupon?.text.toString())
+            Log.e("","Code: ${binding?.editTextCoupon?.text.toString()}")
         }
 
         //placeOrder
