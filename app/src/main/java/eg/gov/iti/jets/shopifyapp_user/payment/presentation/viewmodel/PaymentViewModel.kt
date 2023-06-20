@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.LineItemsOrder
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.ShippingAddress
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
@@ -77,13 +78,13 @@ fun setAddress(){
             LineItemsOrder(it.price,it.quantity, title ="${it.title})${arr?.get(0)}" )
 
         }
-        viewModelScope.launch {
-            cartRepo.removeDraftOrder(draftOrder?.draft_order?.id.toString()).collectLatest {
-                if(it is DraftOrderAPIState.Success){
-                    _mode.value = 2
-                }
-            }
+       viewModelScope.launch {
+           draftOrder?.draft_order?.line_items = listOf(LineItem())
+           cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(),draftOrder!!)
+           UserSettings.cartQuantity = 0
+           UserSettings.saveSettings()
         }
+
         //here to save the order
     }
     fun validateDiscount(discountCode:String){

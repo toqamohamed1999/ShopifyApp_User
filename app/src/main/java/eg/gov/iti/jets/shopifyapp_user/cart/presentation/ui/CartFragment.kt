@@ -2,6 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,6 +82,7 @@ class CartFragment : Fragment(),CartItemListener {
                         cartAdapter.notifyDataSetChanged()
                     }
                     is DraftOrderAPIState.Error->{
+                        Log.e("",it.errorMessage)
                         binding?.cartAnim?.setAnimation("error_cart.json")
                         binding?.cartAnim?.visibility = View.VISIBLE
                         binding?.cartAnim?.repeatCount=0
