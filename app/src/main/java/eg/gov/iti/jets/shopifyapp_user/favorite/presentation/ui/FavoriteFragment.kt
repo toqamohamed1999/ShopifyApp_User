@@ -17,6 +17,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
+import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentFavoriteBinding
@@ -33,15 +35,16 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var viewModel: FavViewModel
-    private lateinit var favAdapter: FavProductAdapter
-    private var favList: List<FavRoomPojo> = emptyList()
+    private lateinit var favAdapter:FavProductAdapter
+    private var favList:List<FavRoomPojo> = emptyList()
+    private var favDraftOrderResponse : FavDraftOrderResponse = FavDraftOrderResponse()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[FavViewModel::class.java]
-        favAdapter = FavProductAdapter(ArrayList(), requireActivity(), this)
+         favAdapter = FavProductAdapter(ArrayList(), requireActivity() , this)
         return binding.root
     }
 
@@ -115,6 +118,7 @@ class FavoriteFragment : Fragment(), OnClickProduct {
             binding.btnlogin.setOnClickListener {
                Navigation.findNavController(requireView()).navigate(R.id.action_favoriteFragment_to_loginFragment)
             }
+
         }
 
     }
@@ -123,7 +127,6 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
         return favList?.filter { it.title!!.lowercase().contains(s.lowercase()) }
     }
-
     private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<FavRoomPojo>?) {
         if (filteredList.isNullOrEmpty()) {
             binding.txtNoResults.visibility = View.VISIBLE
