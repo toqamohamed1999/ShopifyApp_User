@@ -20,7 +20,6 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
     fun setCartDraftOrder(order: DraftOrderResponse?){
         cartDraftOrder = order
     }
-
      fun removeProductFromCart(product: LineItem){
                 removeProductFromList(product)
      }

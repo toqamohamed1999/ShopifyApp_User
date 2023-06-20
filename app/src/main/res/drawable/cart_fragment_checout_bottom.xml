@@ -2,14 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 <item >
 <shape android:shape="rectangle">
-<solid android:color="#5E7469">
+<solid android:color="#9CA7B1">
 
 </solid>
     <corners
         android:topLeftRadius="25dp"
         android:topRightRadius="25dp">
     </corners>
-    <stroke android:color="#29982B" android:dashWidth="2dp"/>
 </shape>
 </item>
 </selector>

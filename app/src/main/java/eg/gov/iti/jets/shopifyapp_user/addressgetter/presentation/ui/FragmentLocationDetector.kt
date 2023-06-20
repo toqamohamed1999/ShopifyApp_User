@@ -31,9 +31,12 @@ import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.Task
@@ -44,6 +47,11 @@ import java.util.*
 
 class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    val egyptBounds = LatLngBounds(
+        LatLng(22.000083, 25.000021),  // SW bounds
+        LatLng(31.324762, 34.217809) // NE bounds
+    )
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mGoogleApiClient: GoogleApiClient
     lateinit var mGoogleMap: GoogleMap
@@ -51,7 +59,7 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
     private var myLocation=false
     private var latitude:String=""
     private var longitude:String=""
-    private  val PermissionID: Int=10
+    private  val PermissionID: Int= 10
     private var binding:FragmentLocationDetectorBinding?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +71,7 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
             binding?.loadingAnim?.visibility = View.INVISIBLE
             binding?.imageButtonMyLocation?.setOnClickListener {
                 Toast.makeText(
@@ -110,7 +119,13 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
             })
             binding?.imageButtonMapConfirm?.setOnClickListener {
                 if (pinSelected) {
+                    val la=latitude.toDouble()
+                    val lo=longitude.toDouble()
+                    if(la> egyptBounds.southwest.latitude&&la<egyptBounds.northeast.latitude&&lo>egyptBounds.southwest.longitude&&lo<egyptBounds.northeast.longitude)
                         getAddress()
+                    else{
+                        Dialogs.SnakeToast(requireView(),"Please Select Place In Egypt !!")
+                    }
                 } else {
                     Dialogs.SnakeToast(it, "Please Select Location First")
                 }
@@ -248,7 +263,12 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
         }
     }
     private fun setUpMap() {
-        binding?.mapView?.getMapAsync { googleMap -> mGoogleMap = googleMap
+        binding?.mapView?.getMapAsync { googleMap ->
+            mGoogleMap = googleMap
+            mGoogleMap.setLatLngBoundsForCameraTarget(egyptBounds)
+            val cameraUpdate =
+                CameraUpdateFactory.zoomBy(10F)
+            mGoogleMap.animateCamera(cameraUpdate)
             mGoogleMap.setOnMapLongClickListener{
                  latitude=it.latitude.toString()
                  longitude=it.longitude.toString()
@@ -257,6 +277,7 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
                 mGoogleMap.addMarker(MarkerOptions().position(it))
             }
         }
+
     }
     override fun onConnected(p0: Bundle?) {
         if(checkPermissions())

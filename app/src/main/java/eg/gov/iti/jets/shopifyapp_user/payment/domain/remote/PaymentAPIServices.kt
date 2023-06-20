@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.domain.remote
 
+import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.model.TransactionBody
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.model.TransactionResponse
 import retrofit2.http.Body
@@ -14,6 +15,6 @@ interface PaymentAPIServices {
     @POST("orders/{orderId}/transactions.json")
     fun captureTransactionForOrder(@Path(value="orderId")orderId:String,@Body tansactionBody:TransactionBody):TransactionResponse
 
-
-
+    @POST("orders.json")
+    suspend fun postOrder(@Body order: Order?): Order
 }

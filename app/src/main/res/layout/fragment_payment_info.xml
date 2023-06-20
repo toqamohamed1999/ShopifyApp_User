@@ -4,17 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     android:theme="@style/Theme.ShopifyApp_User">
-
-    <ImageButton
-        android:id="@+id/imageButtonbackButton"
-        android:layout_width="49dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="4dp"
-        android:background="@drawable/back_transparent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back_icon" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -99,7 +90,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:hint="Enter Phone"
+                android:hint="@string/enter_phone"
                 android:inputType="number"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -180,7 +171,7 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_addres" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewAddresses"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
@@ -206,7 +197,7 @@
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="395dp" />
+        app:layout_constraintGuide_end="16dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -215,6 +206,7 @@
         android:fontFamily="@font/acme"
         android:text="@string/shipping_info"
         android:textAlignment="center"
+        android:textColor="@color/secondary_color"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -230,6 +222,7 @@
         android:fontFamily="@font/acme"
         android:text="Order Info"
         android:textAlignment="center"
+        android:textColor="@color/secondary_color"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -297,7 +290,7 @@
         android:id="@+id/textViewSubTotalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="0.0"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
@@ -309,7 +302,7 @@
         android:id="@+id/textViewShippingFees"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="0.0"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView6"
