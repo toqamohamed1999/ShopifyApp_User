@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,26 +8,19 @@
     android:padding="10dp"
     tools:context=".auth.login.presentation.ui.LoginFragment">
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/img_backSignIn"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_gravity="top"
-            android:src="@drawable/arrow_back"
-           />
 
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="220dp"
             android:layout_marginBottom="60dp"
-            />
+            android:src="@drawable/loggin" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout_login"
@@ -39,10 +32,10 @@
             android:layout_marginEnd="10dp"
             android:hint="@string/email"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/teal_700"
+            app:boxStrokeColor="@color/primary_color"
             app:errorEnabled="true"
-            app:hintTextColor="@color/teal_700"
-            app:startIconDrawable="@drawable/person"
+            app:hintTextColor="@color/primary_color"
+            app:startIconDrawable="@drawable/email"
 
             >
 
@@ -65,8 +58,6 @@
             android:hint="@string/password"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/teal_700"
-            app:counterEnabled="true"
-            app:counterMaxLength="20"
             app:endIconMode="password_toggle"
             app:errorEnabled="true"
             app:hintTextColor="@color/purple_700"
@@ -77,19 +68,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogIn"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textSize="20sp"
             android:text="@string/login"
-            app:cornerRadius="10dp"
-           />
+            android:textAllCaps="false"
+            app:cornerRadius="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/noAccount"
-                android:textSize="18sp"></TextView>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/txtSignUp"
@@ -113,9 +104,9 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/signup"
-                android:textColor="@color/purple_700"
-                android:textSize="18sp"></TextView>
+                android:textColor="@color/primary_color"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

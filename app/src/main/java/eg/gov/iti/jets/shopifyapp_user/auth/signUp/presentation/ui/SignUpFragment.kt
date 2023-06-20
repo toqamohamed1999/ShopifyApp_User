@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.ui
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Patterns
 import androidx.fragment.app.Fragment
@@ -18,13 +19,20 @@ import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.AuthRemoteSourceImp
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
+import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupModel
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupRequest
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.FirebaseRepoImplementation
+import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.remote.AuthRepo
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModel
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModelFactory
+import eg.gov.iti.jets.shopifyapp_user.base.model.DraftOrderFav
+import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.base.model.LineItems
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSignUpBinding
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import kotlinx.coroutines.delay
+import kotlin.io.path.createTempDirectory
 
 
 class SignUpFragment : Fragment() {
@@ -35,14 +43,9 @@ class SignUpFragment : Fragment() {
         )
         ViewModelProvider(this, factory)[SignUpViewModel::class.java]
     }
-
-
-//    private val viewModel: SignUpViewModel by viewModels {
-//        SignUpViewModelFactory(
-//            AuthRepo(FirebaseRepoImplementation(Firebase.auth)),
-//            APIRepoImplementation(AuthRemoteSourceImp())
-//        )
-//    }
+    private var dummyLineItemList: ArrayList<LineItems> = arrayListOf()
+    private var favDraftOrderId: String = ""
+    private var orderDraftOrderId: String = ""
     lateinit var binding: FragmentSignUpBinding
     var uid: String = ""
     private var email = ""
@@ -93,7 +96,8 @@ class SignUpFragment : Fragment() {
                     return@setOnClickListener
                 }
                 if (!pass.isValidPassword()) {
-                    binding.inputPassSignup.error = "Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character."
+                    binding.inputPassSignup.error =
+                        "Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character."
                     return@setOnClickListener
                 }
                 if (confirmPass.isEmpty()) {
@@ -103,47 +107,102 @@ class SignUpFragment : Fragment() {
                 if (pass != confirmPass) {
                     binding.inputConfirmPassSignUp.error = "Passwords do not match"
                     return@setOnClickListener
-                }
-
-               else {
-//                    val signupUser = SignupUser(
-//                        fName,
-//                        lName,
-//                        email,
-//                        pass
-//                    )
-//                    viewModel.signUpUser(signupUser)
-
-                    val customer = Customer(
-                        email = email,
-                        first_name =  fName,
-                        last_name = lName,
-                        tags = pass,
-                        note = uid
+                } else {
+                    binding.progressBar.visibility=View.VISIBLE
+                    val signupUser = SignupUser(
+                        fName,
+                        lName,
+                        email,
+                        pass
                     )
-
-                    viewModel.createCustomerAccount(SignupRequest( customer))
+                    viewModel.signUpUser(signupUser)
 
                 }
 
             } else {
+                binding.progressBar.visibility=View.GONE
                 Snackbar.make(
                     binding.root,
-                    "No Internet!,check your connection",
+                    resources.getString(R.string.noInternetConnection),
                     Snackbar.LENGTH_LONG
                 )
                     .show()
             }
 
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.apisignUpResult.collect{
-                when(it){
-                    is ResponseState.Loading->{
+        val firebaseSignUp = lifecycleScope.launchWhenStarted {
+            viewModel.signUpResult.collect { result ->
+                when (result) {
+                    is ResponseState.Loading -> {
                         println("/////////////Loading//////////////////////")
                     }
                     is ResponseState.Success -> {
-                        println("/////////////Success ${it.data?.customerList?.count()}//////////////////////")
+                        uid = result.data.toString()
+                        dummyLineItemList?.add(
+                            LineItems(
+                                title = "dummy",
+                                quantity = 1,
+                                price = "50"
+                            )
+                        )
+                        viewModel.createFavDraftOrder(
+                            FavDraftOrderResponse(
+                                DraftOrderFav(
+                                    note = "fav_draftOrder",
+                                    lineItems = dummyLineItemList!!
+
+                                )
+                            )
+                        )
+                        delay(3000)
+                        dummyLineItemList?.add(
+                            LineItems(
+                                title = "dummy",
+                                quantity = 1,
+                                price = "50"
+                            )
+                        )
+                        viewModel.createFavDraftOrder(
+                            FavDraftOrderResponse(
+                                DraftOrderFav(
+                                    note = "cart_draftOrder",
+                                    lineItems = dummyLineItemList!!
+
+                                )
+                            )
+                        )
+
+                    }
+                    is ResponseState.Error -> {
+                        println("/////////////Error ${result.exception}//////////////////////")
+                        binding.editEmailSignup.error = "Email is already Exist"
+                    }
+                }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.draftOrder.collect {
+                when (it) {
+                    is ResponseState.Loading -> {
+                        println("/////////////Loading//////////////////////")
+                    }
+                    is ResponseState.Success -> {
+                        if (favDraftOrderId.isEmpty()) {
+                            favDraftOrderId = it.data?.draft_order?.id.toString()!!
+                        } else {
+                            orderDraftOrderId = it.data?.draft_order?.id.toString()!!
+                        }
+                        if (favDraftOrderId.isNotEmpty() && orderDraftOrderId.isNotEmpty()) {
+                            val customer = Customer(
+                                email = email,
+                                first_name = fName,
+                                last_name = lName,
+                                tags = "${pass},${uid}",
+                                note = "${favDraftOrderId},${orderDraftOrderId}",
+                                verified_email = false
+                            )
+                            viewModel.createCustomerAccount(SignupRequest(customer))
+                        }
                     }
                     is ResponseState.Error -> {
                         println("/////////////Error ${it.exception.toString()}//////////////////////")
@@ -152,33 +211,23 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
-//        lifecycleScope.launchWhenStarted {
-//            viewModel.signUpResult.collect { result ->
-//                when (result) {
-//                    is ResponseState.Loading -> {
-//                        println("/////////////Loading//////////////////////")
-//                    }
-//                    is ResponseState.Success -> {
-//                        uid = result.data.toString()
-//                        println("/////////////Success ${uid}//////////////////////")
-//                        val customer = SignupModel(
-//                            email = email,
-//                            first_name =  fName,
-//                            last_name = lName,
-//                            password = pass,
-//                            note = uid
-//                        )
-//
-//                            viewModel.createCustomerAccount(customer)
-//
-//                    }
-//                    is ResponseState.Error -> {
-//                        println("/////////////Error ${result.exception}//////////////////////")
-//                        binding.editEmailSignup.error = "Email is already Exist"
-//                    }
-//                }
-//            }
-      //  }
+        lifecycleScope.launchWhenStarted {
+            viewModel.apisignUpResult.collect {
+                when (it) {
+                    is ResponseState.Loading -> {
+                        binding.progressBar.visibility=View.VISIBLE
+                    }
+                    is ResponseState.Success -> {
+                       binding.progressBar.visibility=View.GONE
+                    }
+                    is ResponseState.Error -> {
+                        println("/////////////Error ${it.exception.toString()}//////////////////////")
+                    }
+                }
+            }
+        }
+
+
     }
 
     private fun clearErrors() {

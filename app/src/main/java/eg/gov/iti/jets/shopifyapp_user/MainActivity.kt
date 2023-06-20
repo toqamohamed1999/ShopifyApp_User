@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 binding.backButton.visibility = View.VISIBLE
                 binding.settingIcon.visibility = View.GONE
 
-            } else if (navDestination.id == R.id.settingsFragment || navDestination.id == R.id.fragmentLocationDetector || navDestination.id == R.id.settingsFragment) {
+            } else if (navDestination.id == R.id.settingsFragment || navDestination.id == R.id.fragmentLocationDetector || navDestination.id == R.id.settingsFragment||navDestination.id==R.id.loginFragment) {
                 binding.toolbar.visibility = View.GONE
                 bottomNav.visibility = View.GONE
                 binding.backButton.visibility = View.VISIBLE
