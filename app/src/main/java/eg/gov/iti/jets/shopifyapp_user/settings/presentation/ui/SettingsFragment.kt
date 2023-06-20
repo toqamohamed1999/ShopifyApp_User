@@ -58,9 +58,6 @@ class SettingsFragment:Fragment(),SettingListener{
         binding?.btnChangeAddress?.setOnClickListener {
             binding?.root?.findNavController()?.navigate(R.id.action_settingsFragment_to_fragmentLocationDetector)
         }
-        binding?.imageButtonbackButton2?.setOnClickListener {
-            binding?.root?.findNavController()?.popBackStack()
-        }
     }
 
     private fun setUpDialogs() {

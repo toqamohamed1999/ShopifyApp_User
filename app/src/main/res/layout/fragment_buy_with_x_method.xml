@@ -17,6 +17,7 @@
         android:fontFamily="@font/acme"
         android:text="@string/choose_method"
         android:textAlignment="center"
+        android:textColor="@color/secondary_color"
         android:textSize="34sp"
         android:textStyle="italic" />
 

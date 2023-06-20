@@ -68,7 +68,7 @@
             app:srcCompat="@drawable/delete_address" />
 
         <LinearLayout
-            android:layout_width="106dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_gravity="bottom|end"
             android:layout_marginTop="8dp"

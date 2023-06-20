@@ -5,29 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/imageButtonbackButton2"
-        android:layout_width="49dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="4dp"
-        android:background="@drawable/back_transparent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back_icon" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@color/blue_app_color"
         app:cardCornerRadius="20dp"
         app:cardElevation="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,7 +31,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/acme"
-                android:text="Addesses"
+                android:text="@string/addesses"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -114,7 +104,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/acme"
-                android:text="Currncy "
+                android:text="@string/currncy"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -188,7 +178,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/acme"
-                android:text="About Us "
+                android:text="@string/about_us"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -228,27 +218,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/blue_app_color"
         android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AboutUscardView" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="157dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="10dp"
-        android:drawableEnd="@drawable/baseline_settings_24"
-        android:fontFamily="@font/acme"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="@string/settings"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
