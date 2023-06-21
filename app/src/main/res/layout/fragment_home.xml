@@ -45,16 +45,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_search" />
 
-    <LinearLayout
-        android:id="@+id/dotsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager"></LinearLayout>
-
     <TextView
         android:id="@+id/brand_textView"
         android:layout_width="wrap_content"
@@ -66,12 +56,12 @@
         android:textSize="20sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dotsLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brands_recyclerview"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:paddingBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
