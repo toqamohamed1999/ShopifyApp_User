@@ -10,15 +10,21 @@ import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.LineItemsOrder
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.ItemsOrderRowBinding
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.splitItemOrder
 
-class ItemOrderAdapter(private var itemOrderList: List<LineItemsOrder>, val context: Context, var myListener: OnClickItemOrder) : RecyclerView.Adapter<ItemOrderAdapter.ViewHolder>() {
+class ItemOrderAdapter(
+    private var itemOrderList: List<LineItemsOrder>,
+    val context: Context,
+    var myListener: OnClickItemOrder
+) : RecyclerView.Adapter<ItemOrderAdapter.ViewHolder>() {
 
     private lateinit var binding: ItemsOrderRowBinding
 
     fun setOrderList(values: List<LineItemsOrder?>?) {
         this.itemOrderList = values as List<LineItemsOrder>
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -33,7 +39,8 @@ class ItemOrderAdapter(private var itemOrderList: List<LineItemsOrder>, val cont
         val id = result.second
         holder.binding.orderTitleValue.text = title
         holder.binding.quantityValue.text = currentItemOrder.quantity.toString()
-        holder.binding.priceValue.text = currentItemOrder.price
+        holder.binding.priceValue.text =
+            (currentItemOrder.price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
         Glide.with(context)
             .load(currentItemOrder.properties[0].value)
             .into(holder.binding.itemImageView)
@@ -50,5 +57,6 @@ class ItemOrderAdapter(private var itemOrderList: List<LineItemsOrder>, val cont
 
     override fun getItemCount(): Int = itemOrderList.size
 
-    inner class ViewHolder(var binding: ItemsOrderRowBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(var binding: ItemsOrderRowBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

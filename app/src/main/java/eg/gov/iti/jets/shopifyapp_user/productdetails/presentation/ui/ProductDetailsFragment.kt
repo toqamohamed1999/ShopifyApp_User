@@ -65,9 +65,8 @@ class ProductDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         product_Id = args.productId
-
         lifecycleScope.launch {
-            viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+
             viewModel.favProducts.collectLatest {
                 when (it) {
                     is ResponseState.Loading -> {
@@ -137,6 +136,7 @@ class ProductDetailsFragment : Fragment() {
                 binding.cardViewIsFavorite.visibility = View.GONE
                 binding.btnAddToBag.visibility = View.GONE
             } else {
+                viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
                 binding.cardViewIsFavorite.visibility = View.VISIBLE
                 binding.btnAddToBag.visibility = View.VISIBLE
             }
@@ -242,7 +242,7 @@ class ProductDetailsFragment : Fragment() {
                 }
             })
             binding.progressBar.visibility = View.GONE
-            binding.txtProductPrice.text = product.variants[0].price
+            binding.txtProductPrice.text = (product.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
             binding.txtProductName.text = product.title
             binding.txtViewDescription.text = product.bodyHtml
             binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)

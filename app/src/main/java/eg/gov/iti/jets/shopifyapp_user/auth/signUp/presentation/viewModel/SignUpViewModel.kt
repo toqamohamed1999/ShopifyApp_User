@@ -11,14 +11,19 @@ import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.CustomerResponse
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupModel
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupRequest
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.ApiRepoInterface
+import eg.gov.iti.jets.shopifyapp_user.base.domain.data.repo.FavDraftOrderRepoImpl
+import eg.gov.iti.jets.shopifyapp_user.base.domain.repo.FavDraftOrderRepoInterface
+import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(
     private val authRepository: AuthRepo,
-    private val apiReoInterface: APIRepoImplementation
+    private val apiReoInterface: APIRepoImplementation,
+    private val draftOrderRepo: FavDraftOrderRepoInterface = FavDraftOrderRepoImpl()
 ) : ViewModel() {
     private val _signUpResult = MutableStateFlow<ResponseState<String>>(ResponseState.Loading)
     val signUpResult: StateFlow<ResponseState<String>> = _signUpResult
@@ -41,6 +46,20 @@ class SignUpViewModel(
                 _apisignUpResult.value = ResponseState.Error(e)
             }
 
+        }
+    }
+    private val _draftOrder: MutableStateFlow<ResponseState<FavDraftOrderResponse>> =
+        MutableStateFlow(ResponseState.Loading)
+    var draftOrder: StateFlow<ResponseState<FavDraftOrderResponse>> = _draftOrder
+    fun createFavDraftOrder(draftOrder: FavDraftOrderResponse){
+        viewModelScope.launch {
+            try{
+                draftOrderRepo.createFavDraftOrder(draftOrder).collect{
+                    _draftOrder.value=ResponseState.Success(it)
+                }
+            }catch (e: java.lang.Exception){
+                _draftOrder.value=ResponseState.Error(e)
+            }
         }
     }
 }

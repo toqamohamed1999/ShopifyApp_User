@@ -39,7 +39,8 @@ class ProductsAdapter(
             this.favList = favList
         }
     }
-    fun getIsFav():Boolean{
+
+    fun getIsFav(): Boolean {
         return isFav
     }
 
@@ -54,8 +55,9 @@ class ProductsAdapter(
         val currentProduct = productList[position]
         holder.binding.productTitleTextView.text =
             currentProduct?.title?.let { getTitleOfProduct(it) }
-        holder.binding.productPriceTextView.text = currentProduct.variants[0].price
-        holder.binding.favIcon.setImageResource(setFavoriteIcon(currentProduct , favList))
+        holder.binding.productPriceTextView.text =
+            (currentProduct.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+        holder.binding.favIcon.setImageResource(setFavoriteIcon(currentProduct, favList))
         Glide.with(context)
             .load(currentProduct.image.src)
             .into(holder.binding.productImageView)

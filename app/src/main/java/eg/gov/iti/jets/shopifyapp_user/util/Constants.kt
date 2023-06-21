@@ -3,6 +3,7 @@ package eg.gov.iti.jets.shopifyapp_user.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
+import android.util.Patterns
 import androidx.annotation.RequiresApi
 import eg.gov.iti.jets.shopifyapp_user.BuildConfig
 import java.time.LocalDateTime
@@ -34,4 +35,14 @@ fun splitItemOrder(string: String): Pair<String, String> {
     val title = parts[0].trim()
     val id = parts[1].trim()
     return Pair(title, id)
+}
+fun String.isValidPassword(): Boolean {
+    // Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.
+    val passwordRegex =
+        Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}$")
+    return passwordRegex.matches(this)
+}
+
+fun String.isValidEmail(): Boolean {
+    return Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 import eg.gov.iti.jets.shopifyapp_user.databinding.OrderRowBinding
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.convertDateTimeFormat
 
 class OrderAdapter(
@@ -37,7 +38,8 @@ class OrderAdapter(
         val currentOrder = orderList[position]
         holder.binding.orderNumValue.text = currentOrder.order_number.toString()
         holder.binding.dateValue.text = convertDateTimeFormat(currentOrder.processed_at!!)
-        holder.binding.priceValue.text = currentOrder.total_price
+        holder.binding.priceValue.text =
+            (currentOrder.total_price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
 //        holder.binding.orderCardView.startAnimation(
 //            AnimationUtils.loadAnimation(
 //                holder.itemView.context,

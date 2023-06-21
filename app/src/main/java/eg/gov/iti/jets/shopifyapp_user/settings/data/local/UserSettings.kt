@@ -8,15 +8,15 @@ import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.Addresse
 
 object UserSettings {
     var currentCurrencyValue: Double = 1.0
-    var userName:String = "Yasmeen"
+    var userName:String = ""
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
-    var currencyCode:String = "EGP"
+    var currencyCode:String = ""
     var shippingAddress:String = ""
     var phoneNumber:String = ""
-    var favoriteDraftOrderId:String = "1118696472857"
-    var cartDraftOrderId:String = "1119703400729"
-    var userAPI_Id = "7098003489049"
+    var favoriteDraftOrderId:String = ""
+    var cartDraftOrderId:String = ""
+    var userAPI_Id = ""
     var userCurrentDiscountCopy:DiscountCode? = null
     var selectedAddress: Address?=null
     var isSelected=false
@@ -27,6 +27,7 @@ object UserSettings {
             .putString("userName", userName)
             .putString("userEmail", userEmail)
             .putString("userPassword",userPassword)
+            .putString("userAPI_Id",userAPI_Id)
             .putString("currencyCode",currencyCode)
             .putString("shippingAddress",shippingAddress)
             .putString("phoneNumber",phoneNumber)
@@ -69,6 +70,7 @@ object UserSettings {
          userPassword = instance.getString("userPassword","")!!
          currencyCode = instance.getString("currencyCode","")!!
          shippingAddress = instance.getString("shippingAddress","")!!
+         userAPI_Id = instance.getString("userAPI_Id","")!!
          phoneNumber = instance.getString("phoneNumber","")!!
          favoriteDraftOrderId =instance.getString("favoriteDraftOrderId","")!!
          cartDraftOrderId = instance.getString("cartDraftOrderId","")!!
@@ -79,11 +81,12 @@ object UserSettings {
          userName = ""
          userEmail = ""
          userPassword = "" // user firebase id
+        userAPI_Id =""
          currencyCode = ""
          shippingAddress = ""
          phoneNumber = ""
          favoriteDraftOrderId = ""
-         cartDraftOrderId = "1118663508249"
+         cartDraftOrderId = ""
          userCurrentDiscountCopy = null
          cartQuantity = 0
         currentCurrencyValue=1.0
@@ -92,6 +95,7 @@ object UserSettings {
             .putString("userName", userName)
             .putString("userEmail", userEmail)
             .putString("userPassword",userPassword)
+            .putString("userAPI_Id",userAPI_Id)
             .putString("currencyCode",currencyCode)
             .putString("shippingAddress",shippingAddress)
             .putString("phoneNumber",phoneNumber)
