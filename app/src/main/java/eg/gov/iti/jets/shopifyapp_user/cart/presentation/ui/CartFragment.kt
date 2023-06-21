@@ -165,4 +165,9 @@ class CartFragment : Fragment(),CartItemListener {
     override fun removerProduct(product: LineItem) {
         viewModel.removeProductFromCart(product)
     }
+
+    override fun gotoDetails(productId: String) {
+
+        binding?.root?.findNavController()?.navigate(CartFragmentDirections.actionCartFragmentToProductDetailsFragment(productId.toLong()))
+    }
 }
