@@ -89,7 +89,7 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
 
      fun getCartProducts() {
          viewModelScope.launch {
-             repo.getCartProducts(UserSettings.cartDraftOrderId).collectLatest {
+             repo.getCartProducts(UserSettings.cartDraftOrderId).collect {
                  _cartOrder.value = it
              }
          }

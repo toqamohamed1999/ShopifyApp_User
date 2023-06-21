@@ -75,7 +75,7 @@ class ProductDetailsViewModel(
 
         val mlist: MutableList<LineItem> = mutableListOf()
         var flag = false
-        cartDraftOrder.draft_order?.line_items?.forEach {
+        cartDraftOrder.draft_order?.line_items?.takeLast((cartDraftOrder.draft_order?.line_items?.size?:1)-1)?.forEach {
             if (product?.applied_discount?.description?.split(")")
                     ?.get(0) == it.applied_discount.description?.split(")")?.get(0)
             ) {

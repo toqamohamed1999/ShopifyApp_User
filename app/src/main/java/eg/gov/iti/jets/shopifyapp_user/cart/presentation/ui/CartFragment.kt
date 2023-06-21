@@ -54,7 +54,7 @@ class CartFragment : Fragment(),CartItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+Log.e("","................${UserSettings.userName}.................${UserSettings.cartDraftOrderId}........................................")
         setUpArticleRecyclerView()
         observeData()
         setUpActions()
@@ -170,4 +170,5 @@ class CartFragment : Fragment(),CartItemListener {
 
         binding?.root?.findNavController()?.navigate(CartFragmentDirections.actionCartFragmentToProductDetailsFragment(productId.toLong()))
     }
+
 }
