@@ -46,7 +46,7 @@ data class Order(
     var processed_at: String ?= null,
     var reference: String ?=null,
     var referring_site: String ?= null,
-   // var shipping_address: String ?= null,
+    var send_receipt:Boolean =false,
     var source_identifier: String ?= null,
     var source_name: String ?= null,
     var source_url: String ?= null,

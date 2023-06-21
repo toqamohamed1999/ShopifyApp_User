@@ -52,6 +52,9 @@ fun setAddress(){
 
     order?.currency = UserSettings.currencyCode
     //order?.client_details = UserSettings.userName + ", " +  UserSettings.userEmail + ", " + UserSettings.phoneNumber
+    order?.email=UserSettings.userEmail
+    order?.send_receipt=true
+    order?.fulfillment_status ="fulfilled"
     order?.merchant_of_record_app_id = "Shopify App Merchants"
     order?.current_subtotal_price = draftOrder?.draft_order?.subtotal_price
     order?.customer = CustomerOrder(id=UserSettings.userAPI_Id.toLong())
