@@ -20,15 +20,17 @@ import eg.gov.iti.jets.shopifyapp_user.products.data.model.ProductBrandState
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.OnClickProduct
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.ProductsAdapter
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.ProductsFragmentDirections
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.model.SubCategoryState
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.remote.SubCategoryRS
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.repo.SubCategoryRepoImp
 import eg.gov.iti.jets.shopifyapp_user.subcategory.presentation.viewmodel.SubCategoryFactoryVM
 import eg.gov.iti.jets.shopifyapp_user.subcategory.presentation.viewmodel.SubCategoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class SubCategoryFragment : Fragment() , OnClickProduct {
+class SubCategoryFragment : Fragment(), OnClickProduct {
 
     private lateinit var binding: FragmentSubCategoryBinding
     private lateinit var productsAdapter: ProductsAdapter
@@ -59,16 +61,16 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
         val categoryID = args.categoryID?.toLong()
         var productType = "SHOES"
         if (categoryID != null) {
-            viewModel.getProductSubCategory(productType , categoryID)
+            viewModel.getProductSubCategory(productType, categoryID)
             viewModel.getAllFavProduct()
         }
 
         //adapter and recyclerview
-        productsAdapter = ProductsAdapter(ArrayList(),ArrayList(), requireActivity() , this)
+        productsAdapter = ProductsAdapter(ArrayList(), ArrayList(), requireActivity(), this)
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.productsRecyclerview.layoutManager = layoutManager
 
@@ -77,17 +79,32 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
             resetButtonBackgrounds()
             binding.shoesTextView.setBackgroundResource(R.drawable.rounded_button_background)
             if (categoryID != null) {
-                viewModel.getProductSubCategory(productType , categoryID)
+                viewModel.getProductSubCategory(productType, categoryID)
 
             }
         }
+        lifecycleScope.launch {
 
+            viewModel.favProducts.collectLatest {
+                when (it) {
+                    is ResponseState.Loading -> {
+
+                    }
+                    is ResponseState.Success -> {
+                        favDraftOrderResponse = it.data!!
+                    }
+                    is ResponseState.Error -> {
+                        println("Draft order Error ${it.exception}")
+                    }
+                }
+            }
+        }
         binding.tshirtTextView.setOnClickListener {
             productType = "T-SHIRTS"
             resetButtonBackgrounds()
             binding.tshirtTextView.setBackgroundResource(R.drawable.rounded_button_background)
             if (categoryID != null) {
-                viewModel.getProductSubCategory(productType , categoryID)
+                viewModel.getProductSubCategory(productType, categoryID)
             }
         }
 
@@ -96,7 +113,7 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
             resetButtonBackgrounds()
             binding.accessoriesTextView.setBackgroundResource(R.drawable.rounded_button_background)
             if (categoryID != null) {
-                viewModel.getProductSubCategory(productType , categoryID)
+                viewModel.getProductSubCategory(productType, categoryID)
             }
         }
 
@@ -108,10 +125,10 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
                         binding.noItemsTextView.visibility = View.GONE
                     }
                     is SubCategoryState.Success -> {
-                        if(it.productsList.isEmpty()){
+                        if (it.productsList.isEmpty()) {
                             binding.productsRecyclerview.visibility = View.GONE
                             binding.noItemsTextView.visibility = View.VISIBLE
-                        }else{
+                        } else {
                             binding.noItemsTextView.visibility = View.GONE
                             binding.productsRecyclerview.visibility = View.VISIBLE
                             productsAdapter.setProductList(it.productsList)
@@ -151,24 +168,24 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
         binding.accessoriesTextView.setBackgroundResource(0)
     }
 
-    override fun onClickFavIcon(product_Id : Long) {
+    override fun onClickFavIcon(product_Id: Long) {
         if (isConnected(requireContext())) {
             if (productsAdapter.getIsFav()) {
                 viewModel.deleteFavProductWithId(product_Id!!)
 
-//                favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
-//                viewModel.updateFavDraftOrder(
-//                    UserSettings.favoriteDraftOrderId.toLong(),
-//                    favDraftOrderResponse
-//                )
+                favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
+                viewModel.updateFavDraftOrder(
+                    UserSettings.favoriteDraftOrderId.toLong(),
+                    favDraftOrderResponse
+                )
             } else {
                 val product: Product? = findProductById(product_Id, productsList)
                 viewModel.insertFavProduct(product?.toFavRoomPojo()!!)
                 favDraftOrderResponse.draft_order?.lineItems?.add(product!!.toLineItems()!!)
-//                viewModel.updateFavDraftOrder(
-//                    UserSettings.favoriteDraftOrderId.toLong(),
-//                    favDraftOrderResponse
-//                )
+                viewModel.updateFavDraftOrder(
+                    UserSettings.favoriteDraftOrderId.toLong(),
+                    favDraftOrderResponse
+                )
             }
         } else {
             Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
@@ -177,7 +194,10 @@ class SubCategoryFragment : Fragment() , OnClickProduct {
     }
 
     override fun onClickProductCard(product_Id: Long) {
-        val action = SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(product_Id)
+        val action =
+            SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(
+                product_Id
+            )
         binding.root.findNavController().navigate(action)
     }
 

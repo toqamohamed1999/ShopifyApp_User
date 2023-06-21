@@ -59,7 +59,8 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (isConnected(requireContext())) {
-            if (UserSettings.userAPI_Id.isNullOrEmpty()) {
+            println("//////////////////////////////${UserSettings.userAPI_Id}")
+            if (UserSettings.userAPI_Id.isEmpty()) {
                 binding.noInternetContainer.visibility = View.GONE
                 binding.fragmentContainer.visibility = View.GONE
                 binding.loggedOutContainer.visibility = View.VISIBLE
@@ -133,14 +134,13 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                     }
                 }
 
-                binding.txtMoreOrders.setOnClickListener {
-                    binding.root.findNavController()
-                        .navigate(R.id.action_profileFragment_to_allOrdersFragment)
-                }
-                binding.imageButtongotToSetting.setOnClickListener {
-                    binding.root.findNavController().navigate(R.id.settingsFragment)
-                }
-            }
+        binding.txtMoreOrders.setOnClickListener {
+            binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
+        }
+        binding.imageButtongotToSetting.setOnClickListener {
+            binding.root.findNavController().navigate(R.id.settingsFragment)
+        }
+    }
         } else {
             binding.noInternetContainer.visibility = View.VISIBLE
             binding.fragmentContainer.visibility = View.GONE

@@ -1,4 +1,4 @@
-package eg.gov.iti.jets.shopifyapp_user.cart.remote_test
+package eg.gov.iti.jets.shopifyapp_user.cart.remote_test.cart
 
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl

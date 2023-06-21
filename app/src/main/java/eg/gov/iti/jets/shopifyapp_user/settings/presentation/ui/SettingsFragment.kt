@@ -43,7 +43,7 @@ class SettingsFragment:Fragment(),SettingListener{
     private fun setUpActions() {
         setUpDialogs()
 
-        binding?.textView?.setOnClickListener {
+        binding?.imageView?.setOnClickListener {
             childFragmentManager.beginTransaction().add(addressesDialog,null).commit()
 
         }
@@ -52,14 +52,11 @@ class SettingsFragment:Fragment(),SettingListener{
         }
         binding?.btnLogout?.setOnClickListener {
             UserSettings.clearSettings()
-            binding?.root?.findNavController()?.navigate(R.id.homeFragment)
+            binding?.root?.findNavController()?.navigate(R.id.loginFragment)
         }
 
         binding?.btnChangeAddress?.setOnClickListener {
             binding?.root?.findNavController()?.navigate(R.id.action_settingsFragment_to_fragmentLocationDetector)
-        }
-        binding?.imageButtonbackButton2?.setOnClickListener {
-            binding?.root?.findNavController()?.popBackStack()
         }
     }
 
@@ -91,7 +88,7 @@ class SettingsFragment:Fragment(),SettingListener{
         Dialogs.SnakeToast(requireView(),"Done Selecting Default Address ")
     }
     override fun selectCurrency(currency: String) {
-        viewModel.changeCurrency(UserSettings.currencyCode,currency)
+        viewModel.changeCurrency(currency)
         UserSettings.currencyCode = currency
         UserSettings.saveSettings()
         currenciesDialog.dismiss()

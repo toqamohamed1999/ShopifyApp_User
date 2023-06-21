@@ -5,6 +5,6 @@ data class DiscountCode(
     var created_at: String,
     val id: Long,
     val price_rule_id: Long,
-    val updated_at: String,
+    var updated_at: String,
     val usage_count: Int
 )

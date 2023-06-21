@@ -165,7 +165,7 @@ class ProductDetailsViewModel(
     private val _favProducts: MutableStateFlow<ResponseState<FavDraftOrderResponse>> =
         MutableStateFlow(ResponseState.Loading)
     var favProducts: StateFlow<ResponseState<FavDraftOrderResponse>> = _favProducts
-    //var favDraftOrder: DraftOrderResponse = DraftOrderResponse(null)
+
 
     fun getFavRemoteProducts(draftOrderId: Long) {
         viewModelScope.launch {

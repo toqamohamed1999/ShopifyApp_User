@@ -54,9 +54,9 @@ class SettingsViewModel(private val settingsRepo: SettingsRepo):ViewModel() {
               }
           }
       }
-    fun changeCurrency(fromCode:String,toCode:String){
+    fun changeCurrency(toCode:String){
         viewModelScope.launch {
-            settingsRepo.changeCurrency(fromCode,toCode).collect{
+            settingsRepo.changeCurrency(toCode).collect{
                 if(it!=null)
                 {
                     UserSettings.currentCurrencyValue = it.conversion_rate

@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ShippingAddress(
-    val address1: String = "",
+    val address1: String? = "",
     val address2: String = "",
     val city: String = "",
     val company: String = "",

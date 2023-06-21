@@ -6,4 +6,5 @@ interface CartItemListener {
     fun increaseProductInCart(product: LineItem)
     fun  decreaseProductInCart(product: LineItem)
     fun removerProduct(product: LineItem)
+    fun gotoDetails(productId:String)
 }

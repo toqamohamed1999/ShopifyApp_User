@@ -1,19 +1,19 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.domain.remote
 
+import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
+import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.PriceRule
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.model.TransactionBody
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.model.TransactionResponse
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface PaymentAPIServices {
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
 
-    @GET("orders/{orderId}/transactions.json")
-    fun retrieveTransactionForOrder(@Path(value="orderId")orderId:String):TransactionResponse
-    @POST("orders/{orderId}/transactions.json")
-    fun captureTransactionForOrder(@Path(value="orderId")orderId:String,@Body tansactionBody:TransactionBody):TransactionResponse
+    @GET("price_rules/{price_rule_id}.json")
+   suspend fun getSinglePriceRule(@Path(value="price_rule_id")price_rule_id:String):PriceRule
 
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
 
-
+    @POST("orders.json")
+    suspend fun postOrder(@Body order: Order.OrderBody?): Order.OrderBody
 }

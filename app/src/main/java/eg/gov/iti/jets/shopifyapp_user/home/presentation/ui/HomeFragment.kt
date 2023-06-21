@@ -40,12 +40,7 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     private lateinit var handler: Handler
-    private  var adsImages: ArrayList<DiscountCode> = arrayListOf(
-        DiscountCode("SS12223#1","-12",12223541,111245553,"",1)
-       ,DiscountCode("101FFA","-13",12223541,111245553,"",1)
-       ,DiscountCode("md4a3","-10",12223541,111245553,"",1)
-
-    )
+    private var adsImages: ArrayList<DiscountCode> = arrayListOf()
     private lateinit var adsAdapter: CouponAdapter
     private lateinit var viewPager2: ViewPager2
     private val runnable = Runnable {
@@ -53,11 +48,11 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     }
     private lateinit var binding: FragmentHomeBinding
     private lateinit var brandAdapter: BrandAdapter
-    private var brandList :List<SmartCollection> = listOf()
+    private var brandList: List<SmartCollection> = listOf()
     private val viewModel: HomeViewModel by lazy {
         val factory = HomeFactoryViewModel(
             BrandRepoImp.getInstance(BrandRemoteSource())!!,
-            AddsRepoImpl(AddsRemoteSourceImpl(AppRetrofit.retrofit.create(AddsAPIServices::class.java)))
+            AddsRepoImpl(AddsRemoteSourceImpl())
         )
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
     }
@@ -65,7 +60,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View?{
+    ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewPager2 = binding.couponsViewPager
         init()
@@ -84,7 +79,10 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onResume() {
         super.onResume()
         handler.postDelayed(runnable, 5000)
+        binding.txtNoResults.visibility = View.GONE
+
     }
+
     override fun onPause() {
         super.onPause()
         handler.removeCallbacks(runnable)
@@ -100,6 +98,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                 adsImages.clear()
                 adsImages.addAll(it)
                 adsAdapter.discounts = adsImages
+                adsAdapter.notifyItemRangeChanged(0, it.size)
                 createDots(it.size)
                 updateDots(0)
             }
@@ -133,6 +132,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // This method is called before the text is changed.
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val filteredList = filteredMyListWithSequence(s.toString())
                 showNoMatchingResultIfFilteredListIsEmpty(filteredList)
@@ -149,9 +149,10 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         binding.searchEditText.addTextChangedListener(textWatcher)
 
     }
+
     private fun init() {
         handler = Handler(Looper.myLooper()!!)
-        adsAdapter = CouponAdapter(adsImages,this, viewPager2)
+        adsAdapter = CouponAdapter(adsImages, this, viewPager2)
         binding.couponsViewPager.adapter = adsAdapter
         adsAdapter.discounts = adsImages
         createDots(adsImages.size)
@@ -160,6 +161,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         viewPager2.clipChildren = false
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     }
+
     private fun setUpTarnsformer() {
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(40))
@@ -169,6 +171,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         }
         viewPager2.setPageTransformer(transformer)
     }
+
     private fun createDots(numDots: Int) {
         for (i in 0 until numDots) {
             val dot = View(context)
@@ -198,17 +201,19 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
 
     override fun onImageClick(discountCode: DiscountCode) {
         UserSettings.userCurrentDiscountCopy = discountCode
-        Dialogs.SnakeToast(requireView(),"Code Copied please paste with in checkout process")
+        Dialogs.SnakeToast(requireView(), "Code Copied please paste with in checkout process")
     }
 
     override fun onBrandClick(brandName: String?) {
         val action = HomeFragmentDirections.actionHomeFragmentToProductsFragment(brandName)
         binding.root.findNavController().navigate(action)
     }
+
     private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
 
         return brandList?.filter { it.title!!.lowercase().contains(s.lowercase()) }
     }
+
     private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<SmartCollection>?) {
         if (filteredList.isNullOrEmpty()) {
             binding.txtNoResults.visibility = View.VISIBLE

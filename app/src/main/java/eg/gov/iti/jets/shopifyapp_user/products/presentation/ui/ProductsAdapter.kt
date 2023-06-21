@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -39,7 +40,8 @@ class ProductsAdapter(
             this.favList = favList
         }
     }
-    fun getIsFav():Boolean{
+
+    fun getIsFav(): Boolean {
         return isFav
     }
 
@@ -52,10 +54,14 @@ class ProductsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = productList[position]
+        if(UserSettings.userAPI_Id.isEmpty()){
+            holder.binding.favIcon.visibility= View.GONE
+        }
         holder.binding.productTitleTextView.text =
             currentProduct?.title?.let { getTitleOfProduct(it) }
-        holder.binding.productPriceTextView.text = currentProduct.variants[0].price
-        holder.binding.favIcon.setImageResource(setFavoriteIcon(currentProduct , favList))
+        holder.binding.productPriceTextView.text =
+            (currentProduct.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+        holder.binding.favIcon.setImageResource(setFavoriteIcon(currentProduct, favList))
         Glide.with(context)
             .load(currentProduct.image.src)
             .into(holder.binding.productImageView)

@@ -53,11 +53,10 @@ class SettingsRemoteSourceImpl():SettingsRemoteSource {
     }
 
     override suspend fun changeCurrency(
-        fromCode: String,
         toCode: String
     ): MutableStateFlow<ExchangerResponse?> {
         return  try{
-            MutableStateFlow(service.changeCurrency(fromCode,toCode))
+            MutableStateFlow(service.changeCurrency(toCode))
         }catch(e:Exception){
             MutableStateFlow(null)
         }

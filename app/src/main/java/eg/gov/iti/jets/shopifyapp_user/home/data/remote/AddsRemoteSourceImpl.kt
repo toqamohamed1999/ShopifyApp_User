@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.home.data.remote
 
+import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCodeBody
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.Discounts
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.PriceRules
@@ -7,7 +8,8 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsRemoteSource
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class AddsRemoteSourceImpl(private val services:AddsAPIServices):AddsRemoteSource {
+class AddsRemoteSourceImpl():AddsRemoteSource {
+    private val services:AddsAPIServices= AppRetrofit.retrofit.create(AddsAPIServices::class.java)
     override suspend fun getAllPriceRules(): MutableStateFlow<PriceRules?> {
         return  try{
             MutableStateFlow(services.getAllPriceRules())

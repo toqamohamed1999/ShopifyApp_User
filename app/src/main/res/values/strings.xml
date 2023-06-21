@@ -18,6 +18,8 @@
     <string name="last_name">Last Name</string>
     <string name="noInternetConnection">No Internet Connection ! </string>
     <string name="delete_MSG_from_favorites">This Product Deleted Successfully From Favorites</string>
+    <string name="registration_completed">Your Registration completed Successfully check your email for verification then log in</string>
+    <string name="go_to_verify_email_from_login">You have to check email verification then try to log in again </string>
 
     /** nada **/
     <string name="home_header">Home</string>
@@ -84,6 +86,18 @@
     <string name="you_aren_t_logged_in">You aren\'t logged in</string>
     <string name="total_price">Total Price:</string>
     <string name="items">Items</string>
+    <string name="currencies">Currencies</string>
+    <string name="addesses">Addesses</string>
+    <string name="currncy">Currncy</string>
+    <string name="about_us">About Us</string>
+    <string name="products">Products</string>
+    <string name="cart">Cart</string>
+    <string name="category">Category</string>
+    <string name="orderInfo">Order Information</string>
+    <string name="all_orders">All Orders</string>
+    <string name="order_details">Order Details</string>
+    <string name="product_details">Product Details</string>
+    <string name="enter_phone">Enter Phone</string>
 
     /** nada **/
 
