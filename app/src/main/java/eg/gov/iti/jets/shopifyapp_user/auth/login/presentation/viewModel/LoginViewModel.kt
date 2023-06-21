@@ -57,4 +57,8 @@ class LoginViewModel(
             favRepo.insertFavProduct(favRoomPojo)
         }
     }
+
+    fun resetFlow() {
+        _returnCustomer.value=ResponseState.Loading
+    }
 }

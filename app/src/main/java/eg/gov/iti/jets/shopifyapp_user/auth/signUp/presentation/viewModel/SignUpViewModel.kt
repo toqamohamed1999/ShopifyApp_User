@@ -1,5 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
@@ -25,11 +27,11 @@ class SignUpViewModel(
     private val apiReoInterface: APIRepoImplementation,
     private val draftOrderRepo: FavDraftOrderRepoInterface = FavDraftOrderRepoImpl()
 ) : ViewModel() {
-    private val _signUpResult = MutableStateFlow<ResponseState<String>>(ResponseState.Loading)
-    val signUpResult: StateFlow<ResponseState<String>> = _signUpResult
+    private val _signUpResult = MutableLiveData<ResponseState<String>>(ResponseState.Loading)
+    val signUpResult: LiveData<ResponseState<String>> = _signUpResult
     private val _apisignUpResult =
-        MutableStateFlow<ResponseState<CustomerResponse>>(ResponseState.Loading)
-    val apisignUpResult: StateFlow<ResponseState<CustomerResponse>> = _apisignUpResult
+        MutableLiveData<ResponseState<CustomerResponse>>(ResponseState.Loading)
+    val apisignUpResult: LiveData<ResponseState<CustomerResponse>> = _apisignUpResult
     fun signUpUser(user: SignupUser) {
         viewModelScope.launch {
             _signUpResult.value = authRepository.signUpUser(user)

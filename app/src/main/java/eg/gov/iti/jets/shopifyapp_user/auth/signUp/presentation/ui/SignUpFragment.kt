@@ -69,7 +69,8 @@ class SignUpFragment : Fragment() {
         (activity as AppCompatActivity).findViewById<AppBarLayout>(R.id.custom_toolBar)?.visibility =
             View.GONE
         binding.textViewHaveAcount.setOnClickListener {
-            Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_loginFragment)
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_signUpFragment_to_loginFragment)
         }
         binding.btnSignUp.setOnClickListener {
             if (isConnected(requireContext().applicationContext)) {
@@ -113,7 +114,7 @@ class SignUpFragment : Fragment() {
                     binding.inputConfirmPassSignUp.error = "Passwords do not match"
                     return@setOnClickListener
                 } else {
-                    binding.progressBar.visibility=View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
                     val signupUser = SignupUser(
                         fName,
                         lName,
@@ -125,7 +126,7 @@ class SignUpFragment : Fragment() {
                 }
 
             } else {
-                binding.progressBar.visibility=View.GONE
+                binding.progressBar.visibility = View.GONE
                 Snackbar.make(
                     binding.root,
                     resources.getString(R.string.noInternetConnection),
@@ -135,55 +136,55 @@ class SignUpFragment : Fragment() {
             }
 
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.signUpResult.collect { result ->
-                when (result) {
-                    is ResponseState.Loading -> {
-                        println("/////////////Loading//////////////////////")
-                    }
-                    is ResponseState.Success -> {
-                        uid = result.data.toString()
-                        dummyLineItemList.add(
-                            LineItems(
-                                title = "dummy",
-                                quantity = 1,
-                                price = "50"
-                            )
+        viewModel.signUpResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ResponseState.Loading -> {
+                    println("/////////////Loading//////////////////////")
+                }
+                is ResponseState.Success -> {
+                    uid = result.data.toString()
+                    dummyLineItemList.add(
+                        LineItems(
+                            title = "dummy",
+                            quantity = 1,
+                            price = "50"
                         )
-                        viewModel.createFavDraftOrder(
-                            FavDraftOrderResponse(
-                                DraftOrderFav(
-                                    note = "fav_draftOrder",
-                                    lineItems = dummyLineItemList
+                    )
+                    viewModel.createFavDraftOrder(
+                        FavDraftOrderResponse(
+                            DraftOrderFav(
+                                note = "fav_draftOrder",
+                                lineItems = dummyLineItemList
 
-                                )
                             )
                         )
-                        delay(3000)
-                        dummyLineItemList.add(
-                            LineItems(
-                                title = "dummy",
-                                quantity = 1,
-                                price = "50"
-                            )
+                    )
+                    lifecycleScope.launch { delay(3000) }
+                    dummyLineItemList.add(
+                        LineItems(
+                            title = "dummy",
+                            quantity = 1,
+                            price = "50"
                         )
-                        viewModel.createFavDraftOrder(
-                            FavDraftOrderResponse(
-                                DraftOrderFav(
-                                    note = "cart_draftOrder",
-                                    lineItems = dummyLineItemList
+                    )
+                    viewModel.createFavDraftOrder(
+                        FavDraftOrderResponse(
+                            DraftOrderFav(
+                                note = "cart_draftOrder",
+                                lineItems = dummyLineItemList
 
-                                )
                             )
                         )
+                    )
 
-                    }
-                    is ResponseState.Error -> {
+
+                }
+                is ResponseState.Error -> {
                         println("/////////////Error ${result.exception}//////////////////////")
                         binding.editEmailSignup.error = "Email is already Exist"
                     }
-                }
             }
+
         }
         lifecycleScope.launchWhenStarted {
             viewModel.draftOrder.collect {
@@ -215,14 +216,13 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
-        lifecycleScope.launch{
-            viewModel.apisignUpResult.collect {
-                when (it) {
+        viewModel.apisignUpResult.observe(viewLifecycleOwner){
+                            when (it) {
                     is ResponseState.Loading -> {
 
                     }
                     is ResponseState.Success -> {
-                       binding.progressBar.visibility=View.GONE
+                        binding.progressBar.visibility = View.GONE
                         val alertDialog = AlertDialog.Builder(context)
 
                         alertDialog.apply {
@@ -240,9 +240,6 @@ class SignUpFragment : Fragment() {
                     }
                 }
             }
-        }
-
-
     }
 
     private fun clearErrors() {
