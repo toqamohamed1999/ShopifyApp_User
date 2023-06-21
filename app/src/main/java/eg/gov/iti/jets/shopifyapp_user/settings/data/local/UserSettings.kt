@@ -11,7 +11,7 @@ object UserSettings {
     var userName:String = ""
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
-    var currencyCode:String = "EGP"
+    var currencyCode:String = ""
     var shippingAddress:String = ""
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = ""
@@ -51,7 +51,6 @@ object UserSettings {
          favoriteDraftOrderId =instance.getString("favoriteDraftOrderId","")!!
          cartDraftOrderId = instance.getString("cartDraftOrderId","")!!
          cartQuantity = instance.getInt("cartQuantity",0)
-        cartDraftOrderId = "1119703400729"
     }
     fun clearSettings(){
          userName = ""
@@ -90,9 +89,9 @@ object UserSettings {
         return AddressBody(
             Addresse(
             address1 = this.getAddressLine(0)?.toString(), address2 = this.getAddressLine(1)?.toString()
-        , city = this.adminArea,company = null, country = this.countryName, country_code = this.countryCode
-                , first_name =  userName, name =  userName
-            , last_name =  userName, phone =  phoneNumber,
+        , city = this.adminArea?:"",company = null, country = this.countryName?:"", country_code = this.countryCode?:""
+                , first_name =  userName?:"", name =  userName?:""
+            , last_name =  userName?:"", phone =  phoneNumber?:"",
                 zip = this.postalCode?:"", country_name = "", customer_id = userAPI_Id.toLong(), default = false, province_code = ""
         ))
     }
