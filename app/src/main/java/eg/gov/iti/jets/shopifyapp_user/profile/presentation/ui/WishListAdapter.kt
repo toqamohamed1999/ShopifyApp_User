@@ -9,8 +9,13 @@ import com.bumptech.glide.Glide
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.databinding.WishlistItemBinding
 import eg.gov.iti.jets.shopifyapp_user.profile.domain.local.OnWishListClick
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 
-class WishListAdapter(private var productList: List<FavRoomPojo>, val context: Context,var myListener:OnWishListClick) :
+class WishListAdapter(
+    private var productList: List<FavRoomPojo>,
+    val context: Context,
+    var myListener: OnWishListClick
+) :
     RecyclerView.Adapter<WishListAdapter.ViewHolder>() {
 
 
@@ -18,7 +23,7 @@ class WishListAdapter(private var productList: List<FavRoomPojo>, val context: C
 
     @SuppressLint("NotifyDataSetChanged")
     fun setProductList(values: List<FavRoomPojo?>?) {
-        this.productList=ArrayList()
+        this.productList = ArrayList()
         this.productList = values as List<FavRoomPojo>
         notifyDataSetChanged()
     }
@@ -31,11 +36,11 @@ class WishListAdapter(private var productList: List<FavRoomPojo>, val context: C
     }
 
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val current=productList[position]
-        holder.binding.txtProductTitle.text=current.title
-        holder.binding.txtPrice.text=current.price
+        val current = productList[position]
+        holder.binding.txtProductTitle.text = current.title
+        holder.binding.txtPrice.text =
+            (current.price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
         Glide.with(context)
             .load(current.imageSrc)
             .into(holder.binding.productImage)
@@ -43,6 +48,7 @@ class WishListAdapter(private var productList: List<FavRoomPojo>, val context: C
             myListener.onClickWishItem(current.productId!!)
         }
     }
-    override fun getItemCount()=productList.size
+
+    override fun getItemCount() = productList.size
     inner class ViewHolder(var binding: WishlistItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

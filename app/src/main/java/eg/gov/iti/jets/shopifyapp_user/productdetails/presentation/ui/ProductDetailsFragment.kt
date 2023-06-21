@@ -242,7 +242,7 @@ class ProductDetailsFragment : Fragment() {
                 }
             })
             binding.progressBar.visibility = View.GONE
-            binding.txtProductPrice.text = product.variants[0].price
+            binding.txtProductPrice.text = (product.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
             binding.txtProductName.text = product.title
             binding.txtViewDescription.text = product.bodyHtml
             binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)
