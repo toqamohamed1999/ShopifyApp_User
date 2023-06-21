@@ -7,9 +7,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -43,6 +41,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.toAddres
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userCurrentDiscountCopy
 import eg.gov.iti.jets.shopifyapp_user.settings.presentation.ui.AddressesFragmentDialog
 import eg.gov.iti.jets.shopifyapp_user.settings.presentation.ui.SettingListener
+import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -60,6 +59,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private lateinit var braintreeClient: BraintreeClient
     private lateinit var googlePayClient:GooglePayClient
     private lateinit var methodDialog:AlertDialog
+    private lateinit var confirmationDialog:AlertDialog
     private var isReadyButton = false
     private val args:FragmentPaymentInfoArgs by navArgs()
     private val viewModel by viewModels<PaymentViewModel> {
@@ -97,9 +97,9 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private fun observeData() {
         lifecycleScope.launch {
             viewModel.mode.collectLatest {
-                when(it){
-                    2->{
-                        // Done Deleting Cart You must show Bill
+                when(it.first){
+                    2 ->{
+                        orderConfirmed(it.second)
                         viewModel.resetMode()
                     }
                     else->{
@@ -108,6 +108,29 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
                 }
             }
         }
+    }
+
+    private fun orderConfirmed(second: Int?) {
+        val inflater= this.layoutInflater
+        val builder = AlertDialog.Builder(requireContext())
+        val view = inflater.inflate(R.layout.fragment_order_comfirmed,null)
+        builder.setView(view)
+        val tvName = view.findViewById<TextView>(R.id.textViewPesonName)
+        val tvNumber = view.findViewById<TextView>(R.id.textOrderNumber)
+        val tvPrice = view.findViewById<TextView>(R.id.textVieworderPrice)
+        val btnContinueShopping = view.findViewById<Button>(R.id.button_continueShipping)
+        tvName.text = UserSettings.userName
+        tvNumber.text = second.toString()
+        tvPrice.text = totalPrice.toString()
+        btnContinueShopping.setOnClickListener {
+            binding?.root?.findNavController()?.navigate(R.id.homeFragment)
+            (requireActivity() as BadgeChanger).changeBadgeCartCount(0)
+            UserSettings.cartQuantity = 0
+            confirmationDialog.dismiss()
+        }
+        builder.setCancelable(false)
+        confirmationDialog = builder.create()
+        confirmationDialog.show()
     }
 
     private fun setUpDialogs() {
@@ -139,7 +162,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     }
 
     private fun confirmOrder() {
-
         viewModel.setAddress()
         viewModel.confirmOrder()
     }
@@ -217,7 +239,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     }
     override fun onGooglePaySuccess(paymentMethodNonce: PaymentMethodNonce) {
         confirmOrder()
-        Toast.makeText(requireContext(),"Payment Success",Toast.LENGTH_SHORT).show()
     }
 
     override fun onGooglePayFailure(error: Exception) {
