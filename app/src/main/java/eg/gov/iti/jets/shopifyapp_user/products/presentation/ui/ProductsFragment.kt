@@ -28,6 +28,7 @@ import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductFa
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductsViewModel
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ProductsFragment : Fragment(), OnClickProduct {
@@ -108,7 +109,23 @@ class ProductsFragment : Fragment(), OnClickProduct {
                 }
             }
         }
+        viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
+        lifecycleScope.launch {
 
+            viewModel.favProducts.collectLatest {
+                when (it) {
+                    is ResponseState.Loading -> {
+
+                    }
+                    is ResponseState.Success -> {
+                        favDraftOrderResponse=it.data!!
+                    }
+                    is ResponseState.Error -> {
+                        println("Draft order Error ${it.exception}")
+                    }
+                }
+            }
+        }
         lifecycleScope.launch {
             viewModel.favProduct.collect {
                 when (it) {
@@ -180,19 +197,19 @@ class ProductsFragment : Fragment(), OnClickProduct {
             if (productsAdapter.getIsFav()) {
                 viewModel.deleteFavProductWithId(product_Id!!)
 
-//                favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
-//                viewModel.updateFavDraftOrder(
-//                    UserSettings.favoriteDraftOrderId.toLong(),
-//                    favDraftOrderResponse
-//                )
+                favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
+                viewModel.updateFavDraftOrder(
+                    UserSettings.favoriteDraftOrderId.toLong(),
+                    favDraftOrderResponse
+                )
             } else {
                 val product: Product? = findProductById(product_Id, productsList)
                 viewModel.insertFavProduct(product?.toFavRoomPojo()!!)
                 favDraftOrderResponse.draft_order?.lineItems?.add(product!!.toLineItems()!!)
-//                viewModel.updateFavDraftOrder(
-//                    UserSettings.favoriteDraftOrderId.toLong(),
-//                    favDraftOrderResponse
-//                )
+                viewModel.updateFavDraftOrder(
+                    UserSettings.favoriteDraftOrderId.toLong(),
+                    favDraftOrderResponse
+                )
             }
         } else {
             Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)

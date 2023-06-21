@@ -84,6 +84,22 @@ class FavoriteFragment : Fragment(), OnClickProduct {
             }
 
             binding.searchEditText.addTextChangedListener(textWatcher)
+            lifecycleScope.launch {
+
+                viewModel.favProducts.collectLatest {
+                    when (it) {
+                        is ResponseState.Loading -> {
+
+                        }
+                        is ResponseState.Success -> {
+                            favDraftOrderResponse=it.data!!
+                        }
+                        is ResponseState.Error -> {
+                            println("Draft order Error ${it.exception}")
+                        }
+                    }
+                }
+            }
 
             lifecycleScope.launch {
 
@@ -113,7 +129,6 @@ class FavoriteFragment : Fragment(), OnClickProduct {
             binding.loggedOutContainer.visibility = View.VISIBLE
             binding.favRecycler.visibility = View.GONE
             binding.txtSearch.visibility=View.GONE
-            binding.animationView.visibility=View.GONE
             binding.txtnowishlist.visibility=View.GONE
             binding.btnlogin.setOnClickListener {
                Navigation.findNavController(requireView()).navigate(R.id.action_favoriteFragment_to_loginFragment)
@@ -140,6 +155,7 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
     override fun onClickFavIcon(product_Id: Long) {
         if (isConnected(requireContext())) {
+            viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
 
             val alertDialog = AlertDialog.Builder(context)
 
@@ -148,7 +164,10 @@ class FavoriteFragment : Fragment(), OnClickProduct {
                 setTitle("Delete")
                 setMessage("Are you sure you want to delete the Product from favorite?")
                 setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
+                    favDraftOrderResponse.draft_order?.lineItems?.removeIf {e->e.productId==product_Id }
+                    viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
                     viewModel.deleteFavProductWithId(product_Id!!)
+
                     Snackbar.make(
                         binding.root,
                         R.string.delete_MSG_from_favorites,
