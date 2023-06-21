@@ -137,9 +137,9 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
         binding.txtMoreOrders.setOnClickListener {
             binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
         }
-        binding.imageButtongotToSetting.setOnClickListener {
-            binding.root.findNavController().navigate(R.id.settingsFragment)
-        }
+//        binding.imageButtongotToSetting.setOnClickListener {
+//            binding.root.findNavController().navigate(R.id.settingsFragment)
+//        }
     }
         } else {
             binding.noInternetContainer.visibility = View.VISIBLE
