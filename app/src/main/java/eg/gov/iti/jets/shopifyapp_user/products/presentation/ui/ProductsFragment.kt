@@ -194,7 +194,6 @@ class ProductsFragment : Fragment(), OnClickProduct {
 
     override fun onClickFavIcon(product_Id: Long) {
         if (isConnected(requireContext())) {
-
             if (productsAdapter.getIsFav()) {
                 viewModel.deleteFavProductWithId(product_Id!!)
 

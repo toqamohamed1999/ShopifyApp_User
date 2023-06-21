@@ -65,11 +65,10 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                 binding.fragmentContainer.visibility = View.GONE
                 binding.loggedOutContainer.visibility = View.VISIBLE
                 binding.btnlogin.setOnClickListener {
-                    binding.root.findNavController()
+                    Navigation.findNavController(requireView())
                         .navigate(R.id.action_profileFragment_to_loginFragment)
                 }
-            }
-            else {
+            } else {
                 binding.noInternetContainer.visibility = View.GONE
                 binding.fragmentContainer.visibility = View.VISIBLE
                 binding.loggedOutContainer.visibility = View.GONE
@@ -108,32 +107,39 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                 layoutManager.orientation = LinearLayoutManager.VERTICAL
                 binding.ordersRecyclerView.layoutManager = layoutManager
 
-        lifecycleScope.launch {
-            viewModel.orderState.collectLatest {
-                when (it) {
-                    is OrderState.Loading -> {
-                    }
-                    is OrderState.Success -> {
-                        orderList = if (it.orderList.size > 2) {
-                            it.orderList.take(2)
-                        } else {
-                            binding.txtMoreOrders.visibility = View.GONE
-                            it.orderList
+                lifecycleScope.launch {
+                    viewModel.orderState.collectLatest {
+                        when (it) {
+                            is OrderState.Loading -> {
+                            }
+                            is OrderState.Success -> {
+                                if (it.orderList.isEmpty()) {
+                                    binding.txtMoreOrders.visibility = View.GONE
+                                    binding.txtOrder.visibility = View.GONE
+                                } else {
+                                    orderList = if (it.orderList.size > 2) {
+                                        it.orderList.take(2)
+                                    } else {
+                                        binding.txtMoreOrders.visibility = View.GONE
+                                        it.orderList
+                                    }
+                                    orderAdapter.setOrderList(orderList)
+                                    binding.ordersRecyclerView.adapter = orderAdapter
+                                }
+                            }
+                            else -> {
+                                Log.i("TAG", "Errrrorrrr: $it")
+                            }
                         }
-                        orderAdapter.setOrderList(orderList)
-                        binding.ordersRecyclerView.adapter = orderAdapter
-                    }
-                    else -> {
-                        Log.i("TAG", "Errrrorrrr: $it")
                     }
                 }
-            }
-        }
 
         binding.txtMoreOrders.setOnClickListener {
             binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
         }
-
+//        binding.imageButtongotToSetting.setOnClickListener {
+//            binding.root.findNavController().navigate(R.id.settingsFragment)
+//        }
     }
         } else {
             binding.noInternetContainer.visibility = View.VISIBLE

@@ -80,7 +80,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
             binding.shoesTextView.setBackgroundResource(R.drawable.rounded_button_background)
             if (categoryID != null) {
                 viewModel.getProductSubCategory(productType, categoryID)
-
+                viewModel.getAllFavProduct()
             }
         }
         lifecycleScope.launch {
@@ -105,6 +105,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
             binding.tshirtTextView.setBackgroundResource(R.drawable.rounded_button_background)
             if (categoryID != null) {
                 viewModel.getProductSubCategory(productType, categoryID)
+                viewModel.getAllFavProduct()
             }
         }
 
@@ -114,6 +115,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
             binding.accessoriesTextView.setBackgroundResource(R.drawable.rounded_button_background)
             if (categoryID != null) {
                 viewModel.getProductSubCategory(productType, categoryID)
+                viewModel.getAllFavProduct()
             }
         }
 
@@ -125,6 +127,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                         binding.noItemsTextView.visibility = View.GONE
                     }
                     is SubCategoryState.Success -> {
+                        productsList = it.productsList
                         if (it.productsList.isEmpty()) {
                             binding.productsRecyclerview.visibility = View.GONE
                             binding.noItemsTextView.visibility = View.VISIBLE
