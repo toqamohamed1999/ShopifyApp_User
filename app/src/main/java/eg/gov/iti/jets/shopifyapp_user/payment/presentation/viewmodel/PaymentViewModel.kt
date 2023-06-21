@@ -24,13 +24,13 @@ class PaymentViewModel(private val cartRepo:CartRepository,
                        private val repo: PaymentRepo,
                        private val addsRepo: AddsRepo
                        ):ViewModel() {
-    private var _mode:MutableStateFlow<Int> = MutableStateFlow(0)
-    var mode: StateFlow<Int> = _mode
+    private var _mode:MutableStateFlow<Pair<Int,Int?>> = MutableStateFlow(Pair(0,0))
+    var mode: StateFlow<Pair<Int,Int?>> = _mode
     private var order: Order?= Order(line_items = listOf<LineItemsOrder>())
     private var draftOrder:DraftOrderResponse?=null
 
     fun resetMode(){
-        _mode.value = 0
+        _mode.value = Pair(0,0)
     }
     fun getCartDraftOrder() {
         viewModelScope.launch {
@@ -58,7 +58,6 @@ fun setAddress(){
     order?.merchant_of_record_app_id = "Shopify App Merchants"
     order?.current_subtotal_price = draftOrder?.draft_order?.subtotal_price
     order?.customer = CustomerOrder(id=UserSettings.userAPI_Id.toLong())
-    Log.e("",".....................$userAPI_Id.................")
     order?.current_total_price =draftOrder?.draft_order?.total_price
     order?.total_price = draftOrder?.draft_order?.total_price
     order?.confirmed = true
@@ -79,11 +78,9 @@ fun setAddress(){
               Log.e("", Gson().toJson(Order.OrderBody(order),Order.OrderBody::class.java).toString())
                repo.postOrder(Order.OrderBody(order)).collect{
                    Log.e("",(it.order.toString()))
+                   _mode.value = Pair(2,it.order?.number)
                }
            }
         }
-    }
-    fun validateDiscount() {
-        var flag = false
     }
 }

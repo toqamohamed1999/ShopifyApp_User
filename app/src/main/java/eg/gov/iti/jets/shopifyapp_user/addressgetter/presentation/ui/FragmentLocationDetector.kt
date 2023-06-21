@@ -266,9 +266,6 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
         binding?.mapView?.getMapAsync { googleMap ->
             mGoogleMap = googleMap
             mGoogleMap.setLatLngBoundsForCameraTarget(egyptBounds)
-            val cameraUpdate =
-                CameraUpdateFactory.zoomBy(10F)
-            mGoogleMap.animateCamera(cameraUpdate)
             mGoogleMap.setOnMapLongClickListener{
                  latitude=it.latitude.toString()
                  longitude=it.longitude.toString()
@@ -276,6 +273,7 @@ class FragmentLocationDetector() : Fragment(), GoogleApiClient.ConnectionCallbac
                 mGoogleMap.clear()
                 mGoogleMap.addMarker(MarkerOptions().position(it))
             }
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(egyptBounds.center,5F))
         }
 
     }

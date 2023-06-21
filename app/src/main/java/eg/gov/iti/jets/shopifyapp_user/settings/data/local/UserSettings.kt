@@ -11,7 +11,7 @@ object UserSettings {
     var userName:String = ""
     var userEmail:String = ""
     var userPassword:String = "" // user firebase id
-    var currencyCode:String = ""
+    var currencyCode:String = "EGP"
     var shippingAddress:String = ""
     var phoneNumber:String = ""
     var favoriteDraftOrderId:String = ""
@@ -36,32 +36,7 @@ object UserSettings {
             .putInt("cartQuantity",cartQuantity)
             .apply()
     }
-    fun getPrice(value:Double):Double{
-        return when (currencyCode) {
-            "USD" -> {
-                value*30.9
-            }
-            "EUR" -> {
-                value*33.23
-            }
-            else -> {
-                value
-            }
-        }
-    }
-    fun getPriceSymbol():String{
-            return when (currencyCode) {
-                "USD" -> {
-                    " $"
-                }
-                "EUR" -> {
-                    " €"
-                }
-                else -> {
-                    " £"
-                }
-            }
-    }
+
     fun loadSettings(){
        val instance = SharedOperations.getInstance()
         currentCurrencyValue= instance.getString("currentCurrencyValue","0.0")?.toDouble()?:1.0
@@ -69,6 +44,7 @@ object UserSettings {
          userEmail = instance.getString("userEmail","")!!
          userPassword = instance.getString("userPassword","")!!
          currencyCode = instance.getString("currencyCode","")!!
+        if(currencyCode.isEmpty()) currencyCode ="EGP"
          shippingAddress = instance.getString("shippingAddress","")!!
          userAPI_Id = instance.getString("userAPI_Id","")!!
          phoneNumber = instance.getString("phoneNumber","")!!
@@ -82,7 +58,7 @@ object UserSettings {
          userEmail = ""
          userPassword = "" // user firebase id
         userAPI_Id =""
-         currencyCode = ""
+         currencyCode = "EGP"
          shippingAddress = ""
          phoneNumber = ""
          favoriteDraftOrderId = ""
