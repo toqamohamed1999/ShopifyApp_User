@@ -2,6 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.payment.presentation.ui
 
 import android.os.Bundle
 import android.text.style.TtsSpan.DateBuilder
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Date
+import kotlin.math.roundToInt
 
 class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private var totalPrice = 0.0
@@ -59,7 +61,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private lateinit var googlePayClient:GooglePayClient
     private lateinit var methodDialog:AlertDialog
     private var isReadyButton = false
-    private lateinit var draftOrder:DraftOrderResponse
     private val args:FragmentPaymentInfoArgs by navArgs()
     private val viewModel by viewModels<PaymentViewModel> {
         PaymentViewModelFactory(
@@ -79,11 +80,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         totalPrice = args.order.toDouble()
-        if(UserSettings.userCurrentDiscountCopy!=null) {
-            binding?.placeOrderBtn?.visibility = View.INVISIBLE
-        }else{
-            binding?.buttonValidateCoupon?.visibility = View.INVISIBLE
-        }
         googlePayClient = GooglePayClient(this, braintreeClient)
         googlePayClient.setListener(this)
         googlePayClient.isReadyToPay(requireActivity()) { isReadyToPay, error ->
@@ -102,26 +98,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         lifecycleScope.launch {
             viewModel.mode.collectLatest {
                 when(it){
-                    1->{
-                        if(userCurrentDiscountCopy!=null) {
-                           if((userCurrentDiscountCopy?.usage_count?:40) <30) {
-                               viewModel.setDiscount(userCurrentDiscountCopy,
-                                   ((draftOrder.draft_order?.total_price?.toDouble()?:0.0)
-                                           -
-                                           (userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)
-                                           ))
-                               binding?.editTextCoupon?.setText("")
-                               Dialogs.SnakeToast(requireView(),"Valid Discount")
-                               binding?.placeOrderBtn?.visibility = View.VISIBLE
-                               viewModel.resetMode()
-                           }
-                        }
-                    }
-                    -1->{
-                        Toast.makeText(requireContext(),"UnValid Discount Code",Toast.LENGTH_SHORT).show()
-                        binding?.editTextCoupon?.setText("")
-                        viewModel.resetMode()
-                    }
                     2->{
                         // Done Deleting Cart You must show Bill
                         viewModel.resetMode()
@@ -167,27 +143,12 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     }
 
     private fun setUpActions() {
-        binding?.editTextCoupon?.doOnTextChanged { text, start, before, count ->
-            binding?.buttonValidateCoupon?.visibility = View.VISIBLE
-            binding?.placeOrderBtn?.visibility = View.INVISIBLE
-        }
-        binding?.editTextCoupon?.doAfterTextChanged {
-            if(it.isNullOrEmpty())
-            {
-                binding?.placeOrderBtn?.visibility = View.VISIBLE
-                binding?.buttonValidateCoupon?.visibility = View.INVISIBLE
-            }
-        }
         //address
         binding?.btnChangeAddress?.setOnClickListener{
             binding?.root?.findNavController()?.navigate(R.id.action_fragmentPaymentInfo_to_fragmentLocationDetector)
         }
         binding?.imageViewAddresses?.setOnClickListener {
             childFragmentManager.beginTransaction().add(addressesDialog,null).commit()
-        }
-        //coupon
-        binding?.buttonValidateCoupon?.setOnClickListener {
-            viewModel.validateDiscount(binding?.editTextCoupon?.text.toString())
         }
 
         //placeOrder
@@ -221,10 +182,32 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         binding?.tvAddres?.text = UserSettings.shippingAddress
 
         binding?.textViewSubTotalPrice?.text= "$totalPrice $currencyCode"
-        binding?.cartTotalPrice?.text = (totalPrice+(30* currentCurrencyValue)).toString()+" "+currencyCode
 
         binding?.textViewShippingFees?.text = "${(30* currentCurrencyValue)} $currencyCode"
-        binding?.editTextCoupon?.setText(UserSettings.userCurrentDiscountCopy?.code)
+        if(UserSettings.userCurrentDiscountCopy!=null)
+        {
+            showDiscount()
+        }else{
+            binding?.discountCardView?.visibility = View.GONE
+            binding?.cartTotalPrice?.text = "Final Price : $totalPrice"
+        }
+    }
+
+    private fun showDiscount() {
+        binding?.textViewDiscountCode?.text = userCurrentDiscountCopy?.code
+        val value = userCurrentDiscountCopy?.created_at?.toDouble()?:0.0
+        if(userCurrentDiscountCopy?.updated_at =="percentage")
+        {
+
+            binding?.textViewDiscountValue?.text = "$value %"
+            totalPrice = (totalPrice-((totalPrice*value)/100))
+            totalPrice = ((totalPrice*100).roundToInt())/100.0
+        }else if(userCurrentDiscountCopy?.updated_at =="fixed_amount"){
+            binding?.textViewDiscountValue?.text = "$value $currencyCode"
+            totalPrice -= value
+        }
+        binding?.cartTotalPrice?.text = "Final Price : $totalPrice $currencyCode"
+        viewModel.setDiscount(userCurrentDiscountCopy,totalPrice)
     }
 
     private fun validatePhone(phone: String): Boolean {
