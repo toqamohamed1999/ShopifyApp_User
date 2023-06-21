@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -12,6 +13,10 @@ import eg.gov.iti.jets.shopifyapp_user.base.local.database.ShopifyDatabase
 import eg.gov.iti.jets.shopifyapp_user.cart.presentation.ui.BadgeDrawable
 import eg.gov.iti.jets.shopifyapp_user.databinding.ActivityMainBinding
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
+import eg.gov.iti.jets.shopifyapp_user.util.MyNetworkStatus
+import eg.gov.iti.jets.shopifyapp_user.util.NetworkConnectivityObserver
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MainActivity : AppCompatActivity(), BadgeChanger {
 
@@ -19,12 +24,31 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
     private lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
     lateinit var backButton: ImageView
+    lateinit var fragment : View
+    var navDestination  : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ShopifyDatabase.context = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        fragment = findViewById(R.id.nav_host_fragment)
+        NetworkConnectivityObserver.initNetworkConnectivity(applicationContext)
+
+        NetworkConnectivityObserver.observeNetworkConnection().onEach {
+            if (it == MyNetworkStatus.Available) {
+                binding.noInternetContainer.visibility = View.GONE
+                navController.navigate(navDestination)
+            } else {
+                fragment.visibility = View.GONE
+                binding.noInternetContainer.visibility = View.VISIBLE
+//                if(navDestination == R.id.favoriteFragment){
+//                    fragment.visibility = View.VISIBLE
+//                    binding.noInternetContainer.visibility = View.GONE
+//                }
+            }
+        }.launchIn(lifecycleScope)
 
         backButton = binding.backButton
         binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
@@ -48,6 +72,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
 
     private fun setUpNavBottom(navController: NavController) {
         navController.addOnDestinationChangedListener { _, navDestination, _ ->
+            this.navDestination = navDestination.id
             if (navDestination.id == R.id.productsFragment
             ) {
                 bottomNav.visibility = View.GONE
