@@ -4,6 +4,7 @@ package eg.gov.iti.jets.shopifyapp_user.payment.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
@@ -12,6 +13,7 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.repo.PaymentRepo
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userAPI_Id
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userCurrentDiscountCopy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,22 +48,17 @@ class PaymentViewModel(private val cartRepo:CartRepository,
      order?.total_price = totalPrice.toString()
  }
 fun setAddress(){
-    order?.shipping_address = UserSettings.shippingAddress
-    order?.customer?.default_address=
-        ShippingAddress(UserSettings.selectedAddress?.getAddressLine(0),
-        UserSettings.selectedAddress?.countryName.toString(),
-        UserSettings.selectedAddress?.adminArea?:"",
-        country_code = UserSettings.currencyCode
-    )
+   // order?.shipping_address = UserSettings.shippingAddress
+
     order?.currency = UserSettings.currencyCode
-    order?.client_details = UserSettings.userName + ", " +  UserSettings.userEmail + ", " + UserSettings.phoneNumber
+    //order?.client_details = UserSettings.userName + ", " +  UserSettings.userEmail + ", " + UserSettings.phoneNumber
+    order?.email=UserSettings.userEmail
+    order?.send_receipt=true
+    order?.fulfillment_status ="fulfilled"
     order?.merchant_of_record_app_id = "Shopify App Merchants"
     order?.current_subtotal_price = draftOrder?.draft_order?.subtotal_price
-    order?.customer = CustomerOrder(id=UserSettings.userAPI_Id.toLong(),
-        default_address = ShippingAddress(), email = UserSettings.userEmail,
-        first_name = UserSettings.userName,
-        currency = UserSettings.currencyCode, accepts_marketing = true, verified_email = true
-    )
+    order?.customer = CustomerOrder(id=UserSettings.userAPI_Id.toLong())
+    Log.e("",".....................$userAPI_Id.................")
     order?.current_total_price =draftOrder?.draft_order?.total_price
     order?.total_price = draftOrder?.draft_order?.total_price
     order?.confirmed = true
@@ -79,7 +76,10 @@ fun setAddress(){
                UserSettings.saveSettings()
            }.join()
            launch {
-               repo.postOrder(Order.OrderBody(order))
+              Log.e("", Gson().toJson(Order.OrderBody(order),Order.OrderBody::class.java).toString())
+               repo.postOrder(Order.OrderBody(order)).collect{
+                   Log.e("",(it.order.toString()))
+               }
            }
         }
     }

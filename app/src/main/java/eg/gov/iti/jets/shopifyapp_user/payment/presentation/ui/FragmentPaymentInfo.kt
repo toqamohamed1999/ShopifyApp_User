@@ -126,7 +126,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         btnGooglePay.setOnClickListener {
             val googlePayRequest = GooglePayRequest()
             googlePayRequest.transactionInfo = TransactionInfo.newBuilder()
-                .setTotalPrice("1.00")//setTotalPrice
+                .setTotalPrice(totalPrice.toString())//setTotalPrice
                 .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
                 .setCurrencyCode(UserSettings.currencyCode)
                 .build()
@@ -139,6 +139,8 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     }
 
     private fun confirmOrder() {
+
+        viewModel.setAddress()
         viewModel.confirmOrder()
     }
 
