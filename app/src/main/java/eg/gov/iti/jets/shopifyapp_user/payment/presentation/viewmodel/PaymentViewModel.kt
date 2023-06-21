@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
-import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
@@ -18,10 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.*
-import java.util.logging.SimpleFormatter
 
 class PaymentViewModel(private val cartRepo:CartRepository,
                        private val repo: PaymentRepo,
@@ -62,58 +57,33 @@ fun setAddress(){
     order?.client_details = UserSettings.userName + ", " +  UserSettings.userEmail + ", " + UserSettings.phoneNumber
     order?.merchant_of_record_app_id = "Shopify App Merchants"
     order?.current_subtotal_price = draftOrder?.draft_order?.subtotal_price
-
+    order?.customer = CustomerOrder(id=UserSettings.userAPI_Id.toLong(),
+        default_address = ShippingAddress(), email = UserSettings.userEmail,
+        first_name = UserSettings.userName,
+        currency = UserSettings.currencyCode, accepts_marketing = true, verified_email = true
+    )
     order?.current_total_price =draftOrder?.draft_order?.total_price
     order?.total_price = draftOrder?.draft_order?.total_price
     order?.confirmed = true
 
 }
     fun confirmOrder() {
-        order?.line_items = draftOrder?.draft_order?.line_items?.map {
+        order?.line_items = draftOrder?.draft_order?.line_items?.takeLast((draftOrder?.draft_order?.line_items?.size?:1)-1)?.map {
             it.toLineItemOrder()
         }
        viewModelScope.launch {
-           draftOrder?.draft_order?.line_items = listOf(LineItem())
-           cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(),draftOrder!!)
-           UserSettings.cartQuantity = 0
-           UserSettings.saveSettings()
-        }
-        //here to save the order
-        viewModelScope.launch {
-            repo.postOrder(order)
-        }
-
-    }
-    fun validateDiscount(discountCode:String){
-       viewModelScope.launch {
            launch {
-               addsRepo.getAllDiscountsForPriceRule(UserSettings.userCurrentDiscountCopy?.price_rule_id.toString())
-                   .collect { disounts ->
-                       disounts?.discount_codes?.forEach {code->
-                           Log.e("","Discount : ${code.code}")
-                           if (code.code == discountCode) {
-                               launch {
-                                   repo.getSinglePriceRule(code.price_rule_id.toString()).collectLatest {
-                                       if(it!=null)
-                                       {
-                                           if(!it.ends_at.equals(null)){
-                                               //val  endDate=
-                                               //var currentDate=""
-
-                                           }else{
-                                               _mode.value = 1
-                                           }
-                                       }else{
-                                           _mode.value=-1
-                                       }
-                                   }
-                               }
-                           }else{
-                               _mode.value=-1
-                           }
-                       }
-               }
+               draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
+               cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
+               UserSettings.cartQuantity = 0
+               UserSettings.saveSettings()
+           }.join()
+           launch {
+               repo.postOrder(Order.OrderBody(order))
            }
-       }
+        }
+    }
+    fun validateDiscount() {
+        var flag = false
     }
 }

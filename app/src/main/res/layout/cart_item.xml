@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layoutDirection="ltr"
+            android:lines="1"
             android:text="ali"
             android:textAlignment="viewStart"
             android:textSize="14sp"

@@ -13,7 +13,7 @@ class PaymentRepoImpl(private val paymentRemoteSource: PaymentRemoteSource): Pay
         return paymentRemoteSource.getSinglePriceRule(price_rule_id)
     }
 
-    override suspend fun postOrder(order: Order?): Flow<Order> {
+    override suspend fun postOrder(order: Order.OrderBody?): Flow<Order.OrderBody> {
         return flowOf(paymentRemoteSource.postOrder(order))
     }
 }

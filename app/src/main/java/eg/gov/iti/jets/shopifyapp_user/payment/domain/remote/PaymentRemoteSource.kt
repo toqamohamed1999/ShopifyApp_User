@@ -8,5 +8,5 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 
 interface PaymentRemoteSource {
     suspend fun getSinglePriceRule(price_rule_id:String): MutableStateFlow<PriceRule?>
-    suspend fun postOrder(order: Order?): Order
+    suspend fun postOrder(order: Order.OrderBody?): Order.OrderBody
 }

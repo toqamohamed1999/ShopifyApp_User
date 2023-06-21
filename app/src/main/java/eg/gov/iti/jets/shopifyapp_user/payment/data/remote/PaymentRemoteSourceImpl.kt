@@ -17,7 +17,7 @@ class PaymentRemoteSourceImpl():PaymentRemoteSource {
             MutableStateFlow(null)
         }
     }
-    override suspend fun postOrder(order: Order?): Order {
+    override suspend fun postOrder(order: Order.OrderBody?): Order.OrderBody {
         return services.postOrder(order)
     }
 

@@ -9,5 +9,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PaymentRepo {
     suspend fun getSinglePriceRule(price_rule_id:String): MutableStateFlow<PriceRule?>
-    suspend fun postOrder(order: Order?): Flow<Order>
+    suspend fun postOrder(order: Order.OrderBody?): Flow<Order.OrderBody>
 }
