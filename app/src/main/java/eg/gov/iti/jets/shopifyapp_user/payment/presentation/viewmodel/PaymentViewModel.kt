@@ -63,7 +63,7 @@ fun setAddress(){
     order?.confirmed = true
 
 }
-    fun confirmOrder() {
+    fun confirmOrder(m:Int) {
         order?.line_items = draftOrder?.draft_order?.line_items?.takeLast((draftOrder?.draft_order?.line_items?.size?:1)-1)?.map {
             it.toLineItemOrder()
         }
@@ -78,7 +78,7 @@ fun setAddress(){
               Log.e("", Gson().toJson(Order.OrderBody(order),Order.OrderBody::class.java).toString())
                repo.postOrder(Order.OrderBody(order)).collect{
                    Log.e("",(it.order.toString()))
-                   _mode.value = Pair(2,it.order?.number)
+                   _mode.value = Pair(m,it.order?.number)
                }
            }
         }

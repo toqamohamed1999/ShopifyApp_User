@@ -1,5 +1,8 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.presentation.ui
 
+import android.media.MediaParser
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.text.style.TtsSpan.DateBuilder
 import android.util.Log
@@ -16,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.room.util.appendPlaceholders
 import com.braintreepayments.api.*
 import com.google.android.gms.wallet.TransactionInfo
 import com.google.android.gms.wallet.WalletConstants
@@ -43,6 +47,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.presentation.ui.AddressesFragmen
 import eg.gov.iti.jets.shopifyapp_user.settings.presentation.ui.SettingListener
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -62,6 +67,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private lateinit var confirmationDialog:AlertDialog
     private var isReadyButton = false
     private val args:FragmentPaymentInfoArgs by navArgs()
+    private lateinit var player:MediaPlayer
     private val viewModel by viewModels<PaymentViewModel> {
         PaymentViewModelFactory(
             CartRepositoryImpl(DraftOrderRemoteSourceImpl(
@@ -72,7 +78,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        braintreeClient = BraintreeClient(requireContext(), PaymentConstants.Tokenization_Key)
+        braintreeClient = BraintreeClient(requireContext().applicationContext, PaymentConstants.Tokenization_Key)
         binding = FragmentPaymentInfoBinding.inflate(inflater,container,false)
         return binding?.root
     }
@@ -80,6 +86,8 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         totalPrice = args.order.toDouble()
+        player = MediaPlayer.create(requireContext().applicationContext,R.raw.paymentcomplete)
+        binding?.paymentanim?.visibility = View.GONE
         googlePayClient = GooglePayClient(this, braintreeClient)
         googlePayClient.setListener(this)
         googlePayClient.isReadyToPay(requireActivity()) { isReadyToPay, error ->
@@ -99,6 +107,20 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
             viewModel.mode.collectLatest {
                 when(it.first){
                     2 ->{
+                        launch {
+                            player.start()
+                            binding?.paymentanim?.visibility = View.VISIBLE
+                            binding?.paymentanim?.playAnimation()
+                            delay(2000)
+                        }.join()
+                        launch {
+                            orderConfirmed(it.second)
+                            viewModel.resetMode()
+                            binding?.paymentanim?.cancelAnimation()
+                            binding?.paymentanim?.visibility = View.GONE
+                        }
+                    }
+                    1->{
                         orderConfirmed(it.second)
                         viewModel.resetMode()
                     }
@@ -123,10 +145,14 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         tvNumber.text = second.toString()
         tvPrice.text = totalPrice.toString()
         btnContinueShopping.setOnClickListener {
-            binding?.root?.findNavController()?.navigate(R.id.homeFragment)
             (requireActivity() as BadgeChanger).changeBadgeCartCount(0)
             UserSettings.cartQuantity = 0
             confirmationDialog.dismiss()
+
+            binding?.root?.findNavController()?.popBackStack(R.id.homeFragment,
+                inclusive = false,
+                saveState = false
+            )
         }
         builder.setCancelable(false)
         confirmationDialog = builder.create()
@@ -144,7 +170,8 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         val btnGooglePay =  view.findViewById<ImageView>(R.id.method_pay_google_pay)
         val btnCashOnDelivery = view.findViewById<ImageView>(R.id.method_pay_cach_on_delivery)
         btnCashOnDelivery.setOnClickListener {
-            confirmOrder()
+            confirmOrder(1)
+            methodDialog.dismiss()
         }
         btnGooglePay.setOnClickListener {
             val googlePayRequest = GooglePayRequest()
@@ -161,9 +188,9 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
 
     }
 
-    private fun confirmOrder() {
+    private fun confirmOrder(m:Int) {
         viewModel.setAddress()
-        viewModel.confirmOrder()
+        viewModel.confirmOrder(m)
     }
 
     private fun setUpActions() {
@@ -213,7 +240,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
             showDiscount()
         }else{
             binding?.discountCardView?.visibility = View.GONE
-            binding?.cartTotalPrice?.text = "Final Price : $totalPrice"
+            binding?.cartTotalPrice?.text = "Final Price : $totalPrice $currencyCode"
         }
     }
 
@@ -238,7 +265,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         return  Patterns.PHONE.matcher(phone).matches()
     }
     override fun onGooglePaySuccess(paymentMethodNonce: PaymentMethodNonce) {
-        confirmOrder()
+        confirmOrder(2)
     }
 
     override fun onGooglePayFailure(error: Exception) {
@@ -259,5 +286,6 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         addressesDialog.dismiss()
         viewModel.setAddress()
     }
+
 
 }

@@ -202,7 +202,7 @@ class SignUpFragment : Fragment() {
                             val customer = Customer(
                                 email = email,
                                 first_name = fName,
-                                last_name = lName,
+                                last_name = lName, currency = "EGP",
                                 tags = "${pass}#${uid}#true",//password,fireBaserUserId,emailVerification
                                 note = "${favDraftOrderId}#${cartDraftOrderId}"
                             )
