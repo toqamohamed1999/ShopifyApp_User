@@ -116,32 +116,18 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="We Send You Email Check Your Inbox !!"
-            android:textColor="@color/secondary_color"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/guideline5"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
         <Button
             android:id="@+id/button_continueShipping"
-            android:layout_width="219dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="199dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:text="Continue Shopping"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:layout_constraintHorizontal_bias="0.515"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/textView16"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.Guideline

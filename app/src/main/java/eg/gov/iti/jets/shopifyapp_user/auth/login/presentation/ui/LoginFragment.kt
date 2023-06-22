@@ -119,7 +119,7 @@ class LoginFragment : Fragment() {
                              UserSettings.favoriteDraftOrderId=it.data?.customers?.get(0)?.note!!.split("#")[0]
                              UserSettings.cartDraftOrderId=it.data?.customers?.get(0)?.note!!.split("#")[1]
                              UserSettings.userPassword=pass
-                             UserSettings.currencyCode = it.data.customers[0].last_name?:"EGP"
+                             UserSettings.currencyCode = it.data.customers[0].phone?:"EGP"
                              UserSettings.shippingAddress = it.data.customers[0].addresses.let {
                                  if(it?.size!=0){
 

@@ -80,7 +80,7 @@ class SettingsViewModel(
             viewModelScope.launch {
                 settingsRepo.getCustomerById(UserSettings.userAPI_Id).collect{ it ->
                     if(it!=null){
-                        it.customer.last_name = UserSettings.currencyCode
+                        it.customer.phone = UserSettings.currencyCode
                         settingsRepo.updateRemoteCustomer(UserSettings.userAPI_Id.toLong(),
                             it
                         ).collect{ ii->
