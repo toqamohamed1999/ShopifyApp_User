@@ -246,6 +246,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
             Toast.makeText(requireContext(),"Payment Canceled",Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(requireContext(),"Payment Error$error", Toast.LENGTH_SHORT).show()
+            throw Exception("Payment Error: $error")
         }
     }
 

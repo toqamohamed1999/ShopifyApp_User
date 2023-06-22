@@ -111,14 +111,18 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                     viewModel.orderState.collectLatest {
                         when (it) {
                             is OrderState.Loading -> {
+                                binding.txtMoreOrders.visibility = View.GONE
+                                binding.txtOrder.visibility = View.GONE
                             }
                             is OrderState.Success -> {
                                 if (it.orderList.isEmpty()) {
                                     binding.txtMoreOrders.visibility = View.GONE
                                     binding.txtOrder.visibility = View.GONE
                                 } else {
-                                    orderList = if (it.orderList.size > 2) {
-                                        it.orderList.take(2)
+                                    binding.txtOrder.visibility = View.VISIBLE
+                                    if (it.orderList.size > 2) {
+                                        binding.txtMoreOrders.visibility = View.VISIBLE
+                                        orderList = it.orderList.take(2)
                                     } else {
                                         binding.txtMoreOrders.visibility = View.GONE
                                         it.orderList

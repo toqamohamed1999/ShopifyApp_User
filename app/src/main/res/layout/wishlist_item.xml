@@ -52,6 +52,7 @@
             android:layout_marginBottom="8dp"
             android:text="@string/product_price"
             android:textAlignment="viewStart"
+            android:textColor="@color/primary_color"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/txtProductTitle"

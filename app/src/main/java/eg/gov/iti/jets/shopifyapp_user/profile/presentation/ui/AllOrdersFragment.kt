@@ -59,8 +59,10 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
             viewModel.orderState.collectLatest {
                 when (it) {
                     is OrderState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is OrderState.Success -> {
+                        binding.progressBar.visibility = View.GONE
                         orderAdapter.setOrderList(it.orderList)
                         binding.ordersRecyclerView.adapter = orderAdapter
                     }

@@ -6,6 +6,7 @@ import android.os.Build
 import android.util.Patterns
 import androidx.annotation.RequiresApi
 import eg.gov.iti.jets.shopifyapp_user.BuildConfig
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -46,3 +47,9 @@ fun String.isValidPassword(): Boolean {
 fun String.isValidEmail(): Boolean {
     return Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }
+
+fun formatDecimal(decimal: Double): String {
+    val decimalFormat = DecimalFormat("0.00")
+    return decimalFormat.format(decimal)
+}
+

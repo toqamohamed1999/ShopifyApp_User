@@ -88,10 +88,12 @@ class ProductsFragment : Fragment(), OnClickProduct {
             viewModel.productState.collect {
                 when (it) {
                     is ProductBrandState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                         binding.productsRecyclerView.visibility = View.GONE
                         binding.noItemsTextView.visibility = View.GONE
                     }
                     is ProductBrandState.Success -> {
+                        binding.progressBar.visibility = View.GONE
                         if (it.productsList.isEmpty()) {
                             binding.productsRecyclerView.visibility = View.GONE
                             binding.noItemsTextView.visibility = View.VISIBLE
@@ -220,9 +222,14 @@ class ProductsFragment : Fragment(), OnClickProduct {
     }
 
     override fun onClickProductCard(product_Id: Long) {
-        val action =
-            ProductsFragmentDirections.actionProductsFragmentToProductDetailsFragment(product_Id)
-        binding.root.findNavController().navigate(action)
+        if (isConnected(requireContext())) {
+            val action =
+                ProductsFragmentDirections.actionProductsFragmentToProductDetailsFragment(product_Id)
+            binding.root.findNavController().navigate(action)
+        }else{
+            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
 
     fun findProductById(productId: Long, productList: List<Product>): Product? {

@@ -11,6 +11,7 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.orders.LineItemsOrder
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.ItemsOrderRowBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 import eg.gov.iti.jets.shopifyapp_user.util.splitItemOrder
 
 class ItemOrderAdapter(
@@ -40,7 +41,7 @@ class ItemOrderAdapter(
         holder.binding.orderTitleValue.text = title
         holder.binding.quantityValue.text = currentItemOrder.quantity.toString()
         holder.binding.priceValue.text =
-            (currentItemOrder.price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+            formatDecimal(currentItemOrder.price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
         Glide.with(context)
             .load(currentItemOrder.properties[0].value)
             .into(holder.binding.itemImageView)

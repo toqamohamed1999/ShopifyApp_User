@@ -10,6 +10,7 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.databinding.WishlistItemBinding
 import eg.gov.iti.jets.shopifyapp_user.profile.domain.local.OnWishListClick
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 
 class WishListAdapter(
     private var productList: List<FavRoomPojo>,
@@ -40,7 +41,7 @@ class WishListAdapter(
         val current = productList[position]
         holder.binding.txtProductTitle.text = current.title
         holder.binding.txtPrice.text =
-            (current.price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+            formatDecimal(current.price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
         Glide.with(context)
             .load(current.imageSrc)
             .into(holder.binding.productImage)

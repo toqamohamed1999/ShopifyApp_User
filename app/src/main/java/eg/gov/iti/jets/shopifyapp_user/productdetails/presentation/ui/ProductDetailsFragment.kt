@@ -30,6 +30,7 @@ import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.Pro
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -241,7 +242,7 @@ class ProductDetailsFragment : Fragment() {
                 }
             })
             binding.progressBar.visibility = View.GONE
-            binding.txtProductPrice.text = (product.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+            binding.txtProductPrice.text = formatDecimal(product.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
             binding.txtProductName.text = product.title
             binding.txtViewDescription.text = product.bodyHtml
             binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)

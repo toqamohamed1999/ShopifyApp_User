@@ -23,7 +23,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/title"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_color"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/item_imageView"
             app:layout_constraintTop_toTopOf="@+id/item_imageView" />
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/quantity"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_color"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/orderTitle_textView"
             app:layout_constraintTop_toBottomOf="@+id/orderTitle_value" />
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/price_header"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/item_imageView"
             app:layout_constraintStart_toStartOf="@+id/quantity_textView"

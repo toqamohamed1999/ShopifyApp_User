@@ -12,6 +12,7 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.databinding.ProductRowBinding
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.OnClickProduct
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 import eg.gov.iti.jets.shopifyapp_user.util.getTitleOfProduct
 
 
@@ -37,7 +38,7 @@ class FavProductAdapter(private var productList: List<FavRoomPojo>, val context:
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = productList[position]
         holder.binding.productTitleTextView.text = currentProduct?.title?.let { getTitleOfProduct(it) }
-        holder.binding.productPriceTextView.text = (currentProduct.price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+        holder.binding.productPriceTextView.text = formatDecimal(currentProduct.price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
         holder.binding.favIcon.setImageResource(R.drawable.favorite_icon)
         Glide.with(context)
             .load(currentProduct.imageSrc)
