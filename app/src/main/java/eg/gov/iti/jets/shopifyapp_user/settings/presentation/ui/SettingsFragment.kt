@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSettingBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.toAddressBody
@@ -24,7 +25,7 @@ class SettingsFragment:Fragment(),SettingListener{
     private  lateinit var addressesDialog:AddressesFragmentDialog
 
     private val viewModel by viewModels<SettingsViewModel> {
-        SettingViewModelFactory(SettingsRepoImpl(SettingsRemoteSourceImpl()))
+        SettingViewModelFactory(SettingsRepoImpl(SettingsRemoteSourceImpl(),APIRepoImplementation()))
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +92,7 @@ class SettingsFragment:Fragment(),SettingListener{
     override fun selectCurrency(currency: String) {
         viewModel.changeCurrency(currency)
         UserSettings.currencyCode = currency
+        viewModel.changeCurrencyOnApi()
         UserSettings.saveSettings()
         currenciesDialog.dismiss()
         binding?.tvCurrncy?.text = currency

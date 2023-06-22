@@ -6,46 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardUseCompatPadding="true">
-
-
-    <TextView
-        android:id="@+id/discountValue_textView"
-        android:layout_width="166dp"
-        android:layout_height="84dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="1500%"
-        android:textAlignment="gravity"
-        android:textColor="#2196F3"
-        android:textDirection="ltr"
-        android:textSize="34sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/discountTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="63dp"
-        android:layout_gravity="start"
-
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="120dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="sdfsdfsd"
-        android:textAlignment="gravity"
-        android:textColor="#731B15"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/discount_imageView"
-        android:layout_width="158dp"
-        android:layout_height="148dp"
-        android:layout_gravity="top|end"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/discount" />
-
     <ImageView
         android:id="@+id/imageViewdiscount_image"
         android:layout_width="match_parent"
@@ -55,16 +15,28 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/textViewvalue_fixed"
+        android:id="@+id/discountValue_textView"
         android:layout_width="wrap_content"
-        android:layout_height="131dp"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:background="@android:drawable/divider_horizontal_bright"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="@color/secondary_color"
-        android:textSize="34sp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/discount_text_back"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="1500%"
+        android:textAlignment="gravity"
+        android:textColor="@color/purple_500"
+        android:textDirection="ltr"
+        android:textSize="28sp"
         android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/discount_imageView"
+        android:layout_width="70dp"
+        android:layout_height="55dp"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/discount" />
+
+
 
 </androidx.cardview.widget.CardView>

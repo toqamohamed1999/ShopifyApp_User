@@ -56,8 +56,8 @@ object UserSettings {
          userName = ""
          userEmail = ""
          userPassword = "" // user firebase id
-        userAPI_Id =""
-         currencyCode = "EGP"
+         userAPI_Id =""
+         currencyCode = ""
          shippingAddress = ""
          phoneNumber = ""
          favoriteDraftOrderId = ""

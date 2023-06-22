@@ -74,5 +74,22 @@ class SettingsViewModel(
             }
         }
     }
+    fun changeCurrencyOnApi(){
+
+        if(UserSettings.userAPI_Id.isNotEmpty()) {
+            viewModelScope.launch {
+                settingsRepo.getCustomerById(UserSettings.userAPI_Id).collect{ it ->
+                    if(it!=null){
+                        it.customer.last_name = UserSettings.currencyCode
+                        settingsRepo.updateRemoteCustomer(UserSettings.userAPI_Id.toLong(),
+                            it
+                        ).collect{ ii->
+                            Log.e("","After Change :.........."+ii.customer.last_name.toString())
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

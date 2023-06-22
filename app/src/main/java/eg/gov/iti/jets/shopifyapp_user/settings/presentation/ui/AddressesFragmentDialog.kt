@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.R
+import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.databinding.UserAddressesLayoutBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
@@ -41,7 +42,7 @@ class AddressesFragmentDialog():DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(owner,SettingViewModelFactory(
             SettingsRepoImpl(
-                SettingsRemoteSourceImpl()
+                SettingsRemoteSourceImpl(),APIRepoImplementation()
             )
         )
         )[SettingsViewModel::class.java]

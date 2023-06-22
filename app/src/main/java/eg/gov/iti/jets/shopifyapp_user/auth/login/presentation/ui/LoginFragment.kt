@@ -119,6 +119,14 @@ class LoginFragment : Fragment() {
                              UserSettings.favoriteDraftOrderId=it.data?.customers?.get(0)?.note!!.split("#")[0]
                              UserSettings.cartDraftOrderId=it.data?.customers?.get(0)?.note!!.split("#")[1]
                              UserSettings.userPassword=pass
+                             UserSettings.currencyCode = it.data.customers[0].last_name?:"EGP"
+                             UserSettings.shippingAddress = it.data.customers[0].addresses.let {
+                                 if(it?.size!=0){
+
+                                     val address = it?.get(0)?.address1?:""
+                                     address
+                             }else ""
+                             }
                              UserSettings.saveSettings()
                              viewModel.getFavRemoteProducts(it.data?.customers?.get(0)?.note!!.split("#")[0].toLong())
                             delay(3000)

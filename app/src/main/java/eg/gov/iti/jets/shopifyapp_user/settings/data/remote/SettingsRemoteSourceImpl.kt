@@ -1,6 +1,7 @@
 package eg.gov.iti.jets.shopifyapp_user.settings.data.remote
 
 import android.util.Log
+import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.CustomerResponse
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.settings.domain.model.*
 import eg.gov.iti.jets.shopifyapp_user.settings.domain.remote.CurrencyService
@@ -57,6 +58,14 @@ class SettingsRemoteSourceImpl():SettingsRemoteSource {
     ): MutableStateFlow<ExchangerResponse?> {
         return  try{
             MutableStateFlow(service.changeCurrency(toCode))
+        }catch(e:Exception){
+            MutableStateFlow(null)
+        }
+    }
+
+    override suspend fun getUser(userId: String): MutableStateFlow<CustomerResponse?> {
+        return  try{
+            MutableStateFlow(settingsAPIServices.getUser(userId))
         }catch(e:Exception){
             MutableStateFlow(null)
         }
