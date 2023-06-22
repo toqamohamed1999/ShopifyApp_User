@@ -70,7 +70,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                 super.onPageSelected(position)
                 handler.removeCallbacks(runnable)
                 handler.postDelayed(runnable, 5000)
-                updateDots(position)
+                //updateDots(position)
             }
         })
         return binding.root
@@ -99,8 +99,8 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                 adsImages.addAll(it)
                 adsAdapter.discounts = adsImages
                 adsAdapter.notifyItemRangeChanged(0, it.size)
-                createDots(it.size)
-                updateDots(0)
+                //createDots(it.size)
+                //updateDots(0)
             }
         }
         viewModel.getAdds()
@@ -155,8 +155,8 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         adsAdapter = CouponAdapter(adsImages, this, viewPager2)
         binding.couponsViewPager.adapter = adsAdapter
         adsAdapter.discounts = adsImages
-        createDots(adsImages.size)
-        updateDots(0)
+        //createDots(adsImages.size)
+        //updateDots(0)
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
@@ -172,7 +172,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         viewPager2.setPageTransformer(transformer)
     }
 
-    private fun createDots(numDots: Int) {
+    /*private fun createDots(numDots: Int) {
         for (i in 0 until numDots) {
             val dot = View(context)
             val dotSize = 16
@@ -184,9 +184,9 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
             binding.dotsLayout.addView(dot)
 
         }
-    }
+    }*/
 
-    private fun updateDots(currentPosition: Int) {
+   /* private fun updateDots(currentPosition: Int) {
         val numDots = binding.dotsLayout.childCount
         for (i in 0 until numDots) {
             val dot = binding.dotsLayout.getChildAt(i)
@@ -197,7 +197,7 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
             }
             dot.background = drawable
         }
-    }
+    }*/
 
     override fun onImageClick(discountCode: DiscountCode) {
         UserSettings.userCurrentDiscountCopy = discountCode

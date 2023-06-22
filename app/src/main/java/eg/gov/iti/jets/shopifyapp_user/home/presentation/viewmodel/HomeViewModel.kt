@@ -33,30 +33,32 @@ class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRe
         }
     }
     fun getAdds(){
-        discounts = mutableListOf()
-        viewModelScope.launch {
-            addsRepo.getAllPriceRules().collect {
-                it?.price_rules?.forEach { item ->
-                    item.ends_at = item.ends_at?:""
-                    if(item.ends_at.isNotEmpty()){
-                       try {
-                           val dateFormat = SimpleDateFormat("YYYY-MM-ddTHH:mm:ss")
-                           val  currentDate = System.currentTimeMillis()
-                           val ts = dateFormat.parse(item.ends_at).time / 1000
-                           if(currentDate<ts)
-                           {
-                               getDiscounts(item.id.toString(), item.value,item.value_type)
-                           }
-                       }catch (e:java.lang.Exception){
-                           Log.e("","Wong Date")
-                           getDiscounts(item.id.toString(), item.value, item.value_type)
-                       }
-                    }else{
-                        getDiscounts(item.id.toString(), item.value, item.value_type)
+        if(discounts.isEmpty()) {
+            viewModelScope.launch {
+                addsRepo.getAllPriceRules().collect {
+                    it?.price_rules?.forEach { item ->
+                        item.ends_at = item.ends_at ?: ""
+                        if (item.ends_at.isNotEmpty()) {
+                            try {
+                                val dateFormat = SimpleDateFormat("YYYY-MM-ddTHH:mm:ss")
+                                val currentDate = System.currentTimeMillis()
+                                val ts = dateFormat.parse(item.ends_at).time / 1000
+                                if (currentDate < ts) {
+                                    getDiscounts(item.id.toString(), item.value, item.value_type)
+                                }
+                            } catch (e: java.lang.Exception) {
+                                Log.e("", "Wong Date")
+                                getDiscounts(item.id.toString(), item.value, item.value_type)
+                            }
+                        } else {
+                            getDiscounts(item.id.toString(), item.value, item.value_type)
+                        }
                     }
                 }
             }
-          }
+        }else{
+            _adds.value = discounts
+        }
     }
     private fun getDiscounts(ruleId: String, value: String, valueType: String){
         viewModelScope.launch {

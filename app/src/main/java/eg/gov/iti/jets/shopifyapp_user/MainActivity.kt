@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.backButton.visibility = View.VISIBLE
                     binding.titleTextView.text = getString(R.string.products)
                     binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
                 }
                 R.id.cartFragment -> {
                     bottomNav.visibility = View.GONE
@@ -120,10 +121,11 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.backButton.visibility = View.VISIBLE
                     binding.titleTextView.text = getString(R.string.category_header)
                     binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
                 }
                 R.id.fragmentPaymentInfo -> {
                      binding.titleTextView.text = getString(R.string.orderInfo)
-                    binding.shoppingCartIcon.visibility=View.INVISIBLE
+                    binding.shoppingCartIcon.visibility=View.GONE
                     bottomNav.visibility = View.GONE
                     binding.backButton.visibility = View.VISIBLE
                     binding.settingIcon.visibility = View.GONE
@@ -153,6 +155,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.backButton.visibility = View.VISIBLE
                     binding.titleTextView.text = getString(R.string.product_details)
                     binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
                 }
                 R.id.loginFragment->{
                     bottomNav.visibility = View.GONE
