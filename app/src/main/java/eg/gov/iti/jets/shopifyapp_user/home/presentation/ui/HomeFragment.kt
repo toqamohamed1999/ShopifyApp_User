@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentHomeBinding
@@ -36,6 +37,11 @@ import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryVi
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeViewModel
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
+import eg.gov.iti.jets.shopifyapp_user.util.MyNetworkStatus
+import eg.gov.iti.jets.shopifyapp_user.util.NetworkConnectivityObserver
+import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
@@ -91,7 +97,6 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         //adds
         lifecycleScope.launch {
             viewModel.adds.observe(viewLifecycleOwner) {
@@ -114,8 +119,10 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
             viewModel.brandState.collect {
                 when (it) {
                     is BrandResultState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is BrandResultState.Success -> {
+                        binding.progressBar.visibility = View.GONE
                         brandList = it.brandList
                         brandAdapter.setBrandList(it.brandList)
                         Log.i("Counttttt", "count =  ${it.brandList.size}")
@@ -205,8 +212,13 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     }
 
     override fun onBrandClick(brandName: String?) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductsFragment(brandName)
-        binding.root.findNavController().navigate(action)
+        if (isConnected(requireContext())) {
+            val action = HomeFragmentDirections.actionHomeFragmentToProductsFragment(brandName)
+            binding.root.findNavController().navigate(action)
+        }else{
+            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
 
     private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {

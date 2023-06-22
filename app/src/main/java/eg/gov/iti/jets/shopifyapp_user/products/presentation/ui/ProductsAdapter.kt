@@ -15,7 +15,9 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.databinding.ProductRowBinding
 import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 import eg.gov.iti.jets.shopifyapp_user.util.getTitleOfProduct
+import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 
 class ProductsAdapter(
     private var productList: List<Product>,
@@ -60,7 +62,7 @@ class ProductsAdapter(
         holder.binding.productTitleTextView.text =
             currentProduct?.title?.let { getTitleOfProduct(it) }
         holder.binding.productPriceTextView.text =
-            (currentProduct.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue).toString() + " ${UserSettings.currencyCode}"
+            formatDecimal(currentProduct.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
         holder.binding.favIcon.setImageResource(setFavoriteIcon(currentProduct, favList))
         Glide.with(context)
             .load(currentProduct.image.src)
@@ -69,28 +71,33 @@ class ProductsAdapter(
             myListener.onClickProductCard(currentProduct.id!!)
         }
         holder.binding.favIcon.setOnClickListener {
-            myListener.onClickFavIcon(currentProduct.id!!)
-            if (isFav) {
-                val alertDialog = AlertDialog.Builder(context)
-                alertDialog.apply {
-                    setIcon(R.drawable.baseline_delete_24)
-                    setTitle("Delete")
-                    setMessage("Are you sure you want to delete the Product from favorite?")
-                    setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
-                        isFav = false
-                        holder.binding.favIcon.setImageResource(R.drawable.favorite_border_icon)
-                        Snackbar.make(
-                            binding.root,
-                            R.string.delete_MSG_from_favorites,
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                    }
-                    setNegativeButton("Cancel") { _, _ ->
-                    }
-                }.create().show()
-            } else {
-                isFav = true
-                holder.binding.favIcon.setImageResource(R.drawable.favorite_icon)
+            if (isConnected(context)) {
+                myListener.onClickFavIcon(currentProduct.id!!)
+                if (isFav) {
+                    val alertDialog = AlertDialog.Builder(context)
+                    alertDialog.apply {
+                        setIcon(R.drawable.baseline_delete_24)
+                        setTitle("Delete")
+                        setMessage("Are you sure you want to delete the Product from favorite?")
+                        setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
+                            isFav = false
+                            holder.binding.favIcon.setImageResource(R.drawable.favorite_border_icon)
+                            Snackbar.make(
+                                binding.root,
+                                R.string.delete_MSG_from_favorites,
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        setNegativeButton("Cancel") { _, _ ->
+                        }
+                    }.create().show()
+                } else {
+                    isFav = true
+                    holder.binding.favIcon.setImageResource(R.drawable.favorite_icon)
+                }
+            }else{
+                Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                    .show()
             }
         }
     }

@@ -11,12 +11,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.categories.data.model.CategoryState
 import eg.gov.iti.jets.shopifyapp_user.categories.data.remote.CategoryRemoteSource
 import eg.gov.iti.jets.shopifyapp_user.categories.data.repo.CategoryRepoImp
 import eg.gov.iti.jets.shopifyapp_user.categories.presentation.viewmodel.CategoryFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.categories.presentation.viewmodel.CategoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentCategoryBinding
+import eg.gov.iti.jets.shopifyapp_user.util.MyNetworkStatus
+import eg.gov.iti.jets.shopifyapp_user.util.NetworkConnectivityObserver
+import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class CategoryFragment : Fragment(), OnClickCategory {
@@ -42,11 +49,24 @@ class CategoryFragment : Fragment(), OnClickCategory {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        NetworkConnectivityObserver.initNetworkConnectivity(requireContext())
+
+        NetworkConnectivityObserver.observeNetworkConnection().onEach {
+            if (it == MyNetworkStatus.Available) {
+                binding.noInternetContainer.visibility = View.GONE
+                binding.categoryRecyclerView.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
+                viewModel.getCategories()
+            } else {
+                binding.categoryRecyclerView.visibility = View.GONE
+                binding.noInternetContainer.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+            }
+        }.launchIn(lifecycleScope)
+
         //adapter and recyclerview
-        viewModel.getCategories()
+        //viewModel.getCategories()
         categoryAdapter = CategoryAdapter(ArrayList(), requireActivity(), this)
-//        val layoutManager = GridLayoutManager(requireContext(), 2)
-//        binding.categoryRecyclerView.layoutManager = layoutManager
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.categoryRecyclerView.layoutManager = layoutManager
@@ -55,8 +75,10 @@ class CategoryFragment : Fragment(), OnClickCategory {
             viewModel.categoryState.collect {
                 when (it) {
                     is CategoryState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is CategoryState.Success -> {
+                        binding.progressBar.visibility = View.GONE
                         categoryAdapter.setCategoryList(it.categoryList)
                         Log.i("Counttttt", "count =  ${it.categoryList.size}")
                         binding.categoryRecyclerView.adapter = categoryAdapter
@@ -67,13 +89,20 @@ class CategoryFragment : Fragment(), OnClickCategory {
                 }
             }
         }
+
     }
 
     override fun onCategoryClick(categoryID: Long) {
-        val action = CategoryFragmentDirections.actionCategoryFragmentToSubCategoryFragment(
-            categoryID.toString()
-        )
-        binding.root.findNavController().navigate(action)
+        if (isConnected(requireContext())) {
+            val action = CategoryFragmentDirections.actionCategoryFragmentToSubCategoryFragment(
+                categoryID.toString()
+            )
+            binding.root.findNavController().navigate(action)
+        }else{
+            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
+
 }
 

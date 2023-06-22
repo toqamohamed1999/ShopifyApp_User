@@ -1,94 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.presentation.ui.HomeFragment">
+    android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txt_search"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/homeFragmentLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/search_background"
-        android:hint="@string/search_hint"
-        app:boxStrokeColor="@color/purple_700"
-        app:hintTextColor="@color/purple_700"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/search_icon">
+        android:layout_height="match_parent"
+        tools:context=".home.presentation.ui.HomeFragment">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/searchEditText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_search"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/search_background"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/search_hint"
+            app:boxStrokeColor="@color/purple_700"
+            app:hintTextColor="@color/purple_700"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/search_icon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_background"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/coupons_viewPager"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/coupons_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_marginTop="3dp"
+            app:chainUseRtl="true"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_search" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"
+            app:layout_constraintEnd_toEndOf="@+id/coupons_viewPager"
+            app:layout_constraintStart_toStartOf="@+id/coupons_viewPager"
+            app:layout_constraintTop_toBottomOf="@+id/txt_search"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="coupon.json"
+            app:lottie_loop="true" />
+
+        <TextView
+            android:id="@+id/brand_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/acme"
+            android:text="@string/brands_header"
+            android:textColor="@color/secondary_color"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/brands_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/brand_textView"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/brand_textView" />
+
+        <TextView
+            android:id="@+id/txt_noResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
+            android:text="@string/no_match_results"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/brand_textView"
+            app:layout_constraintTop_toBottomOf="@+id/brand_textView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/noInternetContainer"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:layout_marginTop="3dp"
-        app:chainUseRtl="true"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_search" />
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"
-        app:layout_constraintEnd_toEndOf="@+id/coupons_viewPager"
-        app:layout_constraintStart_toStartOf="@+id/coupons_viewPager"
-        app:layout_constraintTop_toBottomOf="@+id/txt_search"
-        app:lottie_fileName="coupon.json"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
-        />
-    <TextView
-        android:id="@+id/brand_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/acme"
-        android:text="@string/brands_header"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noInternetAnimation"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_internet" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/brands_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingBottom="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brand_textView"
-        app:layout_constraintVertical_bias="0.0" />
-    <TextView
-        android:id="@+id/txt_noResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:text="@string/no_match_results"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/brand_textView"
-        app:layout_constraintTop_toBottomOf="@+id/brand_textView" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/noInternetConnection"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>
+

@@ -26,8 +26,12 @@ import eg.gov.iti.jets.shopifyapp_user.subcategory.data.remote.SubCategoryRS
 import eg.gov.iti.jets.shopifyapp_user.subcategory.data.repo.SubCategoryRepoImp
 import eg.gov.iti.jets.shopifyapp_user.subcategory.presentation.viewmodel.SubCategoryFactoryVM
 import eg.gov.iti.jets.shopifyapp_user.subcategory.presentation.viewmodel.SubCategoryViewModel
+import eg.gov.iti.jets.shopifyapp_user.util.MyNetworkStatus
+import eg.gov.iti.jets.shopifyapp_user.util.NetworkConnectivityObserver
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SubCategoryFragment : Fragment(), OnClickProduct {
@@ -61,6 +65,8 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         if (UserSettings.userAPI_Id.isNotEmpty()) {
             viewModel.getFavRemoteProducts(UserSettings.favoriteDraftOrderId.toLong())
         }
@@ -70,6 +76,24 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
             viewModel.getProductSubCategory(productType, categoryID)
             viewModel.getAllFavProduct()
         }
+
+
+        NetworkConnectivityObserver.initNetworkConnectivity(requireContext())
+
+        NetworkConnectivityObserver.observeNetworkConnection().onEach {
+            if (it == MyNetworkStatus.Available) {
+                binding.noInternetContainer.visibility = View.GONE
+                binding.subCategoryLayout.visibility = View.VISIBLE
+                if (categoryID != null) {
+                    viewModel.getProductSubCategory(productType, categoryID)
+                }
+                viewModel.getAllFavProduct()
+            } else {
+                binding.subCategoryLayout.visibility = View.GONE
+                binding.noInternetContainer.visibility = View.VISIBLE
+            }
+        }.launchIn(lifecycleScope)
+
 
         //adapter and recyclerview
         productsAdapter = ProductsAdapter(ArrayList(), ArrayList(), requireActivity(), this)
@@ -125,10 +149,12 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
             viewModel.productState.collect {
                 when (it) {
                     is SubCategoryState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                         binding.productsRecyclerview.visibility = View.GONE
                         binding.noItemsTextView.visibility = View.GONE
                     }
                     is SubCategoryState.Success -> {
+                        binding.progressBar.visibility = View.GONE
                         productsList = it.productsList
                         if (it.productsList.isEmpty()) {
                             binding.productsRecyclerview.visibility = View.GONE
@@ -174,36 +200,36 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
     }
 
     override fun onClickFavIcon(product_Id: Long) {
-        if (isConnected(requireContext())) {
-            if (productsAdapter.getIsFav()) {
-                viewModel.deleteFavProductWithId(product_Id!!)
+        if (productsAdapter.getIsFav()) {
+            viewModel.deleteFavProductWithId(product_Id!!)
 
-                favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
-                viewModel.updateFavDraftOrder(
-                    UserSettings.favoriteDraftOrderId.toLong(),
-                    favDraftOrderResponse
-                )
-            } else {
-                val product: Product? = findProductById(product_Id, productsList)
-                viewModel.insertFavProduct(product?.toFavRoomPojo()!!)
-                favDraftOrderResponse.draft_order?.lineItems?.add(product!!.toLineItems()!!)
-                viewModel.updateFavDraftOrder(
-                    UserSettings.favoriteDraftOrderId.toLong(),
-                    favDraftOrderResponse
-                )
-            }
+            favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
+            viewModel.updateFavDraftOrder(
+                UserSettings.favoriteDraftOrderId.toLong(),
+                favDraftOrderResponse
+            )
         } else {
-            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
-                .show()
+            val product: Product? = findProductById(product_Id, productsList)
+            viewModel.insertFavProduct(product?.toFavRoomPojo()!!)
+            favDraftOrderResponse.draft_order?.lineItems?.add(product!!.toLineItems()!!)
+            viewModel.updateFavDraftOrder(
+                UserSettings.favoriteDraftOrderId.toLong(),
+                favDraftOrderResponse
+            )
         }
     }
 
     override fun onClickProductCard(product_Id: Long) {
-        val action =
-            SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(
-                product_Id
-            )
-        binding.root.findNavController().navigate(action)
+        if (isConnected(requireContext())) {
+            val action =
+                SubCategoryFragmentDirections.actionSubCategoryFragmentToProductDetailsFragment(
+                    product_Id
+                )
+            binding.root.findNavController().navigate(action)
+        }else{
+            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
 
     fun findProductById(productId: Long, productList: List<Product>): Product? {

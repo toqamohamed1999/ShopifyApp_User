@@ -23,8 +23,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/orderNumber"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_color"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/orderNum_textView"
             app:layout_constraintStart_toEndOf="@+id/orderNum_textView"
             app:layout_constraintTop_toTopOf="@+id/orderNum_textView" />
@@ -44,7 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/date_header"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_color"
+            android:textStyle="bold"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/orderNum_textView"
             app:layout_constraintTop_toBottomOf="@+id/orderNum_textView" />
@@ -56,6 +59,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/date_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/date_textView"
@@ -68,7 +72,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:text="@string/price_header"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_color"
+            android:textStyle="bold"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/date_textView"
@@ -80,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/price_textView"
             app:layout_constraintStart_toEndOf="@+id/price_textView"
             app:layout_constraintTop_toTopOf="@+id/price_textView" />

@@ -174,4 +174,7 @@ dependencies {
 
     // to offer Google Pay
     implementation 'com.braintreepayments.api:google-pay:4.29.0'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 }
