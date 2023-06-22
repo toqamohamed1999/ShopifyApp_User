@@ -34,13 +34,13 @@
 
             >
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editFName_signup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editFName_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
 
-            />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -101,6 +101,7 @@
             app:boxStrokeColor="@color/primary_color"
             app:endIconMode="password_toggle"
             app:errorEnabled="true"
+            app:errorIconDrawable="@null"
             app:hintTextColor="@color/primary_color"
             app:startIconDrawable="@drawable/lock">
 
@@ -111,6 +112,7 @@
                 android:inputType="textPassword"
                 android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputConfirmPass_signUp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -121,6 +123,7 @@
             app:boxStrokeColor="@color/primary_color"
             app:endIconMode="password_toggle"
             app:errorEnabled="true"
+            app:errorIconDrawable="@null"
             app:hintTextColor="@color/primary_color"
             app:startIconDrawable="@drawable/lock">
 
@@ -141,22 +144,12 @@
             android:text="@string/signup"
             android:textAllCaps="false"
             app:cornerRadius="10dp" />
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:indeterminateTint="@color/primary_color"
-            android:visibility="gone" />
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/or"
-
             android:textSize="18sp" />
 
         <TextView

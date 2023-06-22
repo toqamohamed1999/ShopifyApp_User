@@ -23,8 +23,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(
-    private val authRepository: AuthRepo,
-    private val apiReoInterface: APIRepoImplementation,
+    private val authRepository: AuthRepo = AuthRepo(),
+    private val apiReoInterface: APIRepoImplementation = APIRepoImplementation(),
     private val draftOrderRepo: FavDraftOrderRepoInterface = FavDraftOrderRepoImpl()
 ) : ViewModel() {
     private val _signUpResult = MutableLiveData<ResponseState<String>>(ResponseState.Loading)
@@ -44,23 +44,24 @@ class SignUpViewModel(
                 apiReoInterface.createCustomerAccount(customer).collect {
                     _apisignUpResult.value = ResponseState.Success(it)
                 }
-            }catch (e: java.lang.Exception) {
+            } catch (e: java.lang.Exception) {
                 _apisignUpResult.value = ResponseState.Error(e)
             }
 
         }
     }
+
     private val _draftOrder: MutableStateFlow<ResponseState<FavDraftOrderResponse>> =
         MutableStateFlow(ResponseState.Loading)
     var draftOrder: StateFlow<ResponseState<FavDraftOrderResponse>> = _draftOrder
-    fun createFavDraftOrder(draftOrder: FavDraftOrderResponse){
+    fun createFavDraftOrder(draftOrder: FavDraftOrderResponse) {
         viewModelScope.launch {
-            try{
-                draftOrderRepo.createFavDraftOrder(draftOrder).collect{
-                    _draftOrder.value=ResponseState.Success(it)
+            try {
+                draftOrderRepo.createFavDraftOrder(draftOrder).collect {
+                    _draftOrder.value = ResponseState.Success(it)
                 }
-            }catch (e: java.lang.Exception){
-                _draftOrder.value=ResponseState.Error(e)
+            } catch (e: java.lang.Exception) {
+                _draftOrder.value = ResponseState.Error(e)
             }
         }
     }
