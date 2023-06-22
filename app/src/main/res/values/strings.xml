@@ -98,6 +98,12 @@
     <string name="order_details">Order Details</string>
     <string name="product_details">Product Details</string>
     <string name="enter_phone">Enter Phone</string>
+    <string name="shipping_fees">Shipping Fees</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="order_info">Order Info</string>
+    <string name="phone">Phone</string>
+    <string name="discount_value">Discount Value</string>
+    <string name="discount_code">Discount Code</string>
 
     /** nada **/
 

@@ -53,7 +53,7 @@
         android:id="@+id/cardViewphone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:background="@color/blue_app_color"
         app:cardCornerRadius="20dp"
         app:cardElevation="30dp"
@@ -73,7 +73,7 @@
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/acme"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Phone"
+                android:text="@string/phone"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -91,7 +91,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/enter_phone"
-                android:inputType="number"
+                android:inputType="phone"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -137,7 +137,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/acme"
-                android:text="Addesses"
+                android:text="@string/addesses"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -203,6 +203,7 @@
         android:id="@+id/textView4"
         android:layout_width="202dp"
         android:layout_height="41dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/acme"
         android:text="@string/shipping_info"
         android:textAlignment="center"
@@ -218,16 +219,16 @@
         android:id="@+id/textView2"
         android:layout_width="202dp"
         android:layout_height="41dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/acme"
-        android:text="Order Info"
+        android:text="@string/order_info"
         android:textAlignment="center"
         android:textColor="@color/secondary_color"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -236,28 +237,16 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="16dp" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        style="@style/Widget.Material3.CompoundButton.CheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/save_information_for_every_time"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewphone" />
-
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="32dp"
         android:background="#272525"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/cardViewphone" />
 
     <TextView
         android:id="@+id/textView3"
@@ -265,7 +254,7 @@
         android:layout_height="31dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="20dp"
-        android:text="Sub Total"
+        android:text="@string/sub_total"
         android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -277,7 +266,7 @@
         android:layout_width="109dp"
         android:layout_height="33dp"
         android:layout_marginTop="24dp"
-        android:text="Shipping Fees"
+        android:text="@string/shipping_fees"
         android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -341,7 +330,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="104dp"
                 android:layout_height="26dp"
-                android:text="Discount Value"
+                android:text="@string/discount_value"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -363,7 +352,7 @@
                 android:layout_height="26dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="2dp"
-                android:text="Discount Code "
+                android:text="@string/discount_code"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -382,5 +371,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/paymentanim"
+        android:layout_width="280dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.384"
+        app:lottie_fileName="payment.json" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
