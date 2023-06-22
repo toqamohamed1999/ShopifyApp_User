@@ -26,7 +26,6 @@ data class Order(
     var email: String ?= null,
     var estimated_taxes: Boolean = false,
     var financial_status: String ?= null,
-    var fulfillment_status: String ?= null,
     var id: Long = 0,
     var landing_site: String ?= null,
     var landing_site_ref: String ?= null,
