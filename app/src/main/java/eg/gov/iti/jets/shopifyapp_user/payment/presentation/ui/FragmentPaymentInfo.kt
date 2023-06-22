@@ -145,10 +145,14 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         tvNumber.text = second.toString()
         tvPrice.text = totalPrice.toString()
         btnContinueShopping.setOnClickListener {
-            binding?.root?.findNavController()?.navigate(R.id.homeFragment)
             (requireActivity() as BadgeChanger).changeBadgeCartCount(0)
             UserSettings.cartQuantity = 0
             confirmationDialog.dismiss()
+
+            binding?.root?.findNavController()?.popBackStack(R.id.homeFragment,
+                inclusive = false,
+                saveState = false
+            )
         }
         builder.setCancelable(false)
         confirmationDialog = builder.create()
@@ -236,7 +240,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
             showDiscount()
         }else{
             binding?.discountCardView?.visibility = View.GONE
-            binding?.cartTotalPrice?.text = "Final Price : $totalPrice"
+            binding?.cartTotalPrice?.text = "Final Price : $totalPrice $currencyCode"
         }
     }
 
