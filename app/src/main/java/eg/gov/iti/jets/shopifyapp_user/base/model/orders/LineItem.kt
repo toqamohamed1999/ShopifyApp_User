@@ -20,6 +20,6 @@ fun LineItem.toLineItemOrder():LineItemsOrder{
         url = arr?.get(1)
     }
    return LineItemsOrder(price,quantity, title ="${title})${arr?.get(0)}", listOf(
-        Property("image_url", value = url)
+        Property(this.properties[0].name?:"", value = url)
     ))
   }

@@ -69,12 +69,29 @@ fun setAddress(){
             it.toLineItemOrder()
         }
        viewModelScope.launch {
-               draftOrder?.draft_order?.line_items?.takeLast((draftOrder?.draft_order?.line_items?.size?:1)-1)?.forEach {
-                   val variant=it.applied_discount.description?.split(")")?.get(0)?.toLong()
-                  if(it.properties.isNotEmpty()){
-                      variant?.let { it1 -> check(it1.toLong(),it.quantity,m,it.properties[0].value?.toLong()) }
-                  }
+           launch {
+               draftOrder?.draft_order?.line_items?.takeLast(
+                   (draftOrder?.draft_order?.line_items?.size ?: 1) - 1
+               )?.forEach {
+                   val variant = it.applied_discount.description?.split(")")?.get(0)?.toLong()
+                   if (it.properties.isNotEmpty()) {
+                       variant?.let { it1 ->
+                           check(
+                               it1.toLong(),
+                               it.quantity,
+                               m,
+                               it.properties[0].value?.toLong()
+                           )
+                       }
+                   }
                }
+           }.join()
+           launch {
+               removeProductsFromCart()
+           }.join()
+           launch {
+               postOrder(m)
+           }
         }
     }
     fun check(variantId:Long, quantity:Int, m:Int, inveintoryItemId: Long?){
@@ -88,12 +105,6 @@ fun setAddress(){
                                 updateProductQuantity(inveintoryItemId, available)
 
                         }.join()
-                        launch {
-                            removeProductsFromCart()
-                        }.join()
-                        launch {
-                            postOrder(m)
-                        }
                     }
                 }
         }
