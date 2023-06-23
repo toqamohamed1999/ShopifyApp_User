@@ -383,6 +383,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.384"
-        app:lottie_fileName="payment.json" />
+        app:lottie_fileName="payment.json"
+        app:lottie_loop="true"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -99,9 +99,8 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
                     2 ->{
                         launch {
                             player.start()
-                            binding?.paymentanim?.visibility=View.INVISIBLE
                             binding?.paymentanim?.cancelAnimation()
-                            binding?.paymentanim?.setAnimation(R.raw.paymentcomplete)
+                            binding?.paymentanim?.setAnimation(R.raw.payment)
                             binding?.paymentanim?.visibility = View.VISIBLE
                             binding?.paymentanim?.playAnimation()
                             delay(3000)

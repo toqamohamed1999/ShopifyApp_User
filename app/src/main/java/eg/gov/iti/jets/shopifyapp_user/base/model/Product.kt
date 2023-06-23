@@ -50,14 +50,14 @@ fun Product.toLineItem(id:Int): LineItem {
             )
         ),
         applied_discount = AppliedDiscount(
-            description = "${variant.id})${variant.imageId}",//line item /  image
+            description = "${variant.id})${image.src}",//line item /  image
             value = "10.0",
             title = "Custom",
             amount = "20.00",
             value_type = "percentage"
         ),
         name = title,
-        properties = listOf(Property("id","${variant.inventoryItemId}")),
+        properties = listOf(Property("${this.id}","${variant.inventoryItemId}")),
         custom = true,
         price = variants[0].price.toString(),
         variant_id = null, variant_title = bodyHtml.toString() // Product Description

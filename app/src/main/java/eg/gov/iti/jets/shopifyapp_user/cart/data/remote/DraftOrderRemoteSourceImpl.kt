@@ -1,7 +1,5 @@
 package eg.gov.iti.jets.shopifyapp_user.cart.data.remote
 
-import android.util.Log
-import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderRemoteSource
@@ -38,15 +36,13 @@ class DraftOrderRemoteSourceImpl(private  val retrofitServices:DraftOrderNetwork
     }
 
     override suspend fun updateDraftOrder(
-        orderId: String,
+        orderId: String?,
         order: DraftOrderResponse
     ): MutableStateFlow<DraftOrderAPIState> {
         return MutableStateFlow(
             try{
                 DraftOrderAPIState.Success(retrofitServices.updateDraftOrder(orderId,order))
             }catch (error:java.lang.Exception){
-
-                Log.e("","00000000000000000000000000000000000000000${error.localizedMessage}0000000000000000000000000000000")
                 DraftOrderAPIState.Error(error.message.toString())
             }
         )

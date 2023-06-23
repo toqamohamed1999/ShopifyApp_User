@@ -203,6 +203,7 @@ Log.e("","................${UserSettings.userName}.................${UserSetting
     }
 
     override fun gotoDetails(productId: String) {
+        if(productId.isNotEmpty())
         binding?.root?.findNavController()?.navigate(CartFragmentDirections.actionCartFragmentToProductDetailsFragment(productId.toLong()))
     }
 

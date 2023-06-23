@@ -15,9 +15,10 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.repo.PaymentRepo
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userCurrentDiscountCopy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -68,40 +69,61 @@ fun setAddress(){
             it.toLineItemOrder()
         }
        viewModelScope.launch {
-           launch {
-               draftOrder?.draft_order?.line_items?.forEach {
+               draftOrder?.draft_order?.line_items?.takeLast((draftOrder?.draft_order?.line_items?.size?:1)-1)?.forEach {
                    val variant=it.applied_discount.description?.split(")")?.get(0)?.toLong()
                   if(it.properties.isNotEmpty()){
-
-                      variant?.let { it1 ->
-                          cartRepo.getVariantBYId(it1).collect{vr->
-                              val available = (vr?.variant?.inventoryQuantity?:0)-it.quantity
-                              if(available>=0)
-                              {
-                                  cartRepo.updateProductQuantity(UpdateQuantityBody(
-                                      locationId = 84417610009,
-                                      inventoryItemId = it.properties[0].value?.toLong(),
-                                      available = available
-                                  )).collect()
-                              }
-                          }
-                      }
+                      variant?.let { it1 -> check(it1.toLong(),it.quantity,m,it.properties[0].value?.toLong()) }
                   }
                }
-           }.join()
-           launch {
-               draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
-               cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
-               UserSettings.cartQuantity = 0
-               UserSettings.saveSettings()
-           }.join()
-           launch {
-              Log.e("", Gson().toJson(Order.OrderBody(order),Order.OrderBody::class.java).toString())
-               repo.postOrder(Order.OrderBody(order)).collect{
-                   Log.e("","................orderid : ${it.order?.toString()}.............................")
-                   _mode.value = Pair(m,it.order?.order_number)
-               }
-           }
+        }
+    }
+    fun check(variantId:Long, quantity:Int, m:Int, inveintoryItemId: Long?){
+       viewModelScope.launch {
+
+                cartRepo.getVariantBYId(variantId).collect { vr ->
+                    val available = (vr?.variant?.inventoryQuantity ?: 0) - quantity
+                    if (available >= 0) {
+                        launch {
+                             if(inveintoryItemId!=null)
+                                updateProductQuantity(inveintoryItemId, available)
+
+                        }.join()
+                        launch {
+                            removeProductsFromCart()
+                        }.join()
+                        launch {
+                            postOrder(m)
+                        }
+                    }
+                }
+        }
+    }
+    private fun updateProductQuantity(id:Long, available:Int){
+        CoroutineScope(Dispatchers.Default).launch {
+            cartRepo.updateProductQuantity(UpdateQuantityBody(
+                locationId = 84417610009,
+                inventoryItemId = id,
+                available = available
+            ))
+        }
+    }
+    private fun removeProductsFromCart()
+    {
+        Log.e("","................2...........")
+        CoroutineScope(Dispatchers.Default).launch {
+            draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
+            cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
+            UserSettings.cartQuantity = 0
+            UserSettings.saveSettings()
+        }
+    }
+    private fun postOrder(m:Int){
+        Log.e("","................3..........")
+        CoroutineScope(Dispatchers.Default).launch {
+            repo.postOrder(Order.OrderBody(order)).collect{
+                Log.e("","................orderid : ${it.order?.toString()}.............................")
+                _mode.value = Pair(m,it.order?.order_number)
+            }
         }
     }
 }
