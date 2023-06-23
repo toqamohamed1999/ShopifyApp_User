@@ -88,6 +88,7 @@ class SettingsFragment:Fragment(),SettingListener{
         UserSettings.saveNewAddress(address)
         binding?.tvAddres?.text = address
         Dialogs.SnakeToast(requireView(),"Done Selecting Default Address ")
+        addressesDialog.dismiss()
     }
     override fun selectCurrency(currency: String) {
         viewModel.changeCurrency(currency)

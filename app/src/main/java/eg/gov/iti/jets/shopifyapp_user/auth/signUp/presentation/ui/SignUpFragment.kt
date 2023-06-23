@@ -204,7 +204,7 @@ class SignUpFragment : Fragment() {
                                 first_name = fName,
                                 last_name = lName,
                                 tags = "${pass}#${uid}#false",//password,fireBaserUserId,emailVerification
-                                note = "${favDraftOrderId}#${cartDraftOrderId}"
+                                note = "${favDraftOrderId}#${cartDraftOrderId}#EGP#1.0"
                             )
                             viewModel.createCustomerAccount(SignupRequest(customer))
                         }

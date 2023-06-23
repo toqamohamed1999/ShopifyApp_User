@@ -150,6 +150,10 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     bottomNav.visibility = View.GONE
                     binding.toolbar.visibility = View.GONE
                 }
+                R.id.fragmentLocationDetector->{
+                    bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
+                }
                 else -> {
                     bottomNav.visibility = View.VISIBLE
                     binding.toolbar.visibility = View.VISIBLE

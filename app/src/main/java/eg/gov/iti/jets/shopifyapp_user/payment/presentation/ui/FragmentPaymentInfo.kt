@@ -45,6 +45,7 @@ import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.regex.Matcher
 import kotlin.math.roundToInt
 
 class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
@@ -227,9 +228,9 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         binding?.phoneText?.setText(UserSettings.phoneNumber)
         binding?.tvAddres?.text = UserSettings.shippingAddress
 
-        binding?.textViewSubTotalPrice?.text= "$totalPrice $currencyCode"
+        binding?.textViewSubTotalPrice?.text= "${((totalPrice*100).toInt())/100.0} $currencyCode"
 
-        binding?.textViewShippingFees?.text = "${(30* currentCurrencyValue)} $currencyCode"
+        binding?.textViewShippingFees?.text = "${(((30* currentCurrencyValue)*100).toInt())/100.0} $currencyCode"
         if(UserSettings.userCurrentDiscountCopy!=null)
         {
             if((userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)<totalPrice) {
@@ -253,7 +254,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         }else if(userCurrentDiscountCopy?.updated_at =="fixed_amount"){
             if(value<totalPrice) {
                 binding?.textViewDiscountValue?.text =
-                    "${value * currentCurrencyValue} $currencyCode"
+                    "${((value * currentCurrencyValue*100).toInt())/100.0} $currencyCode"
                 totalPrice -= value
             }else{
                 binding?.discountCardView?.visibility = View.INVISIBLE
@@ -264,7 +265,8 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     }
 
     private fun validatePhone(phone: String): Boolean {
-        return  Patterns.PHONE.matcher(phone).matches()
+        val pattern = "^01[0125][0-9]{8}$"
+        return Matcher.quoteReplacement(phone).matches(Regex(pattern))
     }
     override fun onGooglePaySuccess(paymentMethodNonce: PaymentMethodNonce) {
         confirmOrder(2)
