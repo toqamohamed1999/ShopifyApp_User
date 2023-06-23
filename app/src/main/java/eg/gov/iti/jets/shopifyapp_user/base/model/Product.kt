@@ -29,15 +29,16 @@ data class Product(
     @SerializedName("image") var image: Image
 ) : Parcelable
 
-fun Product.toLineItem(): LineItem {
-    return LineItem(
-        id = id,
-        product_id = id,
+fun Product.toLineItem(id:Int): LineItem {
+    val variant = this.variants[id]
+    return  LineItem(
+        id = variant.id,
+        product_id = variant.id,
         title = title,
         sku = null,
         quantity = 1,
         requires_shipping = false,
-        taxable = true,
+        taxable = false,
         gift_card = false,
         fulfillment_service = "manual",
         grams = 0,
@@ -49,14 +50,14 @@ fun Product.toLineItem(): LineItem {
             )
         ),
         applied_discount = AppliedDiscount(
-            description = "$id)${image.src}",//line item /  image
+            description = "${variant.id})${variant.imageId}",//line item /  image
             value = "10.0",
             title = "Custom",
             amount = "20.00",
             value_type = "percentage"
         ),
         name = title,
-        properties = listOf(),
+        properties = listOf(Property("id","${variant.inventoryItemId}")),
         custom = true,
         price = variants[0].price.toString(),
         variant_id = null, variant_title = bodyHtml.toString() // Product Description

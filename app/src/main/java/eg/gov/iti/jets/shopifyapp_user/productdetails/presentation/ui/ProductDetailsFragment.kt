@@ -21,6 +21,7 @@ import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.base.model.*
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
+import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.VariantRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductDetailsBinding
@@ -44,7 +45,7 @@ class ProductDetailsFragment : Fragment() {
                     AppRetrofit.retrofit.create(
                         DraftOrderNetworkServices::class.java
                     )
-                )
+                ),VariantRemoteSourceImpl()
             )
         )
     }

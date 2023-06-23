@@ -7,16 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.UpdateQuantityBody
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.repo.PaymentRepo
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
-import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userAPI_Id
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userCurrentDiscountCopy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -68,6 +69,27 @@ fun setAddress(){
         }
        viewModelScope.launch {
            launch {
+               draftOrder?.draft_order?.line_items?.forEach {
+                   val variant=it.applied_discount.description?.split(")")?.get(0)?.toLong()
+                  if(it.properties.isNotEmpty()){
+
+                      variant?.let { it1 ->
+                          cartRepo.getVariantBYId(it1).collect{vr->
+                              val available = (vr?.variant?.inventoryQuantity?:0)-it.quantity
+                              if(available>=0)
+                              {
+                                  cartRepo.updateProductQuantity(UpdateQuantityBody(
+                                      locationId = 84417610009,
+                                      inventoryItemId = it.properties[0].value?.toLong(),
+                                      available = available
+                                  )).collect()
+                              }
+                          }
+                      }
+                  }
+               }
+           }.join()
+           launch {
                draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
                cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
                UserSettings.cartQuantity = 0
@@ -77,7 +99,7 @@ fun setAddress(){
               Log.e("", Gson().toJson(Order.OrderBody(order),Order.OrderBody::class.java).toString())
                repo.postOrder(Order.OrderBody(order)).collect{
                    Log.e("","................orderid : ${it.order?.toString()}.............................")
-                   _mode.value = Pair(m,it.order?.number)
+                   _mode.value = Pair(m,it.order?.order_number)
                }
            }
         }

@@ -24,6 +24,7 @@ data class Variants (
     @SerializedName("taxable") var taxable : Boolean?=false,
     @SerializedName("barcode") var barcode : String?="",
     @SerializedName("grams") var grams : Int?=0,
+    @SerializedName("tracked")var tracked:Boolean=true,
     @SerializedName("image_id") var imageId : String?="",
     @SerializedName("weight") var weight : Int?=0,
     @SerializedName("weight_unit") var weightUnit : String?="",
