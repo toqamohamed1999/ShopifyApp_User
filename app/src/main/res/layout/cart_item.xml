@@ -11,9 +11,10 @@
     app:cardElevation="30dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cart_item_constrain_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@drawable/cart_item_available">
 
         <TextView
             android:id="@+id/cart_item_title"

@@ -71,7 +71,7 @@ class ProductDetailsViewModel(
         }
     }
 
-    fun addProductToCart(product: LineItem?, quantity: Int) {
+    fun addProductToCart(product: LineItem?, quantity: Int?) {
 
         val mlist: MutableList<LineItem> = mutableListOf()
         var flag = false
@@ -80,7 +80,7 @@ class ProductDetailsViewModel(
                     ?.get(0) == (it?.applied_discount?.description?:"0.0").split(")")?.get(0)
             ) {
                 flag = true
-                if (it.quantity < quantity) {
+                if (it.quantity < (quantity ?: 0)) {
                     increaseProductQuantity(it)
                     UserSettings.cartQuantity += 1
                     UserSettings.saveSettings()

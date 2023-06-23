@@ -1,33 +1,28 @@
 package eg.gov.iti.jets.shopifyapp_user.payment.presentation.ui
 
-import android.media.MediaParser
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
-import android.text.style.TtsSpan.DateBuilder
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.room.util.appendPlaceholders
 import com.braintreepayments.api.*
 import com.google.android.gms.wallet.TransactionInfo
 import com.google.android.gms.wallet.WalletConstants
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.base.remote.AppRetrofit
-import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
-import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderRemoteSourceImpl
+import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.VariantRemoteSourceImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentPaymentInfoBinding
@@ -48,13 +43,8 @@ import eg.gov.iti.jets.shopifyapp_user.settings.presentation.ui.SettingListener
 import eg.gov.iti.jets.shopifyapp_user.util.BadgeChanger
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.Calendar
-import java.util.Date
 import kotlin.math.roundToInt
 
 class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
@@ -71,7 +61,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
     private val viewModel by viewModels<PaymentViewModel> {
         PaymentViewModelFactory(
             CartRepositoryImpl(DraftOrderRemoteSourceImpl(
-                AppRetrofit.retrofit.create(DraftOrderNetworkServices::class.java))),
+                AppRetrofit.retrofit.create(DraftOrderNetworkServices::class.java)),VariantRemoteSourceImpl()),
             PaymentRepoImpl(PaymentRemoteSourceImpl()),AddsRepoImpl(AddsRemoteSourceImpl()))
     }
     override fun onCreateView(
@@ -109,9 +99,11 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
                     2 ->{
                         launch {
                             player.start()
+                            binding?.paymentanim?.cancelAnimation()
+                            binding?.paymentanim?.setAnimation(R.raw.payment)
                             binding?.paymentanim?.visibility = View.VISIBLE
                             binding?.paymentanim?.playAnimation()
-                            delay(2000)
+                            delay(3000)
                         }.join()
                         launch {
                             orderConfirmed(it.second)
@@ -190,6 +182,9 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
 
     private fun confirmOrder(m:Int) {
         viewModel.setAddress()
+        binding?.paymentanim?.setAnimation(R.raw.loading)
+        binding?.paymentanim?.visibility = View.VISIBLE
+        binding?.paymentanim?.playAnimation()
         viewModel.confirmOrder(m)
     }
 

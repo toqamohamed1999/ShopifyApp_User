@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.*
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.DraftOrderResponse
+import eg.gov.iti.jets.shopifyapp_user.cart.data.model.UpdateQuantityBody
 import eg.gov.iti.jets.shopifyapp_user.cart.data.remote.DraftOrderAPIState
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.repo.CartRepository
 import eg.gov.iti.jets.shopifyapp_user.home.domain.model.addsmodels.DiscountCode
 import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.AddsRepo
 import eg.gov.iti.jets.shopifyapp_user.payment.domain.repo.PaymentRepo
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
-import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userAPI_Id
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings.userCurrentDiscountCopy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -67,19 +69,61 @@ fun setAddress(){
             it.toLineItemOrder()
         }
        viewModelScope.launch {
-           launch {
-               draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
-               cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
-               UserSettings.cartQuantity = 0
-               UserSettings.saveSettings()
-           }.join()
-           launch {
-              Log.e("", Gson().toJson(Order.OrderBody(order),Order.OrderBody::class.java).toString())
-               repo.postOrder(Order.OrderBody(order)).collect{
-                   Log.e("","................orderid : ${it.order?.toString()}.............................")
-                   _mode.value = Pair(m,it.order?.number)
+               draftOrder?.draft_order?.line_items?.takeLast((draftOrder?.draft_order?.line_items?.size?:1)-1)?.forEach {
+                   val variant=it.applied_discount.description?.split(")")?.get(0)?.toLong()
+                  if(it.properties.isNotEmpty()){
+                      variant?.let { it1 -> check(it1.toLong(),it.quantity,m,it.properties[0].value?.toLong()) }
+                  }
                }
-           }
+        }
+    }
+    fun check(variantId:Long, quantity:Int, m:Int, inveintoryItemId: Long?){
+       viewModelScope.launch {
+
+                cartRepo.getVariantBYId(variantId).collect { vr ->
+                    val available = (vr?.variant?.inventoryQuantity ?: 0) - quantity
+                    if (available >= 0) {
+                        launch {
+                             if(inveintoryItemId!=null)
+                                updateProductQuantity(inveintoryItemId, available)
+
+                        }.join()
+                        launch {
+                            removeProductsFromCart()
+                        }.join()
+                        launch {
+                            postOrder(m)
+                        }
+                    }
+                }
+        }
+    }
+    private fun updateProductQuantity(id:Long, available:Int){
+        CoroutineScope(Dispatchers.Default).launch {
+            cartRepo.updateProductQuantity(UpdateQuantityBody(
+                locationId = 84417610009,
+                inventoryItemId = id,
+                available = available
+            ))
+        }
+    }
+    private fun removeProductsFromCart()
+    {
+        Log.e("","................2...........")
+        CoroutineScope(Dispatchers.Default).launch {
+            draftOrder?.draft_order?.line_items = draftOrder?.draft_order?.line_items?.take(1)!!
+            cartRepo.updateProductsInCart(draftOrder?.draft_order?.id.toString(), draftOrder!!)
+            UserSettings.cartQuantity = 0
+            UserSettings.saveSettings()
+        }
+    }
+    private fun postOrder(m:Int){
+        Log.e("","................3..........")
+        CoroutineScope(Dispatchers.Default).launch {
+            repo.postOrder(Order.OrderBody(order)).collect{
+                Log.e("","................orderid : ${it.order?.toString()}.............................")
+                _mode.value = Pair(m,it.order?.order_number)
+            }
         }
     }
 }

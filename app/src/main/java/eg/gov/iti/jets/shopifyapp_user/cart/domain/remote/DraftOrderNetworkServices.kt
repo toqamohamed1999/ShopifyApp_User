@@ -18,7 +18,7 @@ interface DraftOrderNetworkServices {
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
     @PUT("draft_orders/{draftOrderId}.json")
-   suspend fun updateDraftOrder(@Path(value = "draftOrderId")draftOrderId:String,
+   suspend fun updateDraftOrder(@Path(value = "draftOrderId") draftOrderId: String?,
                                 @Body draftOrder: DraftOrderResponse
    ): DraftOrderResponse
 }
