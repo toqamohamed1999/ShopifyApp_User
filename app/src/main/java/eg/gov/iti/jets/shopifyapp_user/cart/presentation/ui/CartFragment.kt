@@ -69,7 +69,13 @@ Log.e("","................${UserSettings.userName}.................${UserSetting
                         binding?.cartAnim?.cancelAnimation()
                         binding?.cartAnim?.visibility = View.INVISIBLE
                         productsIncCard = mutableListOf()
-                        productsIncCard.addAll(it.order?.draft_order?.line_items?.takeLast(((it.order.draft_order?.line_items?.size?:1)-1))?: listOf())
+                       val list =  it.order?.draft_order?.line_items
+                        if(list!=null)
+                        for(i in list.indices){
+                            if(i!=0) {
+                                productsIncCard.add(list[i])
+                            }
+                        }
                         if(productsIncCard.size==0) {
                             binding?.cartAnim?.setAnimation("error_cart.json")
                             binding?.cartAnim?.visibility = View.VISIBLE
@@ -204,7 +210,7 @@ Log.e("","................${UserSettings.userName}.................${UserSetting
 
     override fun gotoDetails(productId: String) {
         if(productId.isNotEmpty())
-        binding?.root?.findNavController()?.navigate(CartFragmentDirections.actionCartFragmentToProductDetailsFragment(productId.toLong()))
+         binding?.root?.findNavController()?.navigate(CartFragmentDirections.actionCartFragmentToProductDetailsFragment(productId.toLong()))
     }
 
 }

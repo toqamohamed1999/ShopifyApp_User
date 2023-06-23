@@ -158,6 +158,8 @@ class SignUpFragment : Fragment() {
                         )
                     )
                     lifecycleScope.launch { delay(3000) }
+                    /////////////////////////////////////////////////////
+                    dummyLineItemList = ArrayList(0)
                     dummyLineItemList.add(
                         LineItems(
                             title = "dummy",

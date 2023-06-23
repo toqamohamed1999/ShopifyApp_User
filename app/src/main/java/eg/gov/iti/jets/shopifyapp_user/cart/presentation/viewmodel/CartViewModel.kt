@@ -134,13 +134,23 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
      }
 
     private fun getVaiants() {
-            cartDraftOrder?.draft_order?.line_items?.takeLast(((cartDraftOrder?.draft_order?.line_items?.size?:1)-1))?.forEach {
-                val variantId=it.applied_discount.description?.split(")")?.get(0)
+        getList( cartDraftOrder?.draft_order?.line_items).forEach {
+                val variantId=it?.applied_discount?.description?.split(")")?.get(0)
                 getVaiant(variantId)
             }
         _cartOrder.value = DraftOrderAPIState.Success(cartDraftOrder)
     }
-
+fun getList(list: List<LineItem>?):List<LineItem>{
+    var mlist:MutableList<LineItem> = mutableListOf()
+    if(!list.isNullOrEmpty())
+    if(list.size>1)
+    {
+        for(i in 1 until list.size){
+            mlist.add(list[i])
+        }
+    }
+    return mlist
+}
     private fun getVaiant(variantId: String?) {
         viewModelScope.launch {
             repo.getVariantBYId(variantId?.toLong()?:0).collect{

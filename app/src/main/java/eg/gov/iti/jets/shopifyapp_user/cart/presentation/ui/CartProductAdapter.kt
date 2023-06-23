@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.cart.data.model.LineItem
 import eg.gov.iti.jets.shopifyapp_user.databinding.CartItemBinding
@@ -17,8 +16,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import kotlin.math.roundToInt
 
-class CartProductAdapter(private val listener: CartItemListener): ListAdapter<LineItem,CartProductAdapter.CartItemViewHolder>(CartDiffUtil()) {
-
+class CartProductAdapter(private val listener: CartItemListener): ListAdapter<LineItem,CartProductAdapter.CartItemViewHolder>(CartDiffUtil()){
     lateinit var binding: CartItemBinding
 
     inner class CartItemViewHolder(
@@ -31,9 +29,9 @@ class CartProductAdapter(private val listener: CartItemListener): ListAdapter<Li
         binding = CartItemBinding.inflate(inflater, parent, false)
         return CartItemViewHolder(binding)
     }
-
     override fun onBindViewHolder(holder: CartItemViewHolder, position: Int) {
         val product:LineItem? = getItem(position)
+
         //item Actions
         holder.binding.cartImageViewDecreaseProduct.setOnClickListener {
             listener.increaseProductInCart(getItem(holder.adapterPosition))
