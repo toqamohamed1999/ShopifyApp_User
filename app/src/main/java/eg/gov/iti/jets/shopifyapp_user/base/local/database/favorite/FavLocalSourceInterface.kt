@@ -8,5 +8,5 @@ interface FavLocalSourceInterface {
     fun getAllFavProducts(): Flow<List<FavRoomPojo>>
     fun getFavProductWithId(productId: Long): Flow<FavRoomPojo>
     suspend fun deleteFavProductWithId(productId: Long)
-    fun deleteAllFavoriteProducts()
+    suspend fun deleteAllFavoriteProducts()
 }

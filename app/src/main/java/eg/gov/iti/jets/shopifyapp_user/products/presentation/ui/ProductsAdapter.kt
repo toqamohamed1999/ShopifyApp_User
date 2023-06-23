@@ -7,6 +7,9 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
@@ -47,6 +50,10 @@ class ProductsAdapter(
         return isFav
     }
 
+    fun setIsFav(isFav: Boolean) {
+        this.isFav = isFav
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -54,10 +61,11 @@ class ProductsAdapter(
         return ViewHolder(binding)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = productList[position]
-        if(UserSettings.userAPI_Id.isEmpty()){
-            holder.binding.favIcon.visibility= View.GONE
+        if (UserSettings.userAPI_Id.isEmpty()) {
+            holder.binding.favIcon.visibility = View.GONE
         }
         holder.binding.productTitleTextView.text =
             currentProduct?.title?.let { getTitleOfProduct(it) }
@@ -73,7 +81,9 @@ class ProductsAdapter(
         holder.binding.favIcon.setOnClickListener {
             if (isConnected(context)) {
                 myListener.onClickFavIcon(currentProduct.id!!)
-                if (isFav) {
+
+                if (holder.binding.favIcon.drawable==ContextCompat.getDrawable(context,R.drawable.favorite_icon)) {
+                    println("//////////////////////////////////////in delete///////////////////////")
                     val alertDialog = AlertDialog.Builder(context)
                     alertDialog.apply {
                         setIcon(R.drawable.baseline_delete_24)
@@ -91,11 +101,12 @@ class ProductsAdapter(
                         setNegativeButton("Cancel") { _, _ ->
                         }
                     }.create().show()
-                } else {
+                } else if (holder.binding.favIcon.drawable.constantState==getDrawable(context,R.drawable.favorite_border_icon)) {
+                    println("//////////////////////////////////////in add///////////////////////")
                     isFav = true
                     holder.binding.favIcon.setImageResource(R.drawable.favorite_icon)
                 }
-            }else{
+            } else {
                 Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
                     .show()
             }
@@ -109,10 +120,10 @@ class ProductsAdapter(
     fun setFavoriteIcon(product: Product, favProducts: List<FavRoomPojo>): Int {
         val isFavorite = favProducts.any { it.productId == product.id }
         return if (isFavorite) {
-            isFav = true
+
             R.drawable.favorite_icon
         } else {
-            isFav = false
+
             R.drawable.favorite_border_icon
         }
     }

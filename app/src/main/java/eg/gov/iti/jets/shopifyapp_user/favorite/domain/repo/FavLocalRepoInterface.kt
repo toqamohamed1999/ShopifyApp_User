@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface FavLocalRepoInterface {
     suspend fun deleteFavProductWithId(productId: Long)
     fun getAllFavProducts(): Flow<List<FavRoomPojo>>
+    suspend fun deleteAllFavoriteProducts()
 }

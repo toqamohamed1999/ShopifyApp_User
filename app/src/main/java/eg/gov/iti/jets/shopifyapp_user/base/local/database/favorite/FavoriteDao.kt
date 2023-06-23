@@ -16,6 +16,6 @@ interface FavoriteDao {
     fun getFavProductWithId(productId: Long): Flow<FavRoomPojo >
     @Query("Delete from FavoriteProducts where productId = :productId")
     suspend fun deleteFavProductWithId(productId: Long)
-    @Query("DELETE from FavoriteProducts")
-    fun deleteAllFavoriteProducts()
+    @Query("DELETE FROM FavoriteProducts")
+    suspend fun deleteAllFavoriteProducts()
 }

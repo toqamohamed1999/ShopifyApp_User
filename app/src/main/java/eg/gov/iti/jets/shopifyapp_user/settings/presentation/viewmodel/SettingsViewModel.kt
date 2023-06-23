@@ -31,7 +31,7 @@ class SettingsViewModel(
     }
     fun deleteFavFromRoom(){
         viewModelScope.launch {
-            repo.getAllFavProducts()
+            repo.deleteAllFavoriteProducts()
         }
     }
 

@@ -16,4 +16,8 @@ class FavLocalRepoImpl(private val favLocalSource: FavLocalSourceInterface = Fav
        return favLocalSource.getAllFavProducts()
     }
 
+    override suspend fun deleteAllFavoriteProducts() {
+        favLocalSource.deleteAllFavoriteProducts()
+    }
+
 }

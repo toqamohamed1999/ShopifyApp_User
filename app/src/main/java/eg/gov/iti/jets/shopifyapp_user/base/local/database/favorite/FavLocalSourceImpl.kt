@@ -23,7 +23,7 @@ class FavLocalSourceImpl(private val favDAO: FavoriteDao =ShopifyDatabase.getIns
        favDAO.deleteFavProductWithId(productId)
     }
 
-    override fun deleteAllFavoriteProducts() {
+    override suspend fun deleteAllFavoriteProducts() {
        favDAO.deleteAllFavoriteProducts()
     }
 
