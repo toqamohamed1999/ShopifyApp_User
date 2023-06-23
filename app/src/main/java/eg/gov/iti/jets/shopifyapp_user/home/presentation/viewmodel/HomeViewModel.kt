@@ -38,7 +38,8 @@ class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRe
             viewModelScope.launch {
                 addsRepo.getAllPriceRules().collect {
                     it?.price_rules?.forEach { item ->
-                        if (item.ends_at.isNotEmpty()) {
+                        val endTime=item?.ends_at?:""
+                        if (endTime.isNotEmpty()) {
                             try {
                                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale("en"))
                                 val currentDate = System.currentTimeMillis()
