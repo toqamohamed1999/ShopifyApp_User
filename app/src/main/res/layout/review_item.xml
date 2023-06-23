@@ -48,8 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:numStars="5"
-            android:progressTint="@color/purple_200"
-            android:secondaryProgressTint="@color/purple_200"
+            android:progressTint="@color/secondary_color"
+            android:secondaryProgressTint="@color/secondary_color"
             app:layout_constraintBottom_toBottomOf="@+id/txtViewReviewerName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/txtViewReviewerName" />
