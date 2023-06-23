@@ -119,14 +119,14 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                                     binding.txtMoreOrders.visibility = View.GONE
                                     binding.txtOrder.visibility = View.GONE
                                 } else {
-                                    binding.txtOrder.visibility = View.VISIBLE
                                     if (it.orderList.size > 2) {
                                         binding.txtMoreOrders.visibility = View.VISIBLE
                                         orderList = it.orderList.take(2)
                                     } else {
                                         binding.txtMoreOrders.visibility = View.GONE
-                                        it.orderList
+                                        orderList = it.orderList
                                     }
+                                    binding.txtOrder.visibility = View.VISIBLE
                                     orderAdapter.setOrderList(orderList)
                                     binding.ordersRecyclerView.adapter = orderAdapter
                                 }
