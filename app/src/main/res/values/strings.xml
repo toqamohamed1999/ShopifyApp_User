@@ -21,6 +21,7 @@
     <string name="registration_completed">Your Registration completed Successfully check your email for verification then log in</string>
     <string name="go_to_verify_email_from_login">You have to check your email for verification then try to log in again </string>
     <string name="wait_to_sent_anotherMail">Your email is not verified check your email for verification link or  wait for 30 minute for sending another mail</string>
+    <string name="invalid_email_or_pass">Email or password is not correct. please check them and try again</string>
 
     /** nada **/
     <string name="home_header">Home</string>

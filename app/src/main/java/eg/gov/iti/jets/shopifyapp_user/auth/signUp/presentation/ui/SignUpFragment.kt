@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 
 class SignUpFragment : Fragment() {
-    private lateinit var  viewModel: SignUpViewModel
+    private lateinit var viewModel: SignUpViewModel
     private var dummyLineItemList: ArrayList<LineItems> = arrayListOf()
     private var favDraftOrderId: String = ""
     private var cartDraftOrderId: String = ""
@@ -65,7 +65,7 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).findViewById<AppBarLayout>(R.id.custom_toolBar)?.visibility =
             View.GONE
-        viewModel=ViewModelProvider(this)[SignUpViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SignUpViewModel::class.java]
         binding.textViewHaveAcount.setOnClickListener {
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_signUpFragment_to_loginFragment)
@@ -124,7 +124,7 @@ class SignUpFragment : Fragment() {
                 }
 
             } else {
-               alertDialog.dismiss()
+                alertDialog.dismiss()
                 Snackbar.make(
                     binding.root,
                     resources.getString(R.string.noInternetConnection),
@@ -180,9 +180,10 @@ class SignUpFragment : Fragment() {
 
                 }
                 is ResponseState.Error -> {
-                        println("/////////////Error ${result.exception}//////////////////////")
-                   alertDialog.dismiss()
-                    }
+                    binding.editEmailSignup.error = "Email is already Exist"
+                    println("/////////////Error ${result.exception}//////////////////////")
+                    alertDialog.dismiss()
+                }
             }
 
         }
@@ -218,30 +219,31 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
-        viewModel.apisignUpResult.observe(viewLifecycleOwner){
-                            when (it) {
-                    is ResponseState.Loading -> {
+        viewModel.apisignUpResult.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
 
-                    }
-                    is ResponseState.Success -> {
-                       alertDialog.dismiss()
-                        val alertDialog = AlertDialog.Builder(context)
+                }
+                is ResponseState.Success -> {
+                    alertDialog.dismiss()
+                    val alertDialog = AlertDialog.Builder(context)
 
-                        alertDialog.apply {
-                            setIcon(R.drawable.baseline_info_24)
-                            setTitle("Info")
-                            setMessage(resources.getString(R.string.registration_completed))
-                            setPositiveButton("OK") { _: DialogInterface?, _: Int ->
-                            }
-                        }.create().show()
+                    alertDialog.apply {
+                        setIcon(R.drawable.baseline_info_24)
+                        setTitle("Info")
+                        setMessage(resources.getString(R.string.registration_completed))
+                        setPositiveButton("OK") { _: DialogInterface?, _: Int ->
+                            Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_loginFragment)
+                        }
+                    }.create().show()
 
 
-                    }
-                    is ResponseState.Error -> {
-                        println("/////////////Error ${it.exception}//////////////////////")
-                    }
+                }
+                is ResponseState.Error -> {
+                    println("/////////////Error ${it.exception}//////////////////////")
                 }
             }
+        }
     }
 
     private fun clearErrors() {

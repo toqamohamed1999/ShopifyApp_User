@@ -109,17 +109,20 @@ class LoginFragment : Fragment() {
                         if (it.data?.customers?.isNotEmpty() == true) {
                             customer = it.data.customers?.get(0)!!
                         }
-                        if (it.data?.customers?.isEmpty() == true) {
-                            binding.emailLayoutLogin.error = "email is not found"
+                        if (it.data?.customers?.isEmpty() == true||customer.tags!!.split("#")[0] != pass) {
                             binding.passwordLayoutLogin.error = null
-                            alertDialog.dismiss()
-                            viewModel.resetFlow()
-
-                        } else if (customer.tags!!.split("#")[0] != pass) {
-                            binding.passwordLayoutLogin.error = "wrong password"
                             binding.emailLayoutLogin.error = null
                             alertDialog.dismiss()
+                            val alertDialog = AlertDialog.Builder(context)
+                            alertDialog.apply {
+                                setIcon(R.drawable.baseline_info_24)
+                                setTitle("warning")
+                                setMessage(resources.getString(R.string.invalid_email_or_pass))
+                                setPositiveButton("OK") { _: DialogInterface?, _: Int ->
+                                }
+                            }.create().show()
                             viewModel.resetFlow()
+
                         } else {
                             binding.emailLayoutLogin.error = null
                             binding.passwordLayoutLogin.error = null
