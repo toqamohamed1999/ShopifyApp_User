@@ -28,46 +28,13 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
     lateinit var navController: NavController
     lateinit var backButton: ImageView
     lateinit var fragment : View
-    var navDestination  : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ShopifyDatabase.context = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-//        fragment = findViewById(R.id.nav_host_fragment)
-//        NetworkConnectivityObserver.initNetworkConnectivity(applicationContext)
-//
-//        NetworkConnectivityObserver.observeNetworkConnection().onEach {
-//            if (it == MyNetworkStatus.Available) {
-//                binding.noInternetContainer.visibility = View.GONE
-//                navController.navigate(navDestination)
-//            } else {
-//                if(navDestination == R.id.favoriteFragment){
-//                    fragment.visibility = View.VISIBLE
-//                    binding.noInternetContainer.visibility = View.GONE
-//                    return@onEach
-//                }else{
-//                    fragment.visibility = View.GONE
-//                    binding.noInternetContainer.visibility = View.VISIBLE
-//                    return@onEach
-//                }
-////                val currentDestinationId = navController.currentDestination?.id
-////                val favFragmentId = R.id.favoriteFragment
-////                if (currentDestinationId == favFragmentId) {
-////                    // Do not hide the FavFragment
-////                    fragment.visibility = View.VISIBLE
-////                    binding.noInternetContainer.visibility = View.GONE
-////                    return@onEach
-////                }else{
-////                    fragment.visibility = View.GONE
-////                    binding.noInternetContainer.visibility = View.VISIBLE
-////                    return@onEach
-////                }
-//            }
-//        }.launchIn(lifecycleScope)
-
         backButton = binding.backButton
         binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
 
@@ -104,6 +71,8 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
         setUpNavBottom(navController)
         if(UserSettings.userAPI_Id.isEmpty()){
             navController.navigate(R.id.loginFragment)
+        }else{
+            changeBadgeCartCount(UserSettings.cartQuantity?:0)
         }
     }
 
