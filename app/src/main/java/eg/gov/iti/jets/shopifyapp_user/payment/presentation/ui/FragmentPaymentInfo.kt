@@ -237,10 +237,12 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         binding?.textViewShippingFees?.text = "${(30* currentCurrencyValue)} $currencyCode"
         if(UserSettings.userCurrentDiscountCopy!=null)
         {
-            showDiscount()
+            if((userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)<totalPrice) {
+                showDiscount()
+            }
         }else{
             binding?.discountCardView?.visibility = View.GONE
-            binding?.cartTotalPrice?.text = "Final Price : $totalPrice $currencyCode"
+            binding?.cartTotalPrice?.text = "Final Price : ${totalPrice+(30* currentCurrencyValue)} $currencyCode"
         }
     }
 
@@ -254,8 +256,13 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
             totalPrice = (totalPrice-((totalPrice*value)/100))
             totalPrice = ((totalPrice*100).roundToInt())/100.0
         }else if(userCurrentDiscountCopy?.updated_at =="fixed_amount"){
-            binding?.textViewDiscountValue?.text = "$value $currencyCode"
-            totalPrice -= value
+            if(value<totalPrice) {
+                binding?.textViewDiscountValue?.text =
+                    "${value * currentCurrencyValue} $currencyCode"
+                totalPrice -= value
+            }else{
+                binding?.discountCardView?.visibility = View.INVISIBLE
+            }
         }
         binding?.cartTotalPrice?.text = "Final Price : $totalPrice $currencyCode"
         viewModel.setDiscount(userCurrentDiscountCopy,totalPrice)
