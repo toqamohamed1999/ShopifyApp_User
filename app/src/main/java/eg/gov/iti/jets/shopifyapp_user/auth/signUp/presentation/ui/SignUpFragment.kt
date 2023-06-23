@@ -25,11 +25,11 @@ import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.FirebaseRepoImplementati
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.remote.AuthRepo
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModel
-import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.base.model.DraftOrderFav
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.LineItems
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSignUpBinding
+import eg.gov.iti.jets.shopifyapp_user.util.createAlertDialog
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import eg.gov.iti.jets.shopifyapp_user.util.isValidEmail
 import eg.gov.iti.jets.shopifyapp_user.util.isValidPassword
@@ -38,13 +38,7 @@ import kotlinx.coroutines.launch
 
 
 class SignUpFragment : Fragment() {
-    private val viewModel: SignUpViewModel by lazy {
-        val factory = SignUpViewModelFactory(
-            AuthRepo(FirebaseRepoImplementation(Firebase.auth)),
-            APIRepoImplementation.getInstance(AuthRemoteSourceImp())!!
-        )
-        ViewModelProvider(this, factory)[SignUpViewModel::class.java]
-    }
+    private lateinit var  viewModel: SignUpViewModel
     private var dummyLineItemList: ArrayList<LineItems> = arrayListOf()
     private var favDraftOrderId: String = ""
     private var cartDraftOrderId: String = ""
@@ -55,6 +49,9 @@ class SignUpFragment : Fragment() {
     private var confirmPass = ""
     private var fName = ""
     private var lName = ""
+    private val alertDialog: AlertDialog by lazy {
+        createAlertDialog(requireContext(), "")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +65,7 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).findViewById<AppBarLayout>(R.id.custom_toolBar)?.visibility =
             View.GONE
+        viewModel=ViewModelProvider(this)[SignUpViewModel::class.java]
         binding.textViewHaveAcount.setOnClickListener {
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_signUpFragment_to_loginFragment)
@@ -114,7 +112,7 @@ class SignUpFragment : Fragment() {
                     binding.inputConfirmPassSignUp.error = "Passwords do not match"
                     return@setOnClickListener
                 } else {
-                    binding.progressBar.visibility = View.VISIBLE
+                    alertDialog.show()
                     val signupUser = SignupUser(
                         fName,
                         lName,
@@ -126,7 +124,7 @@ class SignUpFragment : Fragment() {
                 }
 
             } else {
-                binding.progressBar.visibility = View.GONE
+               alertDialog.dismiss()
                 Snackbar.make(
                     binding.root,
                     resources.getString(R.string.noInternetConnection),
@@ -181,7 +179,7 @@ class SignUpFragment : Fragment() {
                 }
                 is ResponseState.Error -> {
                         println("/////////////Error ${result.exception}//////////////////////")
-                        binding.editEmailSignup.error = "Email is already Exist"
+                   alertDialog.dismiss()
                     }
             }
 
@@ -202,14 +200,16 @@ class SignUpFragment : Fragment() {
                             val customer = Customer(
                                 email = email,
                                 first_name = fName,
-                                last_name = lName, currency = "EGP",
-                                tags = "${pass}#${uid}#true",//password,fireBaserUserId,emailVerification
+                                last_name = lName,
+                                tags = "${pass}#${uid}#false",//password,fireBaserUserId,emailVerification
                                 note = "${favDraftOrderId}#${cartDraftOrderId}"
                             )
                             viewModel.createCustomerAccount(SignupRequest(customer))
                         }
                     }
                     is ResponseState.Error -> {
+                        binding.editEmailSignup.error = "Email is already Exist"
+                        alertDialog.dismiss()
                         println("/////////////Error ${it.exception}//////////////////////")
                     }
 
@@ -222,7 +222,7 @@ class SignUpFragment : Fragment() {
 
                     }
                     is ResponseState.Success -> {
-                        binding.progressBar.visibility = View.GONE
+                       alertDialog.dismiss()
                         val alertDialog = AlertDialog.Builder(context)
 
                         alertDialog.apply {

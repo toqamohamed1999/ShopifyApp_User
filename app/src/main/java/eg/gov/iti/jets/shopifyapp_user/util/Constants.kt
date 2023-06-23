@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.util
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
@@ -7,6 +8,7 @@ import android.util.Patterns
 import androidx.annotation.RequiresApi
 import eg.gov.iti.jets.shopifyapp_user.BuildConfig
 import java.text.DecimalFormat
+import eg.gov.iti.jets.shopifyapp_user.R
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -46,6 +48,13 @@ fun String.isValidPassword(): Boolean {
 
 fun String.isValidEmail(): Boolean {
     return Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
+fun createAlertDialog(context: Context, msg : String): AlertDialog {
+    val builder = AlertDialog.Builder(context)
+    builder.setCancelable(false)
+    builder.setView(R.layout.loading)
+
+    return builder.create()
 }
 
 fun formatDecimal(decimal: Double): String {

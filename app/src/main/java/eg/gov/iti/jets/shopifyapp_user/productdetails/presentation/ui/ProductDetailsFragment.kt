@@ -26,6 +26,7 @@ import eg.gov.iti.jets.shopifyapp_user.cart.data.repo.CartRepositoryImpl
 import eg.gov.iti.jets.shopifyapp_user.cart.domain.remote.DraftOrderNetworkServices
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentProductDetailsBinding
 import eg.gov.iti.jets.shopifyapp_user.productdetails.data.model.SingleProductState
+import eg.gov.iti.jets.shopifyapp_user.productdetails.domain.local.VariantClick
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModel
 import eg.gov.iti.jets.shopifyapp_user.productdetails.presentation.viewmodel.ProductDetailsViewModelFactory
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
@@ -36,7 +37,7 @@ import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProductDetailsFragment : Fragment() {
+class ProductDetailsFragment : Fragment(), VariantClick {
     lateinit var binding: FragmentProductDetailsBinding
     private val viewModel by viewModels<ProductDetailsViewModel> {
         ProductDetailsViewModelFactory(
@@ -54,7 +55,8 @@ class ProductDetailsFragment : Fragment() {
     private var product_Id: Long? = null
     private var isFav: Boolean = false
     private var reviews = listOf<Review>()
-    private var favDraftOrderResponse :FavDraftOrderResponse= FavDraftOrderResponse()
+    private var favDraftOrderResponse: FavDraftOrderResponse = FavDraftOrderResponse()
+    private var selectedVariant:Variants?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,7 +77,7 @@ class ProductDetailsFragment : Fragment() {
 
                     }
                     is ResponseState.Success -> {
-                       favDraftOrderResponse=it.data!!
+                        favDraftOrderResponse = it.data!!
                     }
                     is ResponseState.Error -> {
                         println("Draft order Error ${it.exception}")
@@ -154,6 +156,7 @@ class ProductDetailsFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             binding.linearContainer.visibility = View.VISIBLE
                             receivedProduct = result.product.product
+                            selectedVariant= receivedProduct!!.variants[0]
                             println("/////////receivedProduct//////////////${receivedProduct!!.id}")
                             viewModel.getFavProductWithId(receivedProduct?.id!!)
                             bindDataToView(receivedProduct!!)
@@ -201,8 +204,11 @@ class ProductDetailsFragment : Fragment() {
                         setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                             isFav = false
                             viewModel.deleteFavProductWithId(product_Id!!)
-                            favDraftOrderResponse.draft_order?.lineItems?.removeIf {e->e.productId==receivedProduct?.id }
-                            viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
+                            favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == receivedProduct?.id }
+                            viewModel.updateFavDraftOrder(
+                                UserSettings.favoriteDraftOrderId.toLong(),
+                                favDraftOrderResponse
+                            )
                             binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_border_icon)
 
                             Snackbar.make(
@@ -221,7 +227,10 @@ class ProductDetailsFragment : Fragment() {
                     isFav = true
                     viewModel.insertFavProduct(receivedProduct?.toFavRoomPojo()!!)
                     favDraftOrderResponse.draft_order?.lineItems?.add(receivedProduct!!.toLineItems()!!)
-                    viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
+                    viewModel.updateFavDraftOrder(
+                        UserSettings.favoriteDraftOrderId.toLong(),
+                        favDraftOrderResponse
+                    )
                     binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_icon)
                 }
             } else {
@@ -229,6 +238,7 @@ class ProductDetailsFragment : Fragment() {
                     .show()
             }
         }
+
 
     }
 
@@ -243,11 +253,14 @@ class ProductDetailsFragment : Fragment() {
                 }
             })
             binding.progressBar.visibility = View.GONE
-            binding.txtProductPrice.text = formatDecimal(product.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
+            binding.txtProductPrice.text =
+                formatDecimal(product.variants[0].price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
             binding.txtProductName.text = product.title
             binding.txtViewDescription.text = product.bodyHtml
             binding.viewPagerImages.adapter = ProductImageViewPagerAdapter(product.images)
             binding.reviewsRecycler.adapter = ReviewsAdapter(requireContext(), reviews)
+            binding.variantRecycler.adapter =
+                VariantsAdapter(requireContext(), product.variants, this)
 
             binding.txtSeeMoreReviews.setOnClickListener {
                 val action =
@@ -285,6 +298,10 @@ class ProductDetailsFragment : Fragment() {
             }
             dot.background = drawable
         }
+    }
+
+    override fun onClickVariant(variant: Variants) {
+       selectedVariant=variant
     }
 
 }

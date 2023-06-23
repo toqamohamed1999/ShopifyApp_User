@@ -19,14 +19,14 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:indeterminateTint="@color/purple_500"
-            android:visibility="visible" />
+            android:indeterminateTint="@color/primary_color"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
@@ -114,6 +114,23 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/select_option"
+                android:textAlignment="viewStart"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/variant_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/variant_item" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -129,6 +146,7 @@
                 android:id="@+id/cardView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:backgroundTint="#F1F1F1"
                 android:elevation="32dp"
                 app:cardCornerRadius="24dp">
@@ -137,10 +155,10 @@
                     android:id="@+id/txtViewDescription"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="8dp"
+                    android:layout_margin="10dp"
                     android:text="There's a shell toe for every season, and the adidas Originals Superstar 80s shoes have a full grain leather upper with a shiny badge on the tongue that makes these shoes ready for any time of year."
                     android:textAlignment="viewStart"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -158,7 +176,8 @@
                 android:id="@+id/cardViewReviews"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#F1F1F1"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#F8F6F6"
                 android:elevation="32dp"
                 app:cardCornerRadius="24dp">
 
@@ -179,10 +198,11 @@
 
                     <TextView
                         android:id="@+id/txtSeeMoreReviews"
-                        android:layout_width="135dp"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_margin="12dp"
+                        android:layout_marginBottom="30dp"
                         android:layout_marginStart="5dp"
                         android:text="@string/seemorereviews..."
                         android:textColor="@color/purple_700"

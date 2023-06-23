@@ -12,14 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
+import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
 import eg.gov.iti.jets.shopifyapp_user.auth.login.presentation.viewModel.LoginViewModel
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.LineItems
 import eg.gov.iti.jets.shopifyapp_user.base.model.toFavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentLoginBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.createAlertDialog
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import eg.gov.iti.jets.shopifyapp_user.util.isValidEmail
 import kotlinx.coroutines.delay
@@ -32,8 +35,13 @@ class LoginFragment : Fragment() {
     private var email = ""
     private var pass = ""
     private lateinit var viewModel: LoginViewModel
-    private var favDraftOrderResponse : FavDraftOrderResponse = FavDraftOrderResponse()
-    private var favLineItems : ArrayList<LineItems> = arrayListOf()
+    private var favDraftOrderResponse: FavDraftOrderResponse = FavDraftOrderResponse()
+    private var customer: Customer = Customer()
+    private var favLineItems: ArrayList<LineItems> = arrayListOf()
+    private val alertDialog: AlertDialog by lazy {
+        createAlertDialog(requireContext(), "")
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +59,8 @@ class LoginFragment : Fragment() {
                 .navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.txtSkip.setOnClickListener {
-            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_loginFragment_to_homeFragment)
         }
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding.btnLogIn.setOnClickListener {
@@ -72,15 +81,14 @@ class LoginFragment : Fragment() {
                 if (pass.isEmpty()) {
                     binding.passwordLayoutLogin.error = "Password is required"
                     return@setOnClickListener
-                }
-               else {
-                    binding.progressBar.visibility = View.VISIBLE
+                } else {
+                    alertDialog.show()
                     viewModel.getCustomerByEmail(email)
 
                 }
 
             } else {
-                binding.progressBar.visibility = View.GONE
+                alertDialog.dismiss()
                 Snackbar.make(
                     binding.root,
                     resources.getString(R.string.noInternetConnection),
@@ -98,59 +106,77 @@ class LoginFragment : Fragment() {
 
                     }
                     is ResponseState.Success -> {
-                         if (it.data?.customers?.size == 0) {
+                        if (it.data?.customers?.isNotEmpty() == true) {
+                            customer = it.data.customers?.get(0)!!
+                        }
+                        if (it.data?.customers?.isEmpty() == true) {
                             binding.emailLayoutLogin.error = "email is not found"
-                            binding.passwordLayoutLogin.error=null
-                             viewModel.resetFlow()
+                            binding.passwordLayoutLogin.error = null
+                            alertDialog.dismiss()
+                            viewModel.resetFlow()
 
-                         } else if (it.data?.customers?.get(0)?.tags!!.split("#")[0] != pass) {
-                            println("///////////////////////pass${(it.data?.customers?.get(0)?.tags!!.split("#")[0])}//////")
+                        } else if (customer.tags!!.split("#")[0] != pass) {
                             binding.passwordLayoutLogin.error = "wrong password"
-                            binding.emailLayoutLogin.error=null
-                             viewModel.resetFlow()
+                            binding.emailLayoutLogin.error = null
+                            alertDialog.dismiss()
+                            viewModel.resetFlow()
+                        } else {
+                            binding.emailLayoutLogin.error = null
+                            binding.passwordLayoutLogin.error = null
+                            viewModel.checkVerification(email, pass)
+                            viewModel.resetFlow()
                         }
-                        else if (it.data?.customers?.get(0)?.tags!!.split("#")[2] =="true") {
-                             println("///////////////////////verification ${(it.data?.customers?.get(0)?.tags!!.split("#")[2])}")
-                            binding.emailLayoutLogin.error=null
-                            binding.passwordLayoutLogin.error=null
-                             UserSettings.userAPI_Id=it.data.customers[0].id.toString()
-                             UserSettings.userName=it.data.customers[0].first_name.toString()
-                             UserSettings.userEmail=it.data.customers[0].email.toString()
-                             UserSettings.favoriteDraftOrderId=it.data?.customers?.get(0)?.note!!.split("#")[0]
-                             UserSettings.cartDraftOrderId=it.data?.customers?.get(0)?.note!!.split("#")[1]
-                             UserSettings.userPassword=pass
-                             UserSettings.currencyCode = it.data.customers[0].phone?:"EGP"
-                             UserSettings.shippingAddress = it.data.customers[0].addresses.let {
-                                 if(it?.size!=0){
 
-                                     val address = it?.get(0)?.address1?:""
-                                     address
-                             }else ""
-                             }
-                             UserSettings.saveSettings()
-                             viewModel.getFavRemoteProducts(it.data?.customers?.get(0)?.note!!.split("#")[0].toLong())
-                            delay(3000)
-                             loadFavToRoom()
-                            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
+                    }
+                    is ResponseState.Error -> {
+                        alertDialog.dismiss()
+                        println("/////////////Error ${it.exception.toString()}//////////////////////")
+                        viewModel.resetFlow()
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.isVerified.collect {
+                when (it) {
+                    is ResponseState.Loading -> {
+
+                    }
+                    is ResponseState.Success -> {
+                        if (it.data == true) {
+                            saveCustomerInSharedPref()
+                            loadFavToRoom()
+                            alertDialog.dismiss()
+                            Navigation.findNavController(requireView())
+                                .navigate(R.id.action_loginFragment_to_homeFragment)
+                        } else {
+                            alertDialog.dismiss()
+                            viewModel.checkVerification(email, pass)
+                            val alertDialog = AlertDialog.Builder(context)
+                            alertDialog.apply {
+                                setIcon(R.drawable.baseline_info_24)
+                                setTitle("Info")
+                                setMessage(resources.getString(R.string.go_to_verify_email_from_login))
+                                setPositiveButton("OK") { _: DialogInterface?, _: Int ->
+                                }
+                            }.create().show()
+                            viewModel.resetVerificationFlow()
                         }
-                        else {
+                    }
+                    is ResponseState.Error -> {
+                        alertDialog.dismiss()
+                        println("////////////////Firebase Error $it/////////////")
                         val alertDialog = AlertDialog.Builder(context)
-
                         alertDialog.apply {
                             setIcon(R.drawable.baseline_info_24)
-                            setTitle("Info")
-                            setMessage(resources.getString(R.string.go_to_verify_email_from_login))
+                            setTitle("warning")
+                            setMessage(resources.getString(R.string.wait_to_sent_anotherMail))
                             setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                             }
                         }.create().show()
-                             viewModel.resetFlow()
-                        }
-                        binding.progressBar.visibility = View.GONE
-                    }
-                    is ResponseState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        println("/////////////Error ${it.exception.toString()}//////////////////////")
-                        viewModel.resetFlow()
+                        viewModel.resetVerificationFlow()
+
+
                     }
                 }
             }
@@ -163,8 +189,8 @@ class LoginFragment : Fragment() {
 
                     }
                     is ResponseState.Success -> {
-                        favDraftOrderResponse=it.data!!
-                        favLineItems=favDraftOrderResponse.draft_order!!.lineItems
+                        favDraftOrderResponse = it.data!!
+                        favLineItems = favDraftOrderResponse.draft_order!!.lineItems
                     }
                     is ResponseState.Error -> {
                         println("Draft order Error ${it.exception}")
@@ -174,11 +200,27 @@ class LoginFragment : Fragment() {
         }
 
     }
-    fun loadFavToRoom()
-    {
+
+    private suspend fun loadFavToRoom() {
+        viewModel.getFavRemoteProducts(
+            customer.note!!.split(
+                "#"
+            )[0].toLong()
+        )
+        delay(3000)
         favLineItems.removeFirst()
-        for (fav in favLineItems){
+        for (fav in favLineItems) {
             viewModel.insertFavProduct(fav.toFavRoomPojo())
         }
+    }
+
+    private fun saveCustomerInSharedPref() {
+        UserSettings.userAPI_Id = customer.id.toString()
+        UserSettings.userName = customer.first_name.toString()
+        UserSettings.userEmail = customer.email.toString()
+        UserSettings.favoriteDraftOrderId = customer.note!!.split("#")[0]
+        UserSettings.cartDraftOrderId = customer.note!!.split("#")[1]
+        UserSettings.userPassword = pass
+        UserSettings.saveSettings()
     }
 }
