@@ -78,18 +78,27 @@ class SettingsViewModel(
 
         if(UserSettings.userAPI_Id.isNotEmpty()) {
             viewModelScope.launch {
-                settingsRepo.getCustomerById(UserSettings.userAPI_Id).collect{ it ->
+                settingsRepo.getCustomerById(UserSettings.userAPI_Id).collect{
                     if(it!=null){
-                        it.customer.phone = UserSettings.currencyCode
+                        it.customer.note = getCurrencyCodeToBind(it.customer.note?.split("#"))
+                        Log.e("","After Change :.......$it...")
+
                         settingsRepo.updateRemoteCustomer(UserSettings.userAPI_Id.toLong(),
                             it
                         ).collect{ ii->
-                            Log.e("","After Change :.........."+ii.customer.last_name.toString())
+                            Log.e("","After Change :.........."+ii?.customer?.last_name.toString())
                         }
                     }
                 }
             }
         }
     }
-
+private  fun getCurrencyCodeToBind(all:List<String>?):String{
+    var str=""
+    if(all!=null)
+    {
+        str = all[0]+"#"+all[1]+"#"+UserSettings.currencyCode+"#"+UserSettings.currentCurrencyValue
+    }
+    return str
+}
 }

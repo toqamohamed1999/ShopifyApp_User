@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.shopifyapp_user.settings.data.repo
 
+import android.util.Log
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.CustomerResponse
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.CustomersResponse
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.remote.AuthRemoteSourceInterface
@@ -9,6 +10,7 @@ import eg.gov.iti.jets.shopifyapp_user.settings.domain.remote.SettingsRemoteSour
 import eg.gov.iti.jets.shopifyapp_user.settings.domain.repo.SettingsRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 
 class SettingsRepoImpl(private val settingsRemoteSource: SettingsRemoteSource,private val customerRemoteSource:ApiRepoInterface):SettingsRepo {
     override suspend fun getAllAddressesForUser(userId: String): MutableStateFlow<AdressesResponse?> {
@@ -43,8 +45,13 @@ class SettingsRepoImpl(private val settingsRemoteSource: SettingsRemoteSource,pr
     override suspend fun updateRemoteCustomer(
         customer_id: Long,
         customer: CustomerResponse
-    ): Flow<CustomerResponse> {
-      return customerRemoteSource.updateRemoteCustomer(customer_id,customer)
+    ): Flow<CustomerResponse?> {
+      return try {
+          customerRemoteSource.updateRemoteCustomer(customer_id, customer)
+      }catch (e:java.lang.Exception){
+          Log.e("",e.localizedMessage.toString())
+          flow { emit(null) }
+      }
     }
 
 }
