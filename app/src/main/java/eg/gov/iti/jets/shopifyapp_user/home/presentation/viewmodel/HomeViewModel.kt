@@ -13,6 +13,7 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.repo.BrandRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 
 class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRepo) : ViewModel() {
 
@@ -37,12 +38,11 @@ class HomeViewModel(private val brandRepo: BrandRepo,private val addsRepo:AddsRe
             viewModelScope.launch {
                 addsRepo.getAllPriceRules().collect {
                     it?.price_rules?.forEach { item ->
-                        item.ends_at = item.ends_at ?: ""
                         if (item.ends_at.isNotEmpty()) {
                             try {
-                                val dateFormat = SimpleDateFormat("YYYY-MM-ddTHH:mm:ss")
+                                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale("en"))
                                 val currentDate = System.currentTimeMillis()
-                                val ts = dateFormat.parse(item.ends_at).time / 1000
+                                val ts = dateFormat.parse(item.ends_at.replace("T"," ")).time
                                 if (currentDate < ts) {
                                     getDiscounts(item.id.toString(), item.value, item.value_type)
                                 }

@@ -12,6 +12,18 @@
         android:layout_height="match_parent"
         tools:context=".home.presentation.ui.HomeFragment">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/adds_anim2"
+            android:layout_width="75dp"
+            android:layout_height="68dp"
+            android:layout_marginTop="213dp"
+            app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"
+            app:layout_constraintEnd_toEndOf="@+id/coupons_viewPager"
+            app:layout_constraintTop_toTopOf="@+id/lottieAnimationView"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_fileName="addsAnim.json" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_search"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -49,6 +61,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_search" />
 
         <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"

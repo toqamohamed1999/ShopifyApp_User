@@ -34,56 +34,7 @@ class CouponAdapter( var discounts: ArrayList<DiscountCode> , var myListener: Co
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val discount = discounts[position]
 
-        var img = Random.nextInt(5)
-        when (img) {
-            1 -> {
-                holder.binding.discountImageView.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        holder.binding.root.resources,
-                        R.drawable.x1,
-                        null
-                    )
-                )
-            }
-            2 -> {
-                holder.binding.discountImageView.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        holder.binding.root.resources,
-                        R.drawable.x2,
-                        null
-                    )
-                )
-            }
-            3 -> {
-                holder.binding.discountImageView.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        holder.binding.root.resources,
-                        R.drawable.x3,
-                        null
-                    )
-                )
-            }
-            4 -> {
-                holder.binding.discountImageView.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        holder.binding.root.resources,
-                        R.drawable.x4,
-                        null
-                    )
-                )
-
-            }
-            else -> {
-                holder.binding.discountImageView.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        holder.binding.root.resources,
-                        R.drawable.x5,
-                        null
-                    )
-                )
-            }
-        }
-         img = Random.nextInt(6)
+        val img = Random.nextInt(6)
         when (img) {
             1 -> {
                 holder.binding.imageViewdiscountImage.setImageDrawable(
