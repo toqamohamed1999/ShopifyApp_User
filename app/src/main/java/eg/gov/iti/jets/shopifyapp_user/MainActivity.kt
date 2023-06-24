@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
     private lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
     lateinit var backButton: ImageView
-    lateinit var fragment: View
+    lateinit var fragment : View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,25 +38,27 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
         backButton = binding.backButton
         binding.toolbar.findViewById<ImageView>(R.id.shoppingCart_icon).setOnClickListener {
 
-            if (UserStates.checkConnectionState(this)) {
-                if (UserSettings.userAPI_Id.isNotEmpty()) {
+            if(UserStates.checkConnectionState(this))
+            {
+                if(UserSettings.userAPI_Id.isNotEmpty()){
                     navController.navigate(R.id.cartFragment)
-                } else {
+                }else{
                     navController.navigate(R.id.loginFragment)
                 }
-            } else {
-                Dialogs.SnakeToast(binding.root, getString(R.string.noInternetConnection))
+            }else{
+                Dialogs.SnakeToast(binding.root,getString(R.string.noInternetConnection))
             }
         }
         binding.toolbar.findViewById<ImageView>(R.id.setting_icon).setOnClickListener {
-            if (UserStates.checkConnectionState(this)) {
-                if (UserSettings.userAPI_Id.isNotEmpty()) {
+            if(UserStates.checkConnectionState(this))
+            {
+                if(UserSettings.userAPI_Id.isNotEmpty()){
                     navController.navigate(R.id.settingsFragment)
-                } else {
+                }else{
                     navController.navigate(R.id.loginFragment)
                 }
-            } else {
-                Dialogs.SnakeToast(binding.root, getString(R.string.noInternetConnection))
+            }else{
+                Dialogs.SnakeToast(binding.root,getString(R.string.noInternetConnection))
             }
 
         }
@@ -67,10 +69,10 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupWithNavController(bottomNav, navController)
         setUpNavBottom(navController)
-        if (UserSettings.userAPI_Id.isEmpty()) {
+        if(UserSettings.userAPI_Id.isEmpty()){
             navController.navigate(R.id.loginFragment)
-        } else {
-            changeBadgeCartCount(UserSettings.cartQuantity ?: 0)
+        }else{
+            changeBadgeCartCount(UserSettings.cartQuantity?:0)
         }
     }
 
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                 }
                 R.id.cartFragment -> {
                     bottomNav.visibility = View.GONE
-                    binding.shoppingCartIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility=View.GONE
                     binding.backButton.visibility = View.VISIBLE
                     binding.titleTextView.text = getString(R.string.cart)
                     binding.settingIcon.visibility = View.VISIBLE
@@ -106,8 +108,8 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.shoppingCartIcon.visibility = View.VISIBLE
                 }
                 R.id.fragmentPaymentInfo -> {
-                    binding.titleTextView.text = getString(R.string.orderInfo)
-                    binding.shoppingCartIcon.visibility = View.GONE
+                     binding.titleTextView.text = getString(R.string.orderInfo)
+                    binding.shoppingCartIcon.visibility=View.GONE
                     bottomNav.visibility = View.GONE
                     binding.backButton.visibility = View.VISIBLE
                     binding.settingIcon.visibility = View.GONE
@@ -139,16 +141,16 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.settingIcon.visibility = View.GONE
                     binding.shoppingCartIcon.visibility = View.VISIBLE
                 }
-                R.id.loginFragment -> {
+                R.id.loginFragment->{
                     bottomNav.visibility = View.GONE
                     binding.toolbar.visibility = View.GONE
 
                 }
-                R.id.signUpFragment -> {
+                R.id.signUpFragment->{
                     bottomNav.visibility = View.GONE
                     binding.toolbar.visibility = View.GONE
                 }
-                R.id.fragmentLocationDetector -> {
+                R.id.fragmentLocationDetector->{
                     bottomNav.visibility = View.GONE
                     binding.toolbar.visibility = View.GONE
                 }
@@ -159,14 +161,9 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.settingIcon.visibility = View.GONE
                     binding.shoppingCartIcon.visibility = View.VISIBLE
                     when (navDestination.id) {
-                        R.id.homeFragment -> {
-                            binding.titleTextView.text = getString(R.string.home_header)
-                            binding.toolbar.visibility = View.VISIBLE
-                        }
-                        R.id.categoryFragment -> binding.titleTextView.text =
-                            getString(R.string.category_header)
-                        R.id.favoriteFragment -> binding.titleTextView.text =
-                            getString(R.string.favorite_header)
+                        R.id.homeFragment -> binding.titleTextView.text = getString(R.string.home_header)
+                        R.id.categoryFragment -> binding.titleTextView.text = getString(R.string.category_header)
+                        R.id.favoriteFragment -> binding.titleTextView.text = getString(R.string.favorite_header)
                         R.id.profileFragment -> {
                             binding.titleTextView.text = getString(R.string.profile_header)
                             binding.settingIcon.visibility = View.VISIBLE

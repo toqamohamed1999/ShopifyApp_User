@@ -198,7 +198,7 @@ class ProductsFragment : Fragment(), OnClickProduct {
     @SuppressLint("NotifyDataSetChanged")
     override fun onClickFavIcon(product_Id: Long) {
         if (isConnected(requireContext())) {
-            if (!productsAdapter.getIsFav()) {
+            if (productsAdapter.getIsFav()) {
                 viewModel.deleteFavProductWithId(product_Id!!)
 
                 favDraftOrderResponse.draft_order?.lineItems?.removeIf { e -> e.productId == product_Id }
@@ -206,7 +206,6 @@ class ProductsFragment : Fragment(), OnClickProduct {
                     UserSettings.favoriteDraftOrderId.toLong(),
                     favDraftOrderResponse
                 )
-                productsAdapter.notifyDataSetChanged()
             } else {
                 val product: Product? = findProductById(product_Id, productsList)
                 viewModel.insertFavProduct(product?.toFavRoomPojo()!!)
@@ -215,7 +214,6 @@ class ProductsFragment : Fragment(), OnClickProduct {
                     UserSettings.favoriteDraftOrderId.toLong(),
                     favDraftOrderResponse
                 )
-                productsAdapter.notifyDataSetChanged()
             }
         } else {
             Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
