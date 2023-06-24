@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:drawable/screen_background_dark_transparent"
     android:clickable="true"
-    android:focusable="true"
-    android:padding="2sp">
+    android:focusable="true">
 
     <TextView
         android:id="@+id/textView7"
