@@ -21,7 +21,7 @@ object Dialogs {
         snackbarView.background= ResourcesCompat.getDrawable(view.context.resources, R.drawable.snackbarback,null)
         val textView =
             snackbarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
-        textView.setTextColor(Color.BLACK)
+        textView.setTextColor(Color.WHITE)
         textView.textSize = 18f
         textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
         snackbar.duration = Snackbar.LENGTH_SHORT
