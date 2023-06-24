@@ -27,6 +27,7 @@ import eg.gov.iti.jets.shopifyapp_user.products.data.repo.ProductsBrandRepoImp
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.viewmodel.ProductsViewModel
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,6 +42,7 @@ class ProductsFragment : Fragment(), OnClickProduct {
     private var isFav: Boolean = false
     private var favDraftOrderResponse: FavDraftOrderResponse = FavDraftOrderResponse()
     private var isRangeVisible = false
+    private var values : Double = 0.0
 
     private val viewModel: ProductsViewModel by lazy {
         val factory = ProductFactoryViewModel(
@@ -72,10 +74,12 @@ class ProductsFragment : Fragment(), OnClickProduct {
         binding.filterIcon.setOnClickListener {
             if (isRangeVisible) {
                 binding.rangeSlider.visibility = View.GONE
+                binding.priceTextView.visibility = View.GONE
                 viewModel.getProductsBrand(brand.toString())
                 viewModel.getAllFavProduct()
             } else {
                 binding.rangeSlider.visibility = View.VISIBLE
+                binding.priceTextView.visibility = View.VISIBLE
             }
             isRangeVisible = !isRangeVisible
         }
@@ -151,11 +155,13 @@ class ProductsFragment : Fragment(), OnClickProduct {
 
         binding.rangeSlider.addOnChangeListener { slider, value, fromUser ->
             productsAdapter.setProductList(productsList.filter {
-                val values = binding.rangeSlider.values
+                values = binding.rangeSlider.value.toDouble()
+
                 val price: Float? = it.variants[0].price?.toFloat()
-                price!! >= values[0] && price <= values[1]
+                price!! >= value
             })
             productsAdapter.notifyDataSetChanged()
+            binding.priceTextView.text = "Price: ${formatDecimal(values)}"
         }
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
