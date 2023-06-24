@@ -82,7 +82,7 @@
     <string name="price_products">Products Price:</string>
     <string name="tax_price">Tax Price:</string>
     <string name="title">Title</string>
-    <string name="quantity">Quantity</string>
+    <string name="quantity">Quantity:</string>
     <string name="place_order">Place Order</string>
     <string name="no_products_in_wishlist">no products in wishList</string>
     <string name="you_aren_t_logged_in">You aren\'t logged in</string>

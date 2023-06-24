@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/orderNum_textView"
             app:layout_constraintStart_toEndOf="@+id/orderNum_textView"
             app:layout_constraintTop_toTopOf="@+id/orderNum_textView" />
@@ -50,6 +51,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/date_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/date_textView"
@@ -74,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/price_textView"
             app:layout_constraintStart_toEndOf="@+id/price_textView"
             app:layout_constraintTop_toTopOf="@+id/price_textView"
@@ -98,7 +101,7 @@
             android:fontFamily="@font/acme"
             android:text="@string/items"
             android:textColor="@color/secondary_color"
-            android:textSize="20sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="@+id/price_textView"
             app:layout_constraintTop_toBottomOf="@+id/price_textView" />
 

@@ -46,10 +46,10 @@ class ItemOrderAdapter(
             .load(currentItemOrder.properties[0].value)
             .into(holder.binding.itemImageView)
         holder.binding.itemOrderCardView.setOnClickListener {
-            myListener.onClickItemOrder(id.toLong())
+            myListener.onClickItemOrder(currentItemOrder.properties[0].name.toLong())
         }
 //        holder.binding.itemOrderCardView.startAnimation(
-//            AnimationUtils.loadAnimation(
+//            AnimationUtils.loadAnimation(r
 //                holder.itemView.context,
 //                R.anim.anim_recyclerview
 //            )
