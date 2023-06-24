@@ -125,7 +125,7 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                                         orderList = it.orderList.take(2)
                                     } else {
                                         binding.txtMoreOrders.visibility = View.GONE
-                                        it.orderList
+                                        orderList = it.orderList
                                     }
                                     orderAdapter.setOrderList(orderList)
                                     binding.ordersRecyclerView.adapter = orderAdapter
@@ -138,13 +138,14 @@ class ProfileFragment : Fragment(), OnClickOrder, OnWishListClick {
                     }
                 }
 
-        binding.txtMoreOrders.setOnClickListener {
-            binding.root.findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)
-        }
+                binding.txtMoreOrders.setOnClickListener {
+                    binding.root.findNavController()
+                        .navigate(R.id.action_profileFragment_to_allOrdersFragment)
+                }
 //        binding.imageButtongotToSetting.setOnClickListener {
 //            binding.root.findNavController().navigate(R.id.settingsFragment)
 //        }
-    }
+            }
         } else {
             binding.noInternetContainer.visibility = View.VISIBLE
             binding.fragmentContainer.visibility = View.GONE

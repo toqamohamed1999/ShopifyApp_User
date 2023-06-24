@@ -82,7 +82,11 @@ class ProductsAdapter(
             if (isConnected(context)) {
                 myListener.onClickFavIcon(currentProduct.id!!)
 
-                if (holder.binding.favIcon.drawable==ContextCompat.getDrawable(context,R.drawable.favorite_icon)) {
+                if (holder.binding.favIcon.resources == ContextCompat.getDrawable(
+                        context,
+                        R.drawable.favorite_icon
+                    )
+                ) {
                     println("//////////////////////////////////////in delete///////////////////////")
                     val alertDialog = AlertDialog.Builder(context)
                     alertDialog.apply {
@@ -101,7 +105,11 @@ class ProductsAdapter(
                         setNegativeButton("Cancel") { _, _ ->
                         }
                     }.create().show()
-                } else if (holder.binding.favIcon.drawable.constantState==getDrawable(context,R.drawable.favorite_border_icon)) {
+                } else if (holder.binding.favIcon.resources == ContextCompat.getDrawable(
+                        context,
+                        R.drawable.favorite_border_icon
+                    )
+                ) {
                     println("//////////////////////////////////////in add///////////////////////")
                     isFav = true
                     holder.binding.favIcon.setImageResource(R.drawable.favorite_icon)

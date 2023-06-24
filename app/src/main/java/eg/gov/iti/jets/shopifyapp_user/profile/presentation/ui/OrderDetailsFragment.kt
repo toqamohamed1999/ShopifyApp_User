@@ -2,6 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.profile.presentation.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.shopifyapp_user.base.model.orders.Order
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentOrderDetailsBinding
+import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
 import eg.gov.iti.jets.shopifyapp_user.util.convertDateTimeFormat
+import eg.gov.iti.jets.shopifyapp_user.util.formatDecimal
 
 class OrderDetailsFragment : Fragment(), OnClickItemOrder {
 
@@ -40,7 +43,7 @@ class OrderDetailsFragment : Fragment(), OnClickItemOrder {
 
         binding.orderNumValue.text = order.order_number.toString()
         binding.dateValue.text = convertDateTimeFormat(order.processed_at!!)
-        binding.priceValue.text = order.current_subtotal_price
+        binding.priceValue.text = formatDecimal(order.current_subtotal_price!!.toDouble() * UserSettings.currentCurrencyValue) + " ${UserSettings.currencyCode}"
 
         itemOrderAdapter = ItemOrderAdapter(ArrayList(), requireActivity(), this)
         val layoutManager = LinearLayoutManager(requireContext())
@@ -52,6 +55,7 @@ class OrderDetailsFragment : Fragment(), OnClickItemOrder {
     }
 
     override fun onClickItemOrder(id: Long) {
+        Log.i("iddddddddddd", "${id}")
         val action = OrderDetailsFragmentDirections.actionOrderDetailsFragmentToProductDetailsFragment(id)
         binding.root.findNavController().navigate(action)
     }
