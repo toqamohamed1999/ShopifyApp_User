@@ -19,5 +19,5 @@ interface SettingsRepo {
     suspend fun updateRemoteCustomer(
       customer_id: Long,
       customer: CustomerResponse
-   ): Flow<CustomerResponse>
+   ): Flow<CustomerResponse?>
 }

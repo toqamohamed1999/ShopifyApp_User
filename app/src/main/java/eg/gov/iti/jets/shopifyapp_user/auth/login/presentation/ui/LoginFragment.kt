@@ -221,6 +221,12 @@ class LoginFragment : Fragment() {
         UserSettings.favoriteDraftOrderId = customer.note!!.split("#")[0]
         UserSettings.cartDraftOrderId = customer.note!!.split("#")[1]
         UserSettings.userPassword = pass
+        try {
+            UserSettings.currencyCode = customer.note?.split("#")?.get(2) ?: "EGP"
+            UserSettings.currentCurrencyValue = customer.note?.split("#")?.get(3)?.toDouble() ?: 1.0
+        }catch(e:java.lang.Exception){
+            print(e.message)
+        }
         UserSettings.saveSettings()
     }
 }
