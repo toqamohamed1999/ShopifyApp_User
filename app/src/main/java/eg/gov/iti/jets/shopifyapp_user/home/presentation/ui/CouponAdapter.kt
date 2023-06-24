@@ -67,6 +67,16 @@ class CouponAdapter( var discounts: ArrayList<DiscountCode> , var myListener: Co
                 holder.binding.imageViewdiscountImage.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         holder.binding.root.resources,
+                        R.drawable.fixed4,
+                        null
+                    )
+                )
+
+            }
+            5 -> {
+                holder.binding.imageViewdiscountImage.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        holder.binding.root.resources,
                         R.drawable.fixed5,
                         null
                     )

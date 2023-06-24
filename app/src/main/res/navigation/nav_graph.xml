@@ -196,6 +196,11 @@
         <action
             android:id="@+id/action_settingsFragment_to_fragmentLocationDetector"
             app:destination="@id/fragmentLocationDetector" />
+        <action
+            android:id="@+id/action_settingsFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@+id/settingsFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

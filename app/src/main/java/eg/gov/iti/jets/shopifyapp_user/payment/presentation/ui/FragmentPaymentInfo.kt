@@ -2,6 +2,7 @@ package eg.gov.iti.jets.shopifyapp_user.payment.presentation.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -228,17 +229,16 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         binding?.phoneText?.setText(UserSettings.phoneNumber)
         binding?.tvAddres?.text = UserSettings.shippingAddress
 
-        binding?.textViewSubTotalPrice?.text= "${((totalPrice*100).toInt())/100.0} $currencyCode"
-
-        binding?.textViewShippingFees?.text = "${(((30* currentCurrencyValue)*100).toInt())/100.0} $currencyCode"
+        binding?.textViewSubTotalPrice?.text= "${totalPrice.round()} $currencyCode"
         if(UserSettings.userCurrentDiscountCopy!=null)
         {
-            if((userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)<totalPrice) {
+            if(((userCurrentDiscountCopy?.created_at?.toDouble()?:0.0)* currentCurrencyValue)<totalPrice) {
                 showDiscount()
+            }else{
+                binding?.cartTotalPrice?.text = "Final Price : ${(totalPrice* currentCurrencyValue).round()} $currencyCode"
             }
         }else{
-            binding?.discountCardView?.visibility = View.GONE
-            binding?.cartTotalPrice?.text = "Final Price : ${totalPrice+(30* currentCurrencyValue)} $currencyCode"
+            binding?.cartTotalPrice?.text = "Final Price : ${(totalPrice* currentCurrencyValue).round()} $currencyCode"
         }
     }
 
@@ -247,20 +247,16 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         val value = userCurrentDiscountCopy?.created_at?.toDouble()?:0.0
         if(userCurrentDiscountCopy?.updated_at =="percentage")
         {
-
             binding?.textViewDiscountValue?.text = "$value %"
-            totalPrice = (totalPrice-((totalPrice*value)/100))
-            totalPrice = ((totalPrice*100).roundToInt())/100.0
-        }else if(userCurrentDiscountCopy?.updated_at =="fixed_amount"){
+            totalPrice = (totalPrice-((totalPrice*value)/100)).round()
+        }else if(userCurrentDiscountCopy?.updated_at=="fixed_amount"){
             if(value<totalPrice) {
                 binding?.textViewDiscountValue?.text =
-                    "${((value * currentCurrencyValue*100).toInt())/100.0} $currencyCode"
+                    "${(value * currentCurrencyValue).round()} $currencyCode"
                 totalPrice -= value
-            }else{
-                binding?.discountCardView?.visibility = View.INVISIBLE
             }
         }
-        binding?.cartTotalPrice?.text = "Final Price : $totalPrice $currencyCode"
+        binding?.cartTotalPrice?.text = "Final Price : ${(totalPrice*currentCurrencyValue).round()} $currencyCode"
         viewModel.setDiscount(userCurrentDiscountCopy,totalPrice)
     }
 
@@ -290,6 +286,8 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         addressesDialog.dismiss()
         viewModel.setAddress()
     }
-
+fun Double.round():Double{
+    return  (this*100).roundToInt()/100.0
+}
 
 }

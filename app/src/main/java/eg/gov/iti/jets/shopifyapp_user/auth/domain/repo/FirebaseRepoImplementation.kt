@@ -21,7 +21,6 @@ class FirebaseRepoImplementation(private val auth: FirebaseAuth) : FirebaseRepoI
     override suspend fun loginUser(email: String, pass: String): ResponseState<Boolean> {
         return try {
             auth.signInWithEmailAndPassword(email, pass)?.await()
-            delay(2000)
             if (auth.currentUser?.isEmailVerified == false) {
                 auth.currentUser?.sendEmailVerification()?.await()
                 println("//////////////email verification sent//////////")
