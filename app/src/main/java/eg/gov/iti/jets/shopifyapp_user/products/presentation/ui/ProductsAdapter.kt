@@ -50,10 +50,6 @@ class ProductsAdapter(
         return isFav
     }
 
-    fun setIsFav(isFav: Boolean) {
-        this.isFav = isFav
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -82,11 +78,7 @@ class ProductsAdapter(
             if (isConnected(context)) {
                 myListener.onClickFavIcon(currentProduct.id!!)
 
-                if (holder.binding.favIcon.resources == ContextCompat.getDrawable(
-                        context,
-                        R.drawable.favorite_icon
-                    )
-                ) {
+                if (isFav) {
                     println("//////////////////////////////////////in delete///////////////////////")
                     val alertDialog = AlertDialog.Builder(context)
                     alertDialog.apply {
@@ -105,11 +97,7 @@ class ProductsAdapter(
                         setNegativeButton("Cancel") { _, _ ->
                         }
                     }.create().show()
-                } else if (holder.binding.favIcon.resources == ContextCompat.getDrawable(
-                        context,
-                        R.drawable.favorite_border_icon
-                    )
-                ) {
+                } else{
                     println("//////////////////////////////////////in add///////////////////////")
                     isFav = true
                     holder.binding.favIcon.setImageResource(R.drawable.favorite_icon)
@@ -128,10 +116,10 @@ class ProductsAdapter(
     fun setFavoriteIcon(product: Product, favProducts: List<FavRoomPojo>): Int {
         val isFavorite = favProducts.any { it.productId == product.id }
         return if (isFavorite) {
-
+            isFav = true
             R.drawable.favorite_icon
         } else {
-
+            isFav = false
             R.drawable.favorite_border_icon
         }
     }
