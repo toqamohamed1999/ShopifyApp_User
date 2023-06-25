@@ -104,10 +104,9 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
                     adsAdapter.notifyItemRangeChanged(0, it.size)
                     //createDots(it.size)
                     //updateDots(0)
+                    binding.textView15.visibility = View.GONE
                 }else{
-                    binding.couponsViewPager.visibility = View.INVISIBLE
-                    binding.addsAnim2.visibility = View.INVISIBLE
-                    binding.lottieAnimationView.visibility = View.INVISIBLE
+                    binding.textView15.visibility = View.VISIBLE
                 }
             }
         }
