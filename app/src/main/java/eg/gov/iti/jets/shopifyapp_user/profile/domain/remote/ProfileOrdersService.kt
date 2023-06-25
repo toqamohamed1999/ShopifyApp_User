@@ -6,10 +6,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 
 interface ProfileOrdersService {
-    @Headers(
-        "Content-Type:application/json",
-        "X-Shopify-Access-Token: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"
-    )
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
     @GET("customers/{id}/orders.json")
     suspend fun getOrdersOfUser(@Path("id") id: Long): OrderDetails
 }

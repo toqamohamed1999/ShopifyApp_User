@@ -97,12 +97,18 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
         //adds
         lifecycleScope.launch {
             viewModel.adds.observe(viewLifecycleOwner) {
-                adsImages.clear()
-                adsImages.addAll(it)
-                adsAdapter.discounts = adsImages
-                adsAdapter.notifyItemRangeChanged(0, it.size)
-                //createDots(it.size)
-                //updateDots(0)
+                if(it.isNotEmpty()) {
+                    adsImages.clear()
+                    adsImages.addAll(it)
+                    adsAdapter.discounts = adsImages
+                    adsAdapter.notifyItemRangeChanged(0, it.size)
+                    //createDots(it.size)
+                    //updateDots(0)
+                }else{
+                    binding.couponsViewPager.visibility = View.INVISIBLE
+                    binding.addsAnim2.visibility = View.INVISIBLE
+                    binding.lottieAnimationView.visibility = View.INVISIBLE
+                }
             }
         }
         viewModel.getAdds()
