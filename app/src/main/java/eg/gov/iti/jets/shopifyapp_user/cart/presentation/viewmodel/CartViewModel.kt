@@ -69,7 +69,7 @@ class CartViewModel(private val repo:CartRepository):ViewModel() {
         variants.forEach {
             if(it?.id==id?.toLong())
             {
-                if((it?.inventoryQuantity?:0)>product.quantity){
+                if((it?.inventoryQuantity?:0)>=product.quantity){
                     flag=true
                 }
             }
