@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import eg.gov.iti.jets.shopifyapp_user.R
@@ -59,8 +60,8 @@ class LoginFragment : Fragment() {
                 .navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.txtSkip.setOnClickListener {
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_loginFragment_to_homeFragment)
+            binding.root.findNavController()
+                .navigate(R.id.homeFragment)
         }
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding.btnLogIn.setOnClickListener {
