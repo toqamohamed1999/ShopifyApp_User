@@ -110,6 +110,7 @@
     <string name="loading">Loading</string>
     <string name="size">Size</string>
     <string name="color">Color</string>
+    <string name="price_filter">Price: 0.0</string>
 
     /** nada **/
 

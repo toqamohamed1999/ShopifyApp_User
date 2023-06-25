@@ -168,6 +168,13 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.settingIcon.visibility = View.GONE
                     binding.shoppingCartIcon.visibility = View.VISIBLE
                 }
+                R.id.reviewsFragment -> {
+                    bottomNav.visibility = View.GONE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.titleTextView.text = getString(R.string.reviews)
+                    binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
+                }
                 else -> {
                     bottomNav.visibility = View.VISIBLE
                     binding.toolbar.visibility = View.VISIBLE
