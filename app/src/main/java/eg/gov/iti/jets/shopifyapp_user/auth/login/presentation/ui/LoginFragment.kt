@@ -60,6 +60,8 @@ class LoginFragment : Fragment() {
                 .navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.txtSkip.setOnClickListener {
+            UserSettings.currencyCode="EGP"
+            UserSettings.currentCurrencyValue = 1.0
             binding.root.findNavController()
                 .navigate(R.id.homeFragment)
         }
