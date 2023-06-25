@@ -16,13 +16,25 @@
             android:id="@+id/adds_anim2"
             android:layout_width="75dp"
             android:layout_height="68dp"
-            android:layout_marginTop="213dp"
-            app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"
-            app:layout_constraintEnd_toEndOf="@+id/coupons_viewPager"
-            app:layout_constraintTop_toTopOf="@+id/lottieAnimationView"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/brands_recyclerview"
+            app:layout_constraintEnd_toEndOf="parent"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_fileName="addsAnim.json" />
+            app:lottie_fileName="addsAnim.json"
+            app:lottie_loop="true" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="247dp"
+            android:layout_height="73dp"
+            android:text="@string/no_offers_for_now"
+            android:textAlignment="center"
+            android:textColor="@color/primary_color"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/coupons_viewPager"
+            app:layout_constraintTop_toBottomOf="@+id/txt_search" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_search"
@@ -53,31 +65,23 @@
             android:id="@+id/coupons_viewPager"
             android:layout_width="match_parent"
             android:layout_height="210dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="3dp"
-            app:chainUseRtl="true"
 
+            android:layout_marginEnd="16dp"
+            android:clipToPadding="true"
+            android:padding="0dp"
+            app:chainUseRtl="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_search" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieAnimationView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/coupons_viewPager"
-            app:layout_constraintEnd_toEndOf="@+id/coupons_viewPager"
-            app:layout_constraintStart_toStartOf="@+id/coupons_viewPager"
-            app:layout_constraintTop_toBottomOf="@+id/txt_search"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="coupon.json"
-            app:lottie_loop="true" />
 
         <TextView
             android:id="@+id/brand_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/acme"
             android:text="@string/brands_header"
             android:textColor="@color/secondary_color"
