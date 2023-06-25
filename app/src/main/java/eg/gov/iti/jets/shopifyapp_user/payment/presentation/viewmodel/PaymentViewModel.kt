@@ -45,7 +45,13 @@ class PaymentViewModel(private val cartRepo:CartRepository,
     }
  fun setDiscount(discountCode: DiscountCode?,totalPrice:Double)
  {
-     order?.total_discounts =userCurrentDiscountCopy?.created_at.toString()
+     if(discountCode?.updated_at=="fixed_amount")
+     {
+         order?.total_discounts =userCurrentDiscountCopy?.created_at.toString()
+
+     }else{
+         order?.total_discounts =(((totalPrice)*(userCurrentDiscountCopy?.created_at?.toDouble()?:0.0))/100.0).toString()
+     }
      UserSettings.userCurrentDiscountCopy =discountCode
      order?.total_price = totalPrice.toString()
  }
