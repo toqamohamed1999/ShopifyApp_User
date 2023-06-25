@@ -106,7 +106,7 @@ Log.e("","................${UserSettings.userName}.................${UserSetting
             viewModel.isAvailable.observe(viewLifecycleOwner, Observer {
                 when(it.first){
                     1->{
-                        binding?.cartItemsRecyclerView?.background = ResourcesCompat.getDrawable(resources,R.drawable.cart_item_available,null)
+                       // binding?.cartItemsRecyclerView?.background = ResourcesCompat.getDrawable(resources,R.drawable.cart_item_available,null)
                         viewModel.crearIsAvailable()
                     }
                     2->{
@@ -114,8 +114,8 @@ Log.e("","................${UserSettings.userName}.................${UserSetting
                         viewModel.crearIsAvailable()
                     }
                     3->{
-                        binding?.cartItemsRecyclerView?.background =
-                            ResourcesCompat.getDrawable(resources,R.drawable.cart_item_no_available,null)
+                       /* binding?.cartItemsRecyclerView?.background =
+                            ResourcesCompat.getDrawable(resources,R.drawable.cart_item_no_available,null)*/
 
                         this@CartFragment.falg+=1
                         viewModel.crearIsAvailable()
