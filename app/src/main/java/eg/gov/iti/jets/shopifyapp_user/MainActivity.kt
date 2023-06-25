@@ -3,6 +3,7 @@ package eg.gov.iti.jets.shopifyapp_user
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -20,9 +21,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import eg.gov.iti.jets.shopifyapp_user.util.UserStates
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), BadgeChanger {
 
+    private var index: Int=0
     lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
@@ -154,6 +158,16 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     bottomNav.visibility = View.GONE
                     binding.toolbar.visibility = View.GONE
                 }
+                R.id.homeFragment->{
+                    bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
+                    binding.titleTextView.text = getString(R.string.home_header)
+                    bottomNav.visibility = View.VISIBLE
+                    binding.toolbar.visibility = View.VISIBLE
+                    backButton.visibility = View.GONE
+                    binding.settingIcon.visibility = View.GONE
+                    binding.shoppingCartIcon.visibility = View.VISIBLE
+                }
                 else -> {
                     bottomNav.visibility = View.VISIBLE
                     binding.toolbar.visibility = View.VISIBLE
@@ -161,7 +175,6 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.settingIcon.visibility = View.GONE
                     binding.shoppingCartIcon.visibility = View.VISIBLE
                     when (navDestination.id) {
-                        R.id.homeFragment -> binding.titleTextView.text = getString(R.string.home_header)
                         R.id.categoryFragment -> binding.titleTextView.text = getString(R.string.category_header)
                         R.id.favoriteFragment -> binding.titleTextView.text = getString(R.string.favorite_header)
                         R.id.profileFragment -> {
@@ -171,6 +184,18 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     }
                 }
             }
+        }
+    }
+    override fun onBackPressed() {
+        if(navController.currentDestination?.id==R.id.homeFragment) {
+            if (index == 0) {
+                Toast.makeText(this, "Press Again To Exit", Toast.LENGTH_SHORT).show()
+                index++
+                lifecycleScope.launch {
+                    delay(700)
+                    index = 0
+                }
+            } else if (index == 1) finishAffinity()
         }
     }
 }

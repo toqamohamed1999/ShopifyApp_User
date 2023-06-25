@@ -36,10 +36,7 @@ import eg.gov.iti.jets.shopifyapp_user.home.domain.remote.AddsAPIServices
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeFactoryViewModel
 import eg.gov.iti.jets.shopifyapp_user.home.presentation.viewmodel.HomeViewModel
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
-import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
-import eg.gov.iti.jets.shopifyapp_user.util.MyNetworkStatus
-import eg.gov.iti.jets.shopifyapp_user.util.NetworkConnectivityObserver
-import eg.gov.iti.jets.shopifyapp_user.util.isConnected
+import eg.gov.iti.jets.shopifyapp_user.util.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -207,8 +204,25 @@ class HomeFragment : Fragment(), CouponClickListener, OnClickBrand {
     }*/
 
     override fun onImageClick(discountCode: DiscountCode) {
-        UserSettings.userCurrentDiscountCopy = discountCode
-        Dialogs.SnakeToast(requireView(), "Code Copied please paste with in checkout process")
+        if(UserStates.checkConnectionState(requireContext())) {
+            if (UserSettings.userAPI_Id.isNotEmpty()) {
+                UserSettings.userCurrentDiscountCopy = discountCode
+                Dialogs.SnakeToast(
+                    requireView(),
+                    "Code Copied please paste with in checkout process"
+                )
+            } else {
+                Dialogs.SnakeToast(
+                    requireView(),
+                    "Please LogIn First !"
+                )
+            }
+        }else{
+            Dialogs.SnakeToast(
+                requireView(),
+                getString(R.string.noInternetConnection)
+            )
+        }
     }
 
     override fun onBrandClick(brandName: String?) {
