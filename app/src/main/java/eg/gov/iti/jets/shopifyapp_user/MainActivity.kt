@@ -203,6 +203,8 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     index = 0
                 }
             } else if (index == 1) finishAffinity()
+        }else{
+            super.onBackPressed()
         }
     }
 }
