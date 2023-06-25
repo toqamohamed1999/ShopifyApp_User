@@ -9,23 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavRoomPojo
-import eg.gov.iti.jets.shopifyapp_user.base.model.Product
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentFavoriteBinding
 import eg.gov.iti.jets.shopifyapp_user.favorite.presentation.viewmodel.FavViewModel
 import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.OnClickProduct
-import eg.gov.iti.jets.shopifyapp_user.products.presentation.ui.ProductsFragmentDirections
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -168,11 +164,10 @@ class FavoriteFragment : Fragment(), OnClickProduct {
                     viewModel.updateFavDraftOrder(UserSettings.favoriteDraftOrderId.toLong(),favDraftOrderResponse)
                     viewModel.deleteFavProductWithId(product_Id!!)
 
-                    Snackbar.make(
-                        binding.root,
-                        R.string.delete_MSG_from_favorites,
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                    Dialogs.SnakeToast(
+                        requireView(),
+                        resources.getString( R.string.delete_MSG_from_favorites)
+                    )
                 }
                 setNegativeButton("Cancel") { _, _ ->
 
@@ -181,8 +176,10 @@ class FavoriteFragment : Fragment(), OnClickProduct {
 
 
         } else {
-            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
-                .show()
+            Dialogs.SnakeToast(
+                requireView(),
+                resources.getString(R.string.noInternetConnection)
+            )
         }
 
     }

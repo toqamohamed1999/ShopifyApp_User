@@ -15,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.Reviews.ReviewsAdapter
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
@@ -193,8 +192,10 @@ class ProductDetailsFragment : Fragment(), VariantClick {
             }
 
         } else {
-            Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
-                .show()
+            Dialogs.SnakeToast(
+                requireView(),
+                resources.getString(R.string.noInternetConnection)
+            )
         }
         binding.cardViewIsFavorite.setOnClickListener {
             if (isConnected(requireContext())) {
@@ -217,11 +218,10 @@ class ProductDetailsFragment : Fragment(), VariantClick {
                             )
                             binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_border_icon)
 
-                            Snackbar.make(
-                                binding.root,
-                                R.string.delete_MSG_from_favorites,
-                                Snackbar.LENGTH_LONG
-                            ).show()
+                            Dialogs.SnakeToast(
+                                requireView(),
+                                resources.getString( R.string.delete_MSG_from_favorites)
+                            )
                         }
                         setNegativeButton("Cancel") { _, _ ->
 
@@ -240,8 +240,10 @@ class ProductDetailsFragment : Fragment(), VariantClick {
                     binding.imgViewFavoriteIcon.setImageResource(R.drawable.favorite_icon)
                 }
             } else {
-                Snackbar.make(binding.root, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
-                    .show()
+                Dialogs.SnakeToast(
+                    requireView(),
+                    resources.getString(R.string.noInternetConnection)
+                )
             }
         }
 

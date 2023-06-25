@@ -4,16 +4,14 @@ package eg.gov.iti.jets.shopifyapp_user.auth.login.presentation.ui
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import eg.gov.iti.jets.shopifyapp_user.R
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
@@ -23,6 +21,7 @@ import eg.gov.iti.jets.shopifyapp_user.base.model.LineItems
 import eg.gov.iti.jets.shopifyapp_user.base.model.toFavRoomPojo
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentLoginBinding
 import eg.gov.iti.jets.shopifyapp_user.settings.data.local.UserSettings
+import eg.gov.iti.jets.shopifyapp_user.util.Dialogs
 import eg.gov.iti.jets.shopifyapp_user.util.createAlertDialog
 import eg.gov.iti.jets.shopifyapp_user.util.isConnected
 import eg.gov.iti.jets.shopifyapp_user.util.isValidEmail
@@ -92,12 +91,10 @@ class LoginFragment : Fragment() {
 
             } else {
                 alertDialog.dismiss()
-                Snackbar.make(
-                    binding.root,
-                    resources.getString(R.string.noInternetConnection),
-                    Snackbar.LENGTH_LONG
+                Dialogs.SnakeToast(
+                    requireView(),
+                    resources.getString(R.string.noInternetConnection)
                 )
-                    .show()
             }
 
 

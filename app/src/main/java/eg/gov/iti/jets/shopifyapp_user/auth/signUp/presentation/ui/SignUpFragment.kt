@@ -12,27 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import eg.gov.iti.jets.shopifyapp_user.R
-import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.AuthRemoteSourceImp
 import eg.gov.iti.jets.shopifyapp_user.auth.data.remote.ResponseState
-import eg.gov.iti.jets.shopifyapp_user.auth.data.repo.APIRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.Customer
 import eg.gov.iti.jets.shopifyapp_user.auth.domain.model.SignupRequest
-import eg.gov.iti.jets.shopifyapp_user.auth.domain.repo.FirebaseRepoImplementation
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.model.SignupUser
-import eg.gov.iti.jets.shopifyapp_user.auth.signUp.data.remote.AuthRepo
 import eg.gov.iti.jets.shopifyapp_user.auth.signUp.presentation.viewModel.SignUpViewModel
 import eg.gov.iti.jets.shopifyapp_user.base.model.DraftOrderFav
 import eg.gov.iti.jets.shopifyapp_user.base.model.FavDraftOrderResponse
 import eg.gov.iti.jets.shopifyapp_user.base.model.LineItems
 import eg.gov.iti.jets.shopifyapp_user.databinding.FragmentSignUpBinding
-import eg.gov.iti.jets.shopifyapp_user.util.createAlertDialog
-import eg.gov.iti.jets.shopifyapp_user.util.isConnected
-import eg.gov.iti.jets.shopifyapp_user.util.isValidEmail
-import eg.gov.iti.jets.shopifyapp_user.util.isValidPassword
+import eg.gov.iti.jets.shopifyapp_user.util.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -125,12 +115,10 @@ class SignUpFragment : Fragment() {
 
             } else {
                 alertDialog.dismiss()
-                Snackbar.make(
-                    binding.root,
-                    resources.getString(R.string.noInternetConnection),
-                    Snackbar.LENGTH_LONG
+                Dialogs.SnakeToast(
+                    requireView(),
+                    resources.getString(R.string.noInternetConnection)
                 )
-                    .show()
             }
 
         }
@@ -233,7 +221,8 @@ class SignUpFragment : Fragment() {
                         setTitle("Info")
                         setMessage(resources.getString(R.string.registration_completed))
                         setPositiveButton("OK") { _: DialogInterface?, _: Int ->
-                            Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_loginFragment)
+                            Navigation.findNavController(requireView())
+                                .navigate(R.id.action_signUpFragment_to_loginFragment)
                         }
                     }.create().show()
 
