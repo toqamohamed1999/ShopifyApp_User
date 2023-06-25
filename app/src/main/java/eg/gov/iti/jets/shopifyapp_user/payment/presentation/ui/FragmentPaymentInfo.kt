@@ -137,7 +137,7 @@ class FragmentPaymentInfo: Fragment(),GooglePayListener, SettingListener {
         val btnContinueShopping = view.findViewById<Button>(R.id.button_continueShipping)
         tvName.text = UserSettings.userName
         tvNumber.text = second.toString()
-        tvPrice.text = totalPrice.toString()
+        tvPrice.text = "${(totalPrice*currentCurrencyValue).round()} $currencyCode"
         btnContinueShopping.setOnClickListener {
             (requireActivity() as BadgeChanger).changeBadgeCartCount(0)
             UserSettings.cartQuantity = 0
