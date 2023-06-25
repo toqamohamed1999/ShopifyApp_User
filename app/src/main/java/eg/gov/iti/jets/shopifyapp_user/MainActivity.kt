@@ -159,8 +159,6 @@ class MainActivity : AppCompatActivity(), BadgeChanger {
                     binding.toolbar.visibility = View.GONE
                 }
                 R.id.homeFragment->{
-                    bottomNav.visibility = View.GONE
-                    binding.toolbar.visibility = View.GONE
                     binding.titleTextView.text = getString(R.string.home_header)
                     bottomNav.visibility = View.VISIBLE
                     binding.toolbar.visibility = View.VISIBLE
