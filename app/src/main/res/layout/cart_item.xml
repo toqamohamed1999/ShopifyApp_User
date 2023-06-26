@@ -94,7 +94,7 @@
                 android:layout_gravity="end"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/cart_product_less1_back"
+                android:background="@drawable/less_back"
                 android:layoutDirection="ltr"
                 app:srcCompat="@drawable/cart_product_less_back" />
 
