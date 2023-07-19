@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="10dp"
-    tools:context=".CartFragment">
+    tools:context=".cart.presentation.ui.CartFragment">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/cart_anim"
+        android:layout_width="407dp"
+        android:layout_height="360dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cart_items_recyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/cart_items_recyclerView"
+        app:layout_constraintStart_toStartOf="@+id/cart_items_recyclerView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_fileName="cart.json"
+        app:lottie_loop="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_items_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="120dp"
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="@drawable/cart_fragment_checout_bottom"
         android:orientation="vertical"
-        android:weightSum="2">
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/cart_total_price"
@@ -31,7 +51,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="Total Price 15000$"
+            android:text="Total Price 0.0"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
@@ -53,4 +73,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
